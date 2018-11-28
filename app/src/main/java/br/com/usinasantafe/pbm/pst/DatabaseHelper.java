@@ -1,5 +1,6 @@
 package br.com.usinasantafe.pbm.pst;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -8,6 +9,8 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 import br.com.usinasantafe.pbm.to.variaveis.VerApontaFuncTO;
 
 
@@ -45,6 +48,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		
 		try{
 
+			TableUtils.createTable(cs, ColabTO.class);
+
+			TableUtils.createTable(cs, ConfiguracaoTO.class);
 			TableUtils.createTable(cs, VerApontaFuncTO.class);
 
 		}

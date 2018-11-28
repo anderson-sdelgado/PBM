@@ -52,4 +52,8 @@ public class OpcaoInterFinalActivity extends AppCompatActivity {
         });
 
     }
+
+    public void onBackPressed()  {
+    }
+
 }

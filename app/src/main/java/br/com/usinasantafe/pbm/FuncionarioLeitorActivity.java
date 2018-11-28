@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import br.com.usinasantafe.pbm.to.estaticas.FuncTO;
+import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 
 public class FuncionarioLeitorActivity extends ActivityGeneric {
 
@@ -85,11 +85,11 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
             matricula = data.getStringExtra("SCAN_RESULT");
             if(matricula.length() == 8){
                 matricula = matricula.substring(0,7);
-                FuncTO funcTO = new FuncTO();
-                List listFunc = funcTO.get("matriculaFunc", Long.parseLong(matricula));
-                if (listFunc.size() > 0) {
-                    funcTO = (FuncTO) listFunc.get(0);
-                    nome = funcTO.getNomeFunc();
+                ColabTO colabTO = new ColabTO();
+                List listColab = colabTO.get("matricColab", Long.parseLong(matricula));
+                if (listColab.size() > 0) {
+                    colabTO = (ColabTO) listColab.get(0);
+                    nome = colabTO.getNomeColab();
                     txtRetFunc.setText(matricula + "\n" + nome);
                 }
                 else{

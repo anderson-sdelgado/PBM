@@ -10,4 +10,8 @@ public class DescrOSActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_descr_os);
     }
+
+    public void onBackPressed()  {
+    }
+
 }

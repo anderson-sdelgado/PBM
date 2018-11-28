@@ -10,4 +10,8 @@ public class ListaParadaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_parada);
     }
+
+    public void onBackPressed()  {
+    }
+
 }

@@ -10,4 +10,8 @@ public class ListaItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_item);
     }
+
+    public void onBackPressed()  {
+    }
+
 }

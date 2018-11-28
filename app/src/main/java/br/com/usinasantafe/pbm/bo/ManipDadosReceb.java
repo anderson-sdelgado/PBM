@@ -98,7 +98,7 @@ public class ManipDadosReceb {
 
 	        for (Field field : retClasse.getDeclaredFields()) {
 	            String campo = field.getName();
-	            Log.i("PMM", "Campo = " + campo);
+	            Log.i("PBM", "Campo = " + campo);
 	            if(campo.contains("TO")){
 	            	tabelaAtualizar.add(campo);
 	            }

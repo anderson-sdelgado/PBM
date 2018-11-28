@@ -10,4 +10,7 @@ public class OSActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_os);
     }
+
+    public void onBackPressed()  {
+    }
 }

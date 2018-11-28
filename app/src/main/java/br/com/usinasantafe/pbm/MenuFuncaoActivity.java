@@ -57,4 +57,8 @@ public class MenuFuncaoActivity extends AppCompatActivity {
         });
 
     }
+
+    public void onBackPressed()  {
+    }
+
 }

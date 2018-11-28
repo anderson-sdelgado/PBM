@@ -51,4 +51,8 @@ public class ListaTurnoActivity extends AppCompatActivity {
         });
 
     }
+
+    public void onBackPressed()  {
+    }
+
 }

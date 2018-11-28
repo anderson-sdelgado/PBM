@@ -12,9 +12,6 @@ public class FuncionarioDigActivity extends ActivityGeneric {
     }
 
     public void onBackPressed()  {
-        Intent it = new Intent( FuncionarioDigActivity.this, FuncionarioLeitorActivity.class);
-        startActivity(it);
-        finish();
     }
 
 }
