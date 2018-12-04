@@ -10,6 +10,9 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+import br.com.usinasantafe.pbm.to.estaticas.ComponenteTO;
+import br.com.usinasantafe.pbm.to.estaticas.ParadaTO;
+import br.com.usinasantafe.pbm.to.estaticas.ServicoTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 import br.com.usinasantafe.pbm.to.variaveis.VerApontaFuncTO;
 
@@ -49,6 +52,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		try{
 
 			TableUtils.createTable(cs, ColabTO.class);
+			TableUtils.createTable(cs, ParadaTO.class);
+			TableUtils.createTable(cs, ComponenteTO.class);
+			TableUtils.createTable(cs, ServicoTO.class);
 
 			TableUtils.createTable(cs, ConfiguracaoTO.class);
 			TableUtils.createTable(cs, VerApontaFuncTO.class);
