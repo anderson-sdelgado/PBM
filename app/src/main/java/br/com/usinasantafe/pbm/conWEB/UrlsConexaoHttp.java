@@ -13,6 +13,9 @@ public class UrlsConexaoHttp {
     public static String localUrl = "br.com.usinasantafe.pbm.conWEB.UrlsConexaoHttp";
 
     public static String ColabTO = urlPrincipal + "colab.php";
+    public static String ComponenteTO = urlPrincipal + "componente.php";
+    public static String ParadaTO = urlPrincipal + "parada.php";
+    public static String ServicoTO = urlPrincipal + "servico.php";
 
     public UrlsConexaoHttp() {
         // TODO Auto-generated constructor stub

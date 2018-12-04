@@ -1,0 +1,47 @@
+package br.com.usinasantafe.pbm.to.estaticas;
+
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+import br.com.usinasantafe.pbm.pst.Entidade;
+
+@DatabaseTable(tableName="tbcomponenteest")
+public class ComponenteTO extends Entidade {
+
+    private static final long serialVersionUID = 1L;
+
+    @DatabaseField(id=true)
+    private Long idComponente;
+    @DatabaseField
+    private Long codComponente;
+    @DatabaseField
+    private String descrComponente;
+
+    public ComponenteTO() {
+    }
+
+    public Long getIdComponente() {
+        return idComponente;
+    }
+
+    public void setIdComponente(Long idComponente) {
+        this.idComponente = idComponente;
+    }
+
+    public Long getCodComponente() {
+        return codComponente;
+    }
+
+    public void setCodComponente(Long codComponente) {
+        this.codComponente = codComponente;
+    }
+
+    public String getDescrComponente() {
+        return descrComponente;
+    }
+
+    public void setDescrComponente(String descrComponente) {
+        this.descrComponente = descrComponente;
+    }
+
+}
