@@ -13,7 +13,7 @@ public class ComponenteTO extends Entidade {
     @DatabaseField(id=true)
     private Long idComponente;
     @DatabaseField
-    private Long codComponente;
+    private String codComponente;
     @DatabaseField
     private String descrComponente;
 
@@ -28,11 +28,11 @@ public class ComponenteTO extends Entidade {
         this.idComponente = idComponente;
     }
 
-    public Long getCodComponente() {
+    public String getCodComponente() {
         return codComponente;
     }
 
-    public void setCodComponente(Long codComponente) {
+    public void setCodComponente(String codComponente) {
         this.codComponente = codComponente;
     }
 

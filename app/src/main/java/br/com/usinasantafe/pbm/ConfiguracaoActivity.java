@@ -54,15 +54,25 @@ public class ConfiguracaoActivity extends ActivityGeneric {
                 if(!editTextEquipConfig.getText().toString().equals("") &&
                         !editTextSenhaConfig.getText().toString().equals("")){
 
-                    progressBar = new ProgressDialog(v.getContext());
-                    progressBar.setCancelable(true);
-                    progressBar.setMessage("Pequisando o Equipamento...");
-                    progressBar.show();
+//                    progressBar = new ProgressDialog(v.getContext());
+//                    progressBar.setCancelable(true);
+//                    progressBar.setMessage("Pequisando o Equipamento...");
+//                    progressBar.show();
+//
+//                    ManipDadosVerif.getInstance().setSenha(editTextSenhaConfig.getText().toString());
+//                    ManipDadosVerif.getInstance().verDados(editTextEquipConfig.getText().toString(), "Equip"
+//                            ,ConfiguracaoActivity.this ,MenuInicialActivity.class, progressBar);
 
-                    ManipDadosVerif.getInstance().setSenha(editTextSenhaConfig.getText().toString());
-                    ManipDadosVerif.getInstance().verDados(editTextEquipConfig.getText().toString(), "Equip"
-                            ,ConfiguracaoActivity.this ,MenuInicialActivity.class, progressBar);
+                    ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
+                    configuracaoTO.deleteAll();
+                    configuracaoTO.setEquipConfig(Long.parseLong(editTextEquipConfig.getText().toString()));
+                    configuracaoTO.setSenhaConfig(editTextSenhaConfig.getText().toString());
+                    configuracaoTO.insert();
+                    configuracaoTO.commit();
 
+                    Intent it = new Intent(ConfiguracaoActivity.this, MenuInicialActivity.class);
+                    startActivity(it);
+                    finish();
 
                 }
 

@@ -4,7 +4,6 @@ public class UrlsConexaoHttp {
 
     private int tipoEnvio = 1;
 
-    public static String atualizaaplichttp = "http://www.usinasantafe.com.br/pbmdev/atualizaaplic.php";
 
     public static String urlPrincipal = "http://www.usinasantafe.com.br/pbmdev/";
     public static String urlPrincEnvio = "http://www.usinasantafe.com.br/pbmdev/";
@@ -29,6 +28,8 @@ public class UrlsConexaoHttp {
         String retorno = "";
         if (classe.equals("Equip")) {
             retorno = urlPrincEnvio + "verequip.php";
+        } else if (classe.equals("Atualiza")) {
+            retorno = urlPrincEnvio + "atualizaaplic.php";
         }
         return retorno;
     }

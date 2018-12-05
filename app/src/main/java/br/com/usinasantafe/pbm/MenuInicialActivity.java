@@ -2,6 +2,9 @@ package br.com.usinasantafe.pbm;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -14,14 +17,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.bo.ConexaoWeb;
+import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
+import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 import br.com.usinasantafe.pbm.to.variaveis.VerApontaFuncTO;
 
 public class MenuInicialActivity extends ActivityGeneric {
 
     private ListView lista;
+    private ProgressDialog progressBar;
+    private ConfiguracaoTO configTO;
+    private PBMContext pbmContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +48,37 @@ public class MenuInicialActivity extends ActivityGeneric {
             String[] PERMISSIONS = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
             ActivityCompat.requestPermissions((Activity) this, PERMISSIONS, 112);
         }
+
+        ConexaoWeb conexaoWeb = new ConexaoWeb();
+        configTO = new ConfiguracaoTO();
+        List configList = configTO.all();
+
+        progressBar = new ProgressDialog(this);
+
+        if(conexaoWeb.verificaConexao(this))
+        {
+
+            configTO = new ConfiguracaoTO();
+            configList = configTO.all();
+            if(configList.size() > 0){
+
+                progressBar.setCancelable(true);
+                progressBar.setMessage("Buscando Atualização...");
+                progressBar.show();
+
+                configTO = (ConfiguracaoTO) configList.get(0);
+                AtualizaTO atualizaTO = new AtualizaTO();
+                atualizaTO.setIdEquipAtualizacao(configTO.getEquipConfig());
+                atualizaTO.setVersaoAtual(pbmContext.versaoAplic);
+                ManipDadosVerif.getInstance().verAtualizacao(atualizaTO, this, progressBar);
+            }
+
+        }
+        else{
+            startTimer();
+        }
+
+        configList.clear();
 
         VerApontaFuncTO verApontaFuncTO = new VerApontaFuncTO();
         verApontaFuncTO.setIdFuncApont(1L);
@@ -104,6 +146,34 @@ public class MenuInicialActivity extends ActivityGeneric {
     }
 
     public void onBackPressed()  {
+    }
+
+    public void startTimer() {
+
+        boolean alarmeAtivo = (PendingIntent.getBroadcast(this, 0, new Intent("ALARME_DISPARADO"), PendingIntent.FLAG_NO_CREATE) == null);
+
+        if(progressBar.isShowing()){
+            progressBar.dismiss();
+        }
+
+        if(alarmeAtivo){
+
+            Log.i("PMM", "NOVO TIMER");
+
+            Intent intent = new Intent("EXECUTAR_ALARME");
+            PendingIntent p = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(System.currentTimeMillis());
+            c.add(Calendar.SECOND, 1);
+
+            AlarmManager alarme = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarme.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60000, p);
+
+        }
+        else{
+            Log.i("PMM", "TIMER já ativo");
+        }
     }
 
 }
