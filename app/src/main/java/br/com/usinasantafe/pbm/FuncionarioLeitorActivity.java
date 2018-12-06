@@ -1,5 +1,8 @@
 package br.com.usinasantafe.pbm;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +12,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import br.com.usinasantafe.pbm.bo.ConexaoWeb;
+import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 
 public class FuncionarioLeitorActivity extends ActivityGeneric {
@@ -17,7 +22,8 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
     private PBMContext pbmContext;
     private TextView txtRetFunc;
     private String matricula;
-    private String nome;
+    private Boolean verFunc;
+    private ProgressDialog progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +36,10 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
         Button buttonOkFunc = (Button) findViewById(R.id.buttonOkFunc);
         Button buttonCancFunc = (Button) findViewById(R.id.buttonCancFunc);
         Button buttonDigFunc = (Button) findViewById(R.id.buttonDigFunc);
-        nome = null;
+        Button buttonAtualPadrao = (Button) findViewById(R.id.buttonAtualPadrao);
+        verFunc = false;
 
-        txtRetFunc.setText("");
+        txtRetFunc.setText("Por Favor, realize a leitura do Cartão do Colaborador Mecânico.");
 
         buttonOkFunc.setOnClickListener(new View.OnClickListener() {
 
@@ -40,9 +47,11 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
 
-                Intent it = new Intent(FuncionarioLeitorActivity.this, ListaTurnoActivity.class);
-                startActivity(it);
-                finish();
+                if(verFunc){
+                    Intent it = new Intent(FuncionarioLeitorActivity.this, MenuFuncaoActivity.class);
+                    startActivity(it);
+                    finish();
+                }
 
             }
         });
@@ -71,6 +80,62 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
 
         });
 
+        buttonAtualPadrao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder alerta = new AlertDialog.Builder(  FuncionarioLeitorActivity.this);
+                alerta.setTitle("ATENÇÃO");
+                alerta.setMessage("DESEJA REALMENTE ATUALIZAR BASE DE DADOS?");
+                alerta.setNegativeButton("SIM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        ConexaoWeb conexaoWeb = new ConexaoWeb();
+
+                        if (conexaoWeb.verificaConexao(FuncionarioLeitorActivity.this)) {
+
+                            progressBar = new ProgressDialog(FuncionarioLeitorActivity.this);
+                            progressBar.setCancelable(true);
+                            progressBar.setMessage("Atualizando Colaborador...");
+                            progressBar.show();
+
+                            ManipDadosVerif.getInstance().verDados("", "Colab"
+                                    , FuncionarioLeitorActivity.this, FuncionarioLeitorActivity.class, progressBar);
+
+                        } else {
+
+                            AlertDialog.Builder alerta = new AlertDialog.Builder( FuncionarioLeitorActivity.this);
+                            alerta.setTitle("ATENÇÃO");
+                            alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
+                            alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                            alerta.show();
+
+                        }
+
+
+                    }
+                });
+
+                alerta.setPositiveButton("NÃO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                alerta.show();
+
+            }
+
+        });
+
     }
 
     public void callZXing(View view){
@@ -88,12 +153,13 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
                 ColabTO colabTO = new ColabTO();
                 List listColab = colabTO.get("matricColab", Long.parseLong(matricula));
                 if (listColab.size() > 0) {
+                    verFunc = true;
                     colabTO = (ColabTO) listColab.get(0);
-                    nome = colabTO.getNomeColab();
-                    txtRetFunc.setText(matricula + "\n" + nome);
+                    txtRetFunc.setText(matricula + "\n" + colabTO.getNomeColab());
                 }
                 else{
-                    txtRetFunc.setText("Funcionario Inexistente");
+                    verFunc = false;
+                    txtRetFunc.setText("Funcionário Inexistente");
                 }
             }
         }
@@ -101,6 +167,9 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
     }
 
     public void onBackPressed()  {
+        Intent it = new Intent(FuncionarioLeitorActivity.this, MenuInicialActivity.class);
+        startActivity(it);
+        finish();
     }
 
 }

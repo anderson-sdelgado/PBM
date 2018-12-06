@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MenuFuncaoActivity extends AppCompatActivity {
+public class MenuFuncaoActivity extends ActivityGeneric {
 
     private ListView lista;
 
@@ -39,13 +39,10 @@ public class MenuFuncaoActivity extends AppCompatActivity {
 
                 if (text.equals("APONTAMENTO")) {
 
-                    Intent it = new Intent(  MenuFuncaoActivity.this, FuncionarioLeitorActivity.class);
+                    Intent it = new Intent(  MenuFuncaoActivity.this, ListaParadaActivity.class);
                     startActivity(it);
                     finish();
 
-                    it = new Intent(  MenuFuncaoActivity.this, FuncionarioLeitorActivity.class);
-                    startActivity(it);
-                    finish();
                 } else if (text.equals("FINALIZAR/INTERROPER")) {
                     Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterFinalActivity.class);
                     startActivity(it);

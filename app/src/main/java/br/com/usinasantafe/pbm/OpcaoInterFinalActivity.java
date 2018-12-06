@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class OpcaoInterFinalActivity extends AppCompatActivity {
+public class OpcaoInterFinalActivity extends ActivityGeneric {
 
     private ListView lista;
 

@@ -28,6 +28,10 @@ public class UrlsConexaoHttp {
         String retorno = "";
         if (classe.equals("Equip")) {
             retorno = urlPrincEnvio + "verequip.php";
+        } else if (classe.equals("Colab")) {
+            retorno = urlPrincEnvio + "colab.php";
+        } else if (classe.equals("Parada")) {
+            retorno = urlPrincEnvio + "parada.php";
         } else if (classe.equals("Atualiza")) {
             retorno = urlPrincEnvio + "atualizaaplic.php";
         }

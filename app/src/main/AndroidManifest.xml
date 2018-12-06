@@ -67,10 +67,7 @@
         <activity android:name=".ListaParadaActivity" />
         <activity android:name=".OSActivity" />
         <activity android:name=".DescrOSActivity" />
-        <activity android:name=".ListaItemActivity" />
-        <activity android:name=".ItemActivity" />
         <activity android:name=".OpcaoInterFinalActivity" />
-        <activity android:name=".ListaTurnoActivity"></activity>
     </application>
 
 </manifest>

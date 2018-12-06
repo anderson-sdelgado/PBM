@@ -155,4 +155,7 @@
     <string name="texto_dig_matric">DIGITAR MATRICULA</string>
     <string name="texto_titulo_menu">MENU</string>
     <string name="texto_titulo_opcao">OPÇÃO</string>
+    <string name="texto_motivo_parada">MOTIVOS DE PARADA</string>
+    <string name="texto_atualizar">ATUALIZAR</string>
+    <string name="texto_os">NUM. OS:</string>
 </resources>

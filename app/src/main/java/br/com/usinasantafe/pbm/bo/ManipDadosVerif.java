@@ -160,6 +160,56 @@ public class ManipDadosVerif {
                 }
 
             }
+            else if(this.tipo.equals("Colab")) {
+
+                if (!result.contains("exceeded")) {
+                    JSONObject jObj = new JSONObject(result);
+                    JSONArray jsonArray = jObj.getJSONArray("dados");
+                    Class classe = Class.forName(urlsConexaoHttp.localPSTEstatica + "ColabTO");
+
+                    if (jsonArray.length() > 0) {
+                        genericRecordable = new GenericRecordable();
+                        genericRecordable.deleteAll(classe);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject objeto = jsonArray.getJSONObject(i);
+                            Gson gson = new Gson();
+                            genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
+                        }
+
+                        this.progressDialog.dismiss();
+                    }
+                }
+                else{
+                    this.progressDialog.dismiss();
+                }
+
+            }
+            else if(this.tipo.equals("Parada")) {
+
+                if (!result.contains("exceeded")) {
+                    JSONObject jObj = new JSONObject(result);
+                    JSONArray jsonArray = jObj.getJSONArray("dados");
+                    Class classe = Class.forName(urlsConexaoHttp.localPSTEstatica + "ParadaTO");
+
+                    if (jsonArray.length() > 0) {
+                        genericRecordable = new GenericRecordable();
+                        genericRecordable.deleteAll(classe);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject objeto = jsonArray.getJSONObject(i);
+                            Gson gson = new Gson();
+                            genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
+                        }
+
+                        this.progressDialog.dismiss();
+                    }
+                }
+                else{
+                    this.progressDialog.dismiss();
+                }
+
+            }
 
 
         } catch (Exception e) {
