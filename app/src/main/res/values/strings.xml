@@ -158,4 +158,6 @@
     <string name="texto_motivo_parada">MOTIVOS DE PARADA</string>
     <string name="texto_atualizar">ATUALIZAR</string>
     <string name="texto_os">NUM. OS:</string>
+    <string name="texto_item_os">ITEM(S) DA OS</string>
+    <string name="texto_num_item">NUM. DO ITEM:</string>
 </resources>

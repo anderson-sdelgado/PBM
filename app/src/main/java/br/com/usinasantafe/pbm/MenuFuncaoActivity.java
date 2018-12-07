@@ -39,7 +39,11 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                 if (text.equals("APONTAMENTO")) {
 
-                    Intent it = new Intent(  MenuFuncaoActivity.this, ListaParadaActivity.class);
+//                    Intent it = new Intent(  MenuFuncaoActivity.this, ListaParadaActivity.class);
+//                    startActivity(it);
+//                    finish();
+
+                    Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                     startActivity(it);
                     finish();
 

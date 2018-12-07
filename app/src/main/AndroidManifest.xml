@@ -68,6 +68,8 @@
         <activity android:name=".OSActivity" />
         <activity android:name=".DescrOSActivity" />
         <activity android:name=".OpcaoInterFinalActivity" />
+        <activity android:name=".ListaItemOSActivity" />
+        <activity android:name=".ItemOSDigActivity"></activity>
     </application>
 
 </manifest>

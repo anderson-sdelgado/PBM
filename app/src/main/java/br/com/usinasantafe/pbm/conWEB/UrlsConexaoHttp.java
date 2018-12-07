@@ -34,6 +34,8 @@ public class UrlsConexaoHttp {
             retorno = urlPrincEnvio + "parada.php";
         } else if (classe.equals("Atualiza")) {
             retorno = urlPrincEnvio + "atualizaaplic.php";
+        } else if (classe.equals("OS")) {
+            retorno = urlPrincEnvio + "verifos.php";
         }
         return retorno;
     }
