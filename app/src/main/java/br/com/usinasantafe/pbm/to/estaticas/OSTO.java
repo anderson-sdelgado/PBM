@@ -43,5 +43,4 @@ public class OSTO extends Entidade {
     public void setEquipOS(Long equipOS) {
         this.equipOS = equipOS;
     }
-
 }

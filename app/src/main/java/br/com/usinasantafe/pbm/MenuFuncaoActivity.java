@@ -23,6 +23,7 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
         itens.add("APONTAMENTO");
         itens.add("FINALIZAR/INTERROPER");
+        itens.add("FINALIZAR TURNO");
 
         AdapterList adapterList = new AdapterList(this, itens);
         lista = (ListView) findViewById(R.id.listViewMenuFuncao);

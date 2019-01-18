@@ -15,6 +15,7 @@ public class UrlsConexaoHttp {
     public static String ComponenteTO = urlPrincipal + "componente.php";
     public static String ParadaTO = urlPrincipal + "parada.php";
     public static String ServicoTO = urlPrincipal + "servico.php";
+    public static String EscalaTrabTO = urlPrincipal + "escalatrab.php";
 
     public UrlsConexaoHttp() {
         // TODO Auto-generated constructor stub
