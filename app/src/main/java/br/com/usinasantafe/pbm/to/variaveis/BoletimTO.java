@@ -3,8 +3,10 @@ package br.com.usinasantafe.pbm.to.variaveis;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import br.com.usinasantafe.pbm.pst.Entidade;
+
 @DatabaseTable(tableName="tbboletimvar")
-public class BoletimTO {
+public class BoletimTO extends Entidade {
 
     private static final long serialVersionUID = 1L;
 
@@ -13,11 +15,13 @@ public class BoletimTO {
     @DatabaseField
     private Long idFuncBoletim;
     @DatabaseField
+    private Long idExtBoletim;
+    @DatabaseField
     private String dthrInicialBoletim;
     @DatabaseField
     private String dthrFinalBoletim;
     @DatabaseField
-    private Long statusBoletim;
+    private Long statusBoletim; // 1 - Aberto; 2 - Fechado
 
     public BoletimTO() {
     }
@@ -36,6 +40,14 @@ public class BoletimTO {
 
     public void setIdFuncBoletim(Long idFuncBoletim) {
         this.idFuncBoletim = idFuncBoletim;
+    }
+
+    public Long getIdExtBoletim() {
+        return idExtBoletim;
+    }
+
+    public void setIdExtBoletim(Long idExtBoletim) {
+        this.idExtBoletim = idExtBoletim;
     }
 
     public String getDthrInicialBoletim() {

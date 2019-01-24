@@ -10,14 +10,19 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+
 public class MenuFuncaoActivity extends ActivityGeneric {
 
     private ListView lista;
+    private PBMContext pbmContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_funcao);
+
+        pbmContext = (PBMContext) getApplication();
 
         ArrayList<String> itens = new ArrayList<String>();
 
@@ -40,13 +45,11 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                 if (text.equals("APONTAMENTO")) {
 
-//                    Intent it = new Intent(  MenuFuncaoActivity.this, ListaParadaActivity.class);
+                    ColabTO colabTO = pbmContext.getColabTO();
+
+//                    Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
 //                    startActivity(it);
 //                    finish();
-
-                    Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
-                    startActivity(it);
-                    finish();
 
                 } else if (text.equals("FINALIZAR/INTERROPER")) {
                     Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterFinalActivity.class);

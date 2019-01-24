@@ -21,8 +21,16 @@ public class UrlsConexaoHttp {
         // TODO Auto-generated constructor stub
     }
 
-    public String getsApontVCana() {
-        return urlPrincEnvio + "apontvcana.php";
+    public String getsInsertBolFechado() {
+        return urlPrincEnvio + "inserirbolfechado.php";
+    }
+
+    public String getsInsertBolAberto() {
+        return urlPrincEnvio + "inserirbolaberto.php";
+    }
+
+    public String getsInsertApont() {
+        return urlPrincEnvio + "inserirapont.php";
     }
 
     public String urlVerifica(String classe) {

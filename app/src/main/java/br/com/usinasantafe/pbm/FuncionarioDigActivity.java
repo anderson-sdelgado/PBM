@@ -11,8 +11,10 @@ import android.widget.Button;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
+import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class FuncionarioDigActivity extends ActivityGeneric {
 
@@ -23,6 +25,8 @@ public class FuncionarioDigActivity extends ActivityGeneric {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_funcionario_dig);
+
+        pbmContext = (PBMContext) getApplication();
 
         Button buttonOkFunc = (Button) findViewById(R.id.buttonOkPadrao);
         Button buttonCancFunc = (Button) findViewById(R.id.buttonCancPadrao);
@@ -98,6 +102,15 @@ public class FuncionarioDigActivity extends ActivityGeneric {
 
                         colabTO = (ColabTO) colabList.get(0);
                         colabList.clear();
+
+                        BoletimTO boletimTO = new BoletimTO();
+                        List boletimList = boletimTO.get("idFuncBoletim", colabTO.getIdColab());
+                        if(boletimList.size() == 0){
+                            boletimTO.setIdFuncBoletim(Long.parseLong(editTextPadrao.getText().toString()));
+                            ManipDadosEnvio.getInstance().salvaBoletimAberto(boletimTO);
+                        }
+
+                        pbmContext.setColabTO(colabTO);
                         Intent it = new Intent(FuncionarioDigActivity.this, MenuFuncaoActivity.class);
                         startActivity(it);
                         finish();

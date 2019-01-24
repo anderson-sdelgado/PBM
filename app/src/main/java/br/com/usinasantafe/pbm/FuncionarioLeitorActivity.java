@@ -13,8 +13,11 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
+import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
+import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class FuncionarioLeitorActivity extends ActivityGeneric {
 
@@ -24,6 +27,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
     private String matricula;
     private Boolean verFunc;
     private ProgressDialog progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,14 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
                 // TODO Auto-generated method stub
 
                 if(verFunc){
+
+                    BoletimTO boletimTO = new BoletimTO();
+                    List boletimList = boletimTO.get("idFuncBoletim", Long.parseLong(editTextPadrao.getText().toString()));
+                    if(boletimList.size() == 0){
+                        boletimTO.setIdFuncBoletim(Long.parseLong(editTextPadrao.getText().toString()));
+                        ManipDadosEnvio.getInstance().salvaBoletimAberto(boletimTO);
+                    }
+
                     Intent it = new Intent(FuncionarioLeitorActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
@@ -155,6 +167,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
                 if (listColab.size() > 0) {
                     verFunc = true;
                     colabTO = (ColabTO) listColab.get(0);
+                    pbmContext.setColabTO(colabTO);
                     txtRetFunc.setText(matricula + "\n" + colabTO.getNomeColab());
                 }
                 else{

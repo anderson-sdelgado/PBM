@@ -79,13 +79,6 @@ public class MenuInicialActivity extends ActivityGeneric {
         }
 
         configList.clear();
-
-//        VerApontaFuncTO verApontaFuncTO = new VerApontaFuncTO();
-//        verApontaFuncTO.setIdFuncApont(1L);
-//        verApontaFuncTO.setDthrApont("12/11/2018 07:30");
-//        verApontaFuncTO.deleteAll();
-//        verApontaFuncTO.insert();
-
         listarMenuInicial();
 
     }
@@ -112,18 +105,9 @@ public class MenuInicialActivity extends ActivityGeneric {
                 String text = textView.getText().toString();
 
                 if (text.equals("APONTAMENTO")) {
-
                     Intent it = new Intent(MenuInicialActivity.this, FuncionarioLeitorActivity.class);
                     startActivity(it);
                     finish();
-
-//                    VerApontaFuncTO verApontaFuncTO = new VerApontaFuncTO();
-//                    List verApontaFuncList = verApontaFuncTO.all();
-//                    verApontaFuncTO = (VerApontaFuncTO) verApontaFuncList.get(0);
-//
-//                    Log.i("PBM", "" + Tempo.getInstance().verifDataApont(verApontaFuncTO.getDthrApont()));
-//                    Log.i("PBM", "" + Tempo.getInstance().datahora());
-
                 } else if (text.equals("CONFIGURAÇÃO")) {
                     Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);
                     startActivity(it);

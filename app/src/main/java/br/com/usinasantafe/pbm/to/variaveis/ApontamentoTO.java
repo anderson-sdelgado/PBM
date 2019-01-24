@@ -3,8 +3,10 @@ package br.com.usinasantafe.pbm.to.variaveis;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import br.com.usinasantafe.pbm.pst.Entidade;
+
 @DatabaseTable(tableName="tbapontavar")
-public class ApontamentoTO {
+public class ApontamentoTO extends Entidade {
 
     private static final long serialVersionUID = 1L;
 
@@ -12,6 +14,8 @@ public class ApontamentoTO {
     private Long idAponta;
     @DatabaseField
     private Long idBolAponta;
+    @DatabaseField
+    private Long idExtBolAponta;
     @DatabaseField
     private Long osAponta;
     @DatabaseField
@@ -40,6 +44,14 @@ public class ApontamentoTO {
 
     public void setIdBolAponta(Long idBolAponta) {
         this.idBolAponta = idBolAponta;
+    }
+
+    public Long getIdExtBolAponta() {
+        return idExtBolAponta;
+    }
+
+    public void setIdExtBolAponta(Long idExtBolAponta) {
+        this.idExtBolAponta = idExtBolAponta;
     }
 
     public Long getOsAponta() {
