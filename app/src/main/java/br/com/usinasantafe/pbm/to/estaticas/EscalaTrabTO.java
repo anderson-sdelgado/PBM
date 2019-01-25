@@ -3,8 +3,10 @@ package br.com.usinasantafe.pbm.to.estaticas;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import br.com.usinasantafe.pbm.pst.Entidade;
+
 @DatabaseTable(tableName="tbescalatrabest")
-public class EscalaTrabTO {
+public class EscalaTrabTO extends Entidade {
 
     private static final long serialVersionUID = 1L;
 

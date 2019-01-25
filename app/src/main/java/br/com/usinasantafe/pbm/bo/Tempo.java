@@ -135,34 +135,40 @@ public class Tempo {
 		this.envioDado = envioDado;
 	}
 
-	public String verifDataApont(String dtStr){
+	public boolean verifDataInicioBoletim(String hrInicio){
 
-	    String dataCerta = "";
+        String horaStr = hrInicio.substring(0, 2);
+        String minutoStr = hrInicio.substring(3, 5);
 
-        String diaStr = dtStr.substring(0, 2);
-        String mesStr = dtStr.substring(3, 5);
-        String anoStr = dtStr.substring(6, 10);
-        String horaStr = dtStr.substring(11, 13);
-        String minutoStr = dtStr.substring(14, 16);
-
+        Date dataHora = new Date();
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(diaStr));
-        cal.set(Calendar.MONTH, Integer.parseInt(mesStr) - 1);
-        cal.set(Calendar.YEAR, Integer.parseInt(anoStr));
+
+        cal.setTime(dataHora);
+
+//        int mes = cal.get(Calendar.MONTH);
+//        int dia = cal.get(Calendar.DAY_OF_MONTH);
+//        int ano = cal.get(Calendar.YEAR);
+
         cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaStr));
         cal.set(Calendar.MINUTE, Integer.parseInt(minutoStr));
 
-        cal.add(Calendar.HOUR, +2);
-        cal.add(Calendar.MINUTE, +5);
+        Date dataHoraInicio = cal.getTime();
+        dataHoraInicio = new Date(dataHoraInicio.getTime() + (2 * 60 * 1000));
 
-        int mes = cal.get(Calendar.MONTH);
-        int dia = cal.get(Calendar.DAY_OF_MONTH);
-        int ano = cal.get(Calendar.YEAR);
-        int horas = cal.get(Calendar.HOUR_OF_DAY);
-        int minutos = cal.get(Calendar.MINUTE);
+        TimeZone tz = TimeZone.getDefault();
+        Date d = new Date();
+        Calendar calendar = Calendar.getInstance();
+        Long dt =  dataHoraInicio.getTime() - tz.getOffset(d.getTime());
+        calendar.setTimeInMillis(dt);
+
+        int mes = calendar.get(Calendar.MONTH);
+        int dia = calendar.get(Calendar.DAY_OF_MONTH);
+        int ano = calendar.get(Calendar.YEAR);
+        int horas = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutos = calendar.get(Calendar.MINUTE);
         mes = mes + 1;
 
-        mesStr = "";
+        String mesStr = "";
         if(mes < 10){
             mesStr = "0" + mes;
         }
@@ -170,7 +176,7 @@ public class Tempo {
             mesStr = String.valueOf(mes);
         }
 
-        diaStr = "";
+        String diaStr = "";
         if(dia < 10){
             diaStr = "0" + dia;
         }
@@ -178,12 +184,12 @@ public class Tempo {
             diaStr = String.valueOf(dia);
         }
 
-        horaStr = "";
+        String horasStr = "";
         if(horas < 10){
-            horaStr = "0" + horas;
+            horasStr = "0" + horas;
         }
         else{
-            horaStr = String.valueOf(horas);
+            horasStr = String.valueOf(horas);
         }
 
         String minutosStr = "";
@@ -194,9 +200,18 @@ public class Tempo {
             minutosStr = String.valueOf(minutos);
         }
 
-        dataCerta = ""+diaStr+"/"+mesStr+"/"+ano+" "+horaStr+":"+minutosStr;
+        Log.i("PBM", "DATA HORA DE INICIO  = " +diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr);
 
-        return dataCerta;
+        Date dataHoraAtual = new Date();
+        dataHoraAtual = new Date(dataHoraAtual.getTime() - tz.getOffset(d.getTime()));
+
+        if(dataHoraAtual.after(dataHoraInicio)){
+            Log.i("PBM", "DEPOIS");
+            return false;
+        }else{
+            Log.i("PBM", "ANTES");
+            return true;
+        }
 
     }
 

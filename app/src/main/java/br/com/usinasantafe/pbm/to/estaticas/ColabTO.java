@@ -17,7 +17,7 @@ public class ColabTO extends Entidade {
     @DatabaseField
     private String nomeColab;
     @DatabaseField
-    private Long idEscalaColab;
+    private Long idEscalaTrabColab;
 
     public ColabTO() {
     }
@@ -46,11 +46,11 @@ public class ColabTO extends Entidade {
         this.nomeColab = nomeColab;
     }
 
-    public Long getIdEscalaColab() {
-        return idEscalaColab;
+    public Long getIdEscalaTrabColab() {
+        return idEscalaTrabColab;
     }
 
-    public void setIdEscalaColab(Long idEscalaColab) {
-        this.idEscalaColab = idEscalaColab;
+    public void setIdEscalaTrabColab(Long idEscalaTrabColab) {
+        this.idEscalaTrabColab = idEscalaTrabColab;
     }
 }

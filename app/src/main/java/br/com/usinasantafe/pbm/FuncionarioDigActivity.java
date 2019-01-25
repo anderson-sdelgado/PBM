@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -101,7 +102,7 @@ public class FuncionarioDigActivity extends ActivityGeneric {
                     if (colabList.size() > 0) {
 
                         colabTO = (ColabTO) colabList.get(0);
-                        colabList.clear();
+
 
                         BoletimTO boletimTO = new BoletimTO();
                         List boletimList = boletimTO.get("idFuncBoletim", colabTO.getIdColab());
@@ -110,7 +111,10 @@ public class FuncionarioDigActivity extends ActivityGeneric {
                             ManipDadosEnvio.getInstance().salvaBoletimAberto(boletimTO);
                         }
 
+                        Log.i("PBM", "DIG ID ESCALA COLAB = " + colabTO.getIdEscalaTrabColab());
+                        Log.i("PBM", "DIG ID ESCALA COLAB = " + colabTO.getIdEscalaTrabColab());
                         pbmContext.setColabTO(colabTO);
+                        colabList.clear();
                         Intent it = new Intent(FuncionarioDigActivity.this, MenuFuncaoActivity.class);
                         startActivity(it);
                         finish();

@@ -16,6 +16,8 @@ import br.com.usinasantafe.pbm.to.estaticas.ItemOSTO;
 import br.com.usinasantafe.pbm.to.estaticas.OSTO;
 import br.com.usinasantafe.pbm.to.estaticas.ParadaTO;
 import br.com.usinasantafe.pbm.to.estaticas.ServicoTO;
+import br.com.usinasantafe.pbm.to.variaveis.ApontamentoTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 import br.com.usinasantafe.pbm.to.variaveis.VerApontaFuncTO;
 
@@ -64,6 +66,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 			TableUtils.createTable(cs, ConfiguracaoTO.class);
 			TableUtils.createTable(cs, VerApontaFuncTO.class);
+			TableUtils.createTable(cs, BoletimTO.class);
+			TableUtils.createTable(cs, ApontamentoTO.class);
 
 		}
 		catch(Exception e){
