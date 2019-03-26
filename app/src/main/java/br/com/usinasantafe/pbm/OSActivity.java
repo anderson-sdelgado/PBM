@@ -18,11 +18,14 @@ import br.com.usinasantafe.pbm.to.estaticas.OSTO;
 public class OSActivity extends ActivityGeneric {
 
     private ProgressDialog progressBar;
+    private PBMContext pbmContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_os);
+
+        pbmContext = (PBMContext) getApplication();
 
         Button buttonOkOS = (Button) findViewById(R.id.buttonOkPadrao);
         Button buttonCancOS = (Button) findViewById(R.id.buttonCancPadrao);

@@ -14,7 +14,7 @@ import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
-import br.com.usinasantafe.pbm.to.variaveis.ApontamentoTO;
+import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class MenuFuncaoActivity extends ActivityGeneric {
@@ -67,8 +67,8 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                     List boletimList = boletimTO.get(boletimPesqList);
                     boletimTO = (BoletimTO) boletimList.get(0);
 
-                    ApontamentoTO apontamentoTO = new ApontamentoTO();
-                    List apontamentoList = apontamentoTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+                    ApontTO apontTO = new ApontTO();
+                    List apontamentoList = apontTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
 
                     if(apontamentoList.size() == 0){
                         ColabTO colabTO = pbmContext.getColabTO();
@@ -87,14 +87,14 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         }
                     }
                     else{
-                        apontamentoTO = (ApontamentoTO) apontamentoList.get(0);
-                        if(apontamentoTO.getDthrFinalAponta().equals("")){
+                        apontTO = (ApontTO) apontamentoList.get(0);
+                        if(apontTO.getDthrFinalApont().equals("")){
                             it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                             startActivity(it);
                             finish();
                         }
                         else{
-                            if(Tempo.getInstance().verifDataHora(apontamentoTO.getDthrFinalAponta())){
+                            if(Tempo.getInstance().verifDataHora(apontTO.getDthrFinalApont())){
                                 it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                                 startActivity(it);
                                 finish();

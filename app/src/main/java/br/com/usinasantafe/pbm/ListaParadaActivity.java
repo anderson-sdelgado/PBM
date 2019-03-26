@@ -26,7 +26,7 @@ import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
 import br.com.usinasantafe.pbm.to.estaticas.ParadaTO;
-import br.com.usinasantafe.pbm.to.variaveis.ApontamentoTO;
+import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class ListaParadaActivity extends ActivityGeneric {
@@ -90,29 +90,29 @@ public class ListaParadaActivity extends ActivityGeneric {
                 List boletimList = boletimTO.get(boletimPesqList);
                 boletimTO = (BoletimTO) boletimList.get(0);
 
-                ApontamentoTO apontamentoTO = new ApontamentoTO();
+                ApontTO apontamentoTO = new ApontTO();
                 List apontamentoList = apontamentoTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
 
-                ApontamentoTO apontTO = new ApontamentoTO();
+                ApontTO apontTO = new ApontTO();
                 if(apontamentoList.size() == 0){
                     ColabTO colabTO = pbmContext.getColabTO();
                     EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
                     List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
                     escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                    apontTO.setDthrInicialAponta(Tempo.getInstance().dataSHora() + " " + escalaTrabTO.getHorarioEntEscalaTrab());
+                    apontTO.setDthrInicialApont(Tempo.getInstance().dataSHora() + " " + escalaTrabTO.getHorarioEntEscalaTrab());
                 }
                 else{
-                    apontTO.setDthrInicialAponta(apontamentoTO.getDthrFinalAponta());
+                    apontTO.setDthrInicialApont(apontamentoTO.getDthrFinalApont());
                 }
 
-                apontTO.setIdBolAponta(boletimTO.getIdBoletim());
-                apontTO.setIdExtBolAponta(boletimTO.getIdExtBoletim());
-                apontTO.setOsAponta(0L);
-                apontTO.setItemOSAponta(0L);
-                apontTO.setParadaAponta(paradaTO.getIdParada());
-                apontTO.setDthrFinalAponta(Tempo.getInstance().datahora());
-                apontTO.setRealizAponta(0L);
-                apontTO.setStatusAponta(0L);
+                apontTO.setIdBolApont(boletimTO.getIdBoletim());
+                apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
+                apontTO.setOsApont(0L);
+                apontTO.setItemOSApont(0L);
+                apontTO.setParadaApont(paradaTO.getIdParada());
+                apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                apontTO.setRealizApont(0L);
+                apontTO.setStatusApont(0L);
                 ManipDadosEnvio.getInstance().salvaApontamento(apontTO);
                 Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
                 startActivity(it);
