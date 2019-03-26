@@ -13,19 +13,29 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
+import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
+import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
 import br.com.usinasantafe.pbm.to.estaticas.ParadaTO;
+import br.com.usinasantafe.pbm.to.variaveis.ApontamentoTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class ListaParadaActivity extends ActivityGeneric {
 
     private ListView lista;
     private ProgressDialog progressBar;
     private ArrayAdapter<String> adapter;
+    private PBMContext pbmContext;
+    private String textParada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +45,8 @@ public class ListaParadaActivity extends ActivityGeneric {
         Button buttonAtualParada = (Button) findViewById(R.id.buttonAtualParada);
         Button buttonRetMenuParada = (Button) findViewById(R.id.buttonRetMenuParada);
         EditText editPesqListParada = (EditText) findViewById(R.id.editPesqListParada);
+
+        pbmContext = (PBMContext) getApplication();
 
         ParadaTO paradaTO = new ParadaTO();
         List paradaList = paradaTO.orderBy("codParada",true);
@@ -56,6 +68,52 @@ public class ListaParadaActivity extends ActivityGeneric {
             public void onItemClick(AdapterView<?> l, View v, int position,
                                     long id) {
 
+                TextView textView = (TextView) v.findViewById(R.id.textViewItemListParada);
+                textParada = textView.getText().toString();
+
+                ParadaTO paradaTO = new ParadaTO();
+                List paradaList = paradaTO.get("codParada", textParada.substring(0, textParada.indexOf('-')).trim());
+                paradaTO = (ParadaTO) paradaList.get(0);
+
+                ArrayList boletimPesqList = new ArrayList();
+                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                pesquisa.setCampo("idFuncBoletim");
+                pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                boletimPesqList.add(pesquisa);
+
+                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                pesquisa2.setCampo("statusBoletim");
+                pesquisa2.setValor(1L);
+                boletimPesqList.add(pesquisa2);
+
+                BoletimTO boletimTO = new BoletimTO();
+                List boletimList = boletimTO.get(boletimPesqList);
+                boletimTO = (BoletimTO) boletimList.get(0);
+
+                ApontamentoTO apontamentoTO = new ApontamentoTO();
+                List apontamentoList = apontamentoTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+
+                ApontamentoTO apontTO = new ApontamentoTO();
+                if(apontamentoList.size() == 0){
+                    ColabTO colabTO = pbmContext.getColabTO();
+                    EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
+                    List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                    escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
+                    apontTO.setDthrInicialAponta(Tempo.getInstance().dataSHora() + " " + escalaTrabTO.getHorarioEntEscalaTrab());
+                }
+                else{
+                    apontTO.setDthrInicialAponta(apontamentoTO.getDthrFinalAponta());
+                }
+
+                apontTO.setIdBolAponta(boletimTO.getIdBoletim());
+                apontTO.setIdExtBolAponta(boletimTO.getIdExtBoletim());
+                apontTO.setOsAponta(0L);
+                apontTO.setItemOSAponta(0L);
+                apontTO.setParadaAponta(paradaTO.getIdParada());
+                apontTO.setDthrFinalAponta(Tempo.getInstance().datahora());
+                apontTO.setRealizAponta(0L);
+                apontTO.setStatusAponta(0L);
+                ManipDadosEnvio.getInstance().salvaApontamento(apontTO);
                 Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();

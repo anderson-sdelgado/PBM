@@ -19,10 +19,10 @@ public class ReceberAlarme extends BroadcastReceiver {
 		}
 
 		Log.i("PMM", "DATA HORA = " + Tempo.getInstance().datahora());
-//		if(ManipDadosEnvio.getInstance().verifDadosEnvio()){
-//			Log.i("PMM", "ENVIANDO");
-//			ManipDadosEnvio.getInstance().envioDados(context);
-//		}
+		if(ManipDadosEnvio.getInstance().verifDadosEnvio()){
+			Log.i("PMM", "ENVIANDO");
+			ManipDadosEnvio.getInstance().envioDados(context);
+		}
 	}
 
 }

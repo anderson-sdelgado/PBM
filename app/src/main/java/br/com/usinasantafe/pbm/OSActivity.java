@@ -54,11 +54,11 @@ public class OSActivity extends ActivityGeneric {
 
                         }
 
-                    } catch (NumberFormatException e) {
+                    } catch (Exception e) {
 
                         AlertDialog.Builder alerta = new AlertDialog.Builder(OSActivity.this);
                         alerta.setTitle("ATENÇÃO");
-                        alerta.setMessage("VALOR DE OS INCORRETO OU OS INEXISTENTE! FAVOR VERIFICAR.");
+                        alerta.setMessage("O.S. INCORRETA OU INEXISTENTE! FAVOR VERIFICAR.");
                         alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

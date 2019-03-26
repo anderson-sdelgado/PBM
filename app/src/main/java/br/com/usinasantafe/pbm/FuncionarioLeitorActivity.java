@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
@@ -27,6 +29,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
     private String matricula;
     private Boolean verFunc;
     private ProgressDialog progressBar;
+    private ColabTO colabTO;
 
 
     @Override
@@ -53,13 +56,30 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
 
                 if(verFunc){
 
+                    ArrayList boletimPesqList = new ArrayList();
+                    EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                    pesquisa.setCampo("idFuncBoletim");
+                    pesquisa.setValor(colabTO.getIdColab());
+                    boletimPesqList.add(pesquisa);
+
+                    EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                    pesquisa2.setCampo("statusBoletim");
+                    pesquisa2.setValor(1L);
+                    boletimPesqList.add(pesquisa2);
+
                     BoletimTO boletimTO = new BoletimTO();
-                    List boletimList = boletimTO.get("idFuncBoletim", Long.parseLong(editTextPadrao.getText().toString()));
+                    List boletimList = boletimTO.get(boletimPesqList);
                     if(boletimList.size() == 0){
-                        boletimTO.setIdFuncBoletim(Long.parseLong(editTextPadrao.getText().toString()));
+                        boletimTO.setIdFuncBoletim(colabTO.getIdColab());
+                        boletimTO.setDthrInicialBoletim(Tempo.getInstance().datahora());
+                        boletimTO.setIdExtBoletim(0L);
+                        boletimTO.setStatusBoletim(1L);
                         ManipDadosEnvio.getInstance().salvaBoletimAberto(boletimTO);
                     }
 
+                    boletimPesqList.clear();
+                    boletimList.clear();
+                    pbmContext.setColabTO(colabTO);
                     Intent it = new Intent(FuncionarioLeitorActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
@@ -162,12 +182,10 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
             matricula = data.getStringExtra("SCAN_RESULT");
             if(matricula.length() == 8){
                 matricula = matricula.substring(0,7);
-                ColabTO colabTO = new ColabTO();
+                colabTO = new ColabTO();
                 List listColab = colabTO.get("matricColab", Long.parseLong(matricula));
                 if (listColab.size() > 0) {
                     verFunc = true;
-                    colabTO = (ColabTO) listColab.get(0);
-                    pbmContext.setColabTO(colabTO);
                     txtRetFunc.setText(matricula + "\n" + colabTO.getNomeColab());
                 }
                 else{

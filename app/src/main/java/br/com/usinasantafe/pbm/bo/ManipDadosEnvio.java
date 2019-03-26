@@ -1,5 +1,6 @@
 package br.com.usinasantafe.pbm.bo;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -63,7 +64,7 @@ public class ManipDadosEnvio {
     public void salvaApontamento(ApontamentoTO apontamentoTO) {
 
         String datahora = Tempo.getInstance().datahora();
-        apontamentoTO.setDthrAponta(datahora);
+        apontamentoTO.setDthrInicialAponta(datahora);
 
         BoletimTO boletimMMTO = new BoletimTO();
         List lBol = boletimMMTO.get("statusBoletim", 1L);
@@ -98,8 +99,11 @@ public class ManipDadosEnvio {
             for (int j = 0; j < apontaList.size(); j++) {
 
                 apontamentoTO = (ApontamentoTO) apontaList.get(j);
-                Gson gsonItem = new Gson();
-                jsonArrayAponta.add(gsonItem.toJsonTree(apontamentoTO, apontamentoTO.getClass()));
+                if (apontamentoTO.getStatusAponta() != 2L) {
+                    Gson gsonItem = new Gson();
+                    jsonArrayAponta.add(gsonItem.toJsonTree(apontamentoTO, apontamentoTO.getClass()));
+
+                }
 
             }
 
@@ -208,9 +212,9 @@ public class ManipDadosEnvio {
 
     /////////////////////////////// DELETAR DADOS ///////////////////////////////////////////////
 
-    public void atualDelBoletimMM(String retorno){
+    public void atualDelBoletimMM(String retorno) {
 
-        try{
+        try {
 
             int pos1 = retorno.indexOf("=") + 1;
             int pos2 = retorno.indexOf("_") + 1;
@@ -228,13 +232,18 @@ public class ManipDadosEnvio {
             for (int j = 0; j < apontaList.size(); j++) {
 
                 apontamentoTO = (ApontamentoTO) apontaList.get(j);
-                apontamentoTO.delete();
 
+                if(apontamentoTO.getStatusAponta() == 1L){
+                    apontamentoTO.setStatusAponta(2L);
+                    apontamentoTO.update();
+                }
+                else if(apontamentoTO.getStatusAponta() == 3L){
+                    apontamentoTO.delete();
+                }
 
             }
 
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Tempo.getInstance().setEnvioDado(true);
         }
 
@@ -305,6 +314,12 @@ public class ManipDadosEnvio {
         return boletimMMTO.get("statusBoletim", 2L);
     }
 
+    public List apontamento() {
+        ApontamentoTO apontamentoTO = new ApontamentoTO();
+        return apontamentoTO.dif("statusAponta", 2L);
+    }
+
+
     //////////////////////VERIFICAÇÃO DE DADOS///////////////////////////
 
     public Boolean verifBolAbertoSemEnvio() {
@@ -315,9 +330,23 @@ public class ManipDadosEnvio {
         return boletinsFechado().size() > 0;
     }
 
-    public Boolean verifAponta() {return new ApontamentoTO().hasElements(); }
+    public Boolean verifAponta() {
+        return apontamento().size() > 0;
+    }
 
     /////////////////////////MECANISMO DE ENVIO//////////////////////////////////
+
+    public void envioDados(Context context) {
+        enviando = true;
+        ConexaoWeb conexaoWeb = new ConexaoWeb();
+        if (conexaoWeb.verificaConexao(context)) {
+            envioDadosPrinc();
+        }
+        else{
+            enviando = false;
+        }
+
+    }
 
     public void envioDadosPrinc() {
         if (verifBolFechado()) {
@@ -336,7 +365,7 @@ public class ManipDadosEnvio {
     public boolean verifDadosEnvio() {
         if ((!verifBolFechado())
                 && (!verifBolAbertoSemEnvio())
-                && (!verifAponta())){
+                && (!verifAponta())) {
             enviando = false;
             return false;
         } else {

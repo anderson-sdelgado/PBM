@@ -135,20 +135,18 @@ public class Tempo {
 		this.envioDado = envioDado;
 	}
 
-	public boolean verifDataInicioBoletim(String hrInicio){
+	public boolean verifDataHora(String dthrInicio){
 
-        String horaStr = hrInicio.substring(0, 2);
-        String minutoStr = hrInicio.substring(3, 5);
+        String diaStr = dthrInicio.substring(0, 2);
+        String mesStr = dthrInicio.substring(3, 5);
+        String anoStr = dthrInicio.substring(6, 10);
+        String horaStr= dthrInicio.substring(11, 13);
+        String minutoStr= dthrInicio.substring(14, 16);
 
-        Date dataHora = new Date();
         Calendar cal = Calendar.getInstance();
-
-        cal.setTime(dataHora);
-
-//        int mes = cal.get(Calendar.MONTH);
-//        int dia = cal.get(Calendar.DAY_OF_MONTH);
-//        int ano = cal.get(Calendar.YEAR);
-
+        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(diaStr));
+        cal.set(Calendar.MONTH, Integer.parseInt(mesStr) - 1);
+        cal.set(Calendar.YEAR, Integer.parseInt(anoStr));
         cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaStr));
         cal.set(Calendar.MINUTE, Integer.parseInt(minutoStr));
 
@@ -168,7 +166,7 @@ public class Tempo {
         int minutos = calendar.get(Calendar.MINUTE);
         mes = mes + 1;
 
-        String mesStr = "";
+        mesStr = "";
         if(mes < 10){
             mesStr = "0" + mes;
         }
@@ -176,7 +174,7 @@ public class Tempo {
             mesStr = String.valueOf(mes);
         }
 
-        String diaStr = "";
+        diaStr = "";
         if(dia < 10){
             diaStr = "0" + dia;
         }

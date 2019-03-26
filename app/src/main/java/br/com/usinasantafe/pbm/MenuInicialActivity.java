@@ -55,28 +55,28 @@ public class MenuInicialActivity extends ActivityGeneric {
 
         progressBar = new ProgressDialog(this);
 
-        if(conexaoWeb.verificaConexao(this))
-        {
-
-            configTO = new ConfiguracaoTO();
-            configList = configTO.all();
-            if(configList.size() > 0){
-
-                progressBar.setCancelable(true);
-                progressBar.setMessage("Buscando Atualização...");
-                progressBar.show();
-
-                configTO = (ConfiguracaoTO) configList.get(0);
-                AtualizaTO atualizaTO = new AtualizaTO();
-                atualizaTO.setIdEquipAtualizacao(configTO.getEquipConfig());
-                atualizaTO.setVersaoAtual(pbmContext.versaoAplic);
-                ManipDadosVerif.getInstance().verAtualizacao(atualizaTO, this, progressBar);
-            }
-
-        }
-        else{
+//        if(conexaoWeb.verificaConexao(this))
+//        {
+//
+//            configTO = new ConfiguracaoTO();
+//            configList = configTO.all();
+//            if(configList.size() > 0){
+//
+//                progressBar.setCancelable(true);
+//                progressBar.setMessage("Buscando Atualização...");
+//                progressBar.show();
+//
+//                configTO = (ConfiguracaoTO) configList.get(0);
+//                AtualizaTO atualizaTO = new AtualizaTO();
+//                atualizaTO.setIdEquipAtualizacao(configTO.getEquipConfig());
+//                atualizaTO.setVersaoAtual(pbmContext.versaoAplic);
+//                ManipDadosVerif.getInstance().verAtualizacao(atualizaTO, this, progressBar);
+//            }
+//
+//        }
+//        else{
             startTimer();
-        }
+//        }
 
         configList.clear();
         listarMenuInicial();

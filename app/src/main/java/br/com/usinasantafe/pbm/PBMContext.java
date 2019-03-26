@@ -8,6 +8,7 @@ public class PBMContext extends Application {
 
     public static String versaoAplic = "1.1";
     private ColabTO colabTO;
+    private int verTela;
 
     @Override
     public void onCreate() {
@@ -21,5 +22,13 @@ public class PBMContext extends Application {
 
     public void setColabTO(ColabTO colabTO) {
         this.colabTO = colabTO;
+    }
+
+    public int getVerTela() {
+        return verTela;
+    }
+
+    public void setVerTela(int verTela) {
+        this.verTela = verTela;
     }
 }

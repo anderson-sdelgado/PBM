@@ -13,9 +13,9 @@ public class BoletimTO extends Entidade {
     @DatabaseField(generatedId=true)
     private Long idBoletim;
     @DatabaseField
-    private Long idFuncBoletim;
-    @DatabaseField
     private Long idExtBoletim;
+    @DatabaseField
+    private Long idFuncBoletim;
     @DatabaseField
     private String dthrInicialBoletim;
     @DatabaseField

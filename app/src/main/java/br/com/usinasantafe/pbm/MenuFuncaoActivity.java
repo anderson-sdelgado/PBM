@@ -2,7 +2,6 @@ package br.com.usinasantafe.pbm;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,8 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
+import br.com.usinasantafe.pbm.to.variaveis.ApontamentoTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class MenuFuncaoActivity extends ActivityGeneric {
 
@@ -50,26 +52,66 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                     Intent it;
 
-                    ColabTO colabTO = pbmContext.getColabTO();
-                    EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                    List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
-                    escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
+                    ArrayList boletimPesqList = new ArrayList();
+                    EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                    pesquisa.setCampo("idFuncBoletim");
+                    pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                    boletimPesqList.add(pesquisa);
 
-                    Log.i("PBM", "ID ESCALA COLAB BD " + escalaTrabTO.getIdEscalaTrab());
-                    Log.i("PBM", "ESCALA COLAB HORARIO BD " + escalaTrabTO.getHorarioEntEscalaTrab());
-                    Log.i("PBM", "HORARIO CELULAR " + Tempo.getInstance().datahora());
-                    if(Tempo.getInstance().verifDataInicioBoletim(escalaTrabTO.getHorarioEntEscalaTrab())){
-                        it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
-                        startActivity(it);
-                        finish();
+                    EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                    pesquisa2.setCampo("statusBoletim");
+                    pesquisa2.setValor(1L);
+                    boletimPesqList.add(pesquisa2);
+
+                    BoletimTO boletimTO = new BoletimTO();
+                    List boletimList = boletimTO.get(boletimPesqList);
+                    boletimTO = (BoletimTO) boletimList.get(0);
+
+                    ApontamentoTO apontamentoTO = new ApontamentoTO();
+                    List apontamentoList = apontamentoTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+
+                    if(apontamentoList.size() == 0){
+                        ColabTO colabTO = pbmContext.getColabTO();
+                        EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
+                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                        escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
+                        if(Tempo.getInstance().verifDataHora(Tempo.getInstance().dataSHora() + " " + escalaTrabTO.getHorarioEntEscalaTrab())){
+                            it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
+                            startActivity(it);
+                            finish();
+                        }
+                        else{
+                            it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
+                            startActivity(it);
+                            finish();
+                        }
                     }
                     else{
-                        it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
-                        startActivity(it);
-                        finish();
+                        apontamentoTO = (ApontamentoTO) apontamentoList.get(0);
+                        if(apontamentoTO.getDthrFinalAponta().equals("")){
+                            it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
+                            startActivity(it);
+                            finish();
+                        }
+                        else{
+                            if(Tempo.getInstance().verifDataHora(apontamentoTO.getDthrFinalAponta())){
+                                it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
+                                startActivity(it);
+                                finish();
+                            }
+                            else{
+                                it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
+                                startActivity(it);
+                                finish();
+                            }
+                        }
                     }
 
                 } else if (text.equals("FINALIZAR/INTERROPER")) {
+                    Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterFinalActivity.class);
+                    startActivity(it);
+                    finish();
+                } else if (text.equals("FINALIZAR TURNO")) {
                     Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterFinalActivity.class);
                     startActivity(it);
                     finish();

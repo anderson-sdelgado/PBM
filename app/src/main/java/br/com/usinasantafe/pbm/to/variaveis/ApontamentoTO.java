@@ -19,13 +19,17 @@ public class ApontamentoTO extends Entidade {
     @DatabaseField
     private Long osAponta;
     @DatabaseField
-    private Long ItemAponta;
+    private Long itemOSAponta;
     @DatabaseField
     private Long paradaAponta;
     @DatabaseField
-    private String dthrAponta;
+    private String dthrInicialAponta;
     @DatabaseField
-    private Long statusItemAponta;
+    private String dthrFinalAponta;
+    @DatabaseField
+    private Long realizAponta;
+    @DatabaseField
+    private Long statusAponta; //0 - Não Enviado; 1 - Enviado
 
     public ApontamentoTO() {
     }
@@ -62,12 +66,12 @@ public class ApontamentoTO extends Entidade {
         this.osAponta = osAponta;
     }
 
-    public Long getItemAponta() {
-        return ItemAponta;
+    public Long getItemOSAponta() {
+        return itemOSAponta;
     }
 
-    public void setItemAponta(Long itemAponta) {
-        ItemAponta = itemAponta;
+    public void setItemOSAponta(Long itemOSAponta) {
+        this.itemOSAponta = itemOSAponta;
     }
 
     public Long getParadaAponta() {
@@ -78,19 +82,35 @@ public class ApontamentoTO extends Entidade {
         this.paradaAponta = paradaAponta;
     }
 
-    public String getDthrAponta() {
-        return dthrAponta;
+    public String getDthrInicialAponta() {
+        return dthrInicialAponta;
     }
 
-    public void setDthrAponta(String dthrAponta) {
-        this.dthrAponta = dthrAponta;
+    public void setDthrInicialAponta(String dthrInicialAponta) {
+        this.dthrInicialAponta = dthrInicialAponta;
     }
 
-    public Long getStatusItemAponta() {
-        return statusItemAponta;
+    public String getDthrFinalAponta() {
+        return dthrFinalAponta;
     }
 
-    public void setStatusItemAponta(Long statusItemAponta) {
-        this.statusItemAponta = statusItemAponta;
+    public void setDthrFinalAponta(String dthrFinalAponta) {
+        this.dthrFinalAponta = dthrFinalAponta;
+    }
+
+    public Long getRealizAponta() {
+        return realizAponta;
+    }
+
+    public void setRealizAponta(Long realizAponta) {
+        this.realizAponta = realizAponta;
+    }
+
+    public Long getStatusAponta() {
+        return statusAponta;
+    }
+
+    public void setStatusAponta(Long statusAponta) {
+        this.statusAponta = statusAponta;
     }
 }

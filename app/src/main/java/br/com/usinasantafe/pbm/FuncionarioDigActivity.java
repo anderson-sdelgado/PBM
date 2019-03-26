@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
+import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
@@ -103,18 +106,31 @@ public class FuncionarioDigActivity extends ActivityGeneric {
 
                         colabTO = (ColabTO) colabList.get(0);
 
+                        ArrayList boletimPesqList = new ArrayList();
+                        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                        pesquisa.setCampo("idFuncBoletim");
+                        pesquisa.setValor(colabTO.getIdColab());
+                        boletimPesqList.add(pesquisa);
+
+                        EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                        pesquisa2.setCampo("statusBoletim");
+                        pesquisa2.setValor(1L);
+                        boletimPesqList.add(pesquisa2);
 
                         BoletimTO boletimTO = new BoletimTO();
-                        List boletimList = boletimTO.get("idFuncBoletim", colabTO.getIdColab());
+                        List boletimList = boletimTO.get(boletimPesqList);
                         if(boletimList.size() == 0){
-                            boletimTO.setIdFuncBoletim(Long.parseLong(editTextPadrao.getText().toString()));
+                            boletimTO.setIdFuncBoletim(colabTO.getIdColab());
+                            boletimTO.setDthrInicialBoletim(Tempo.getInstance().datahora());
+                            boletimTO.setIdExtBoletim(0L);
+                            boletimTO.setStatusBoletim(1L);
                             ManipDadosEnvio.getInstance().salvaBoletimAberto(boletimTO);
                         }
 
-                        Log.i("PBM", "DIG ID ESCALA COLAB = " + colabTO.getIdEscalaTrabColab());
-                        Log.i("PBM", "DIG ID ESCALA COLAB = " + colabTO.getIdEscalaTrabColab());
-                        pbmContext.setColabTO(colabTO);
+                        boletimList.clear();
+                        boletimPesqList.clear();
                         colabList.clear();
+                        pbmContext.setColabTO(colabTO);
                         Intent it = new Intent(FuncionarioDigActivity.this, MenuFuncaoActivity.class);
                         startActivity(it);
                         finish();
