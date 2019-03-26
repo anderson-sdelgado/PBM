@@ -124,7 +124,7 @@ public class FuncionarioDigActivity extends ActivityGeneric {
                             boletimTO.setDthrInicialBoletim(Tempo.getInstance().datahora());
                             boletimTO.setIdExtBoletim(0L);
                             boletimTO.setStatusBoletim(1L);
-                            ManipDadosEnvio.getInstance().salvaBoletimAberto(boletimTO);
+                            boletimTO.insert();
                         }
 
                         boletimList.clear();

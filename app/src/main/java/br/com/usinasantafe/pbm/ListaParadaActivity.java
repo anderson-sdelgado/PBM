@@ -90,11 +90,11 @@ public class ListaParadaActivity extends ActivityGeneric {
                 List boletimList = boletimTO.get(boletimPesqList);
                 boletimTO = (BoletimTO) boletimList.get(0);
 
-                ApontTO apontamentoTO = new ApontTO();
-                List apontamentoList = apontamentoTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+                ApontTO apontaTO = new ApontTO();
+                List apontList = apontaTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
 
                 ApontTO apontTO = new ApontTO();
-                if(apontamentoList.size() == 0){
+                if(apontList.size() == 0){
                     ColabTO colabTO = pbmContext.getColabTO();
                     EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
                     List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
@@ -102,7 +102,8 @@ public class ListaParadaActivity extends ActivityGeneric {
                     apontTO.setDthrInicialApont(Tempo.getInstance().dataSHora() + " " + escalaTrabTO.getHorarioEntEscalaTrab());
                 }
                 else{
-                    apontTO.setDthrInicialApont(apontamentoTO.getDthrFinalApont());
+                    apontaTO = (ApontTO) apontList.get(0);
+                    apontTO.setDthrInicialApont(apontaTO.getDthrFinalApont());
                 }
 
                 apontTO.setIdBolApont(boletimTO.getIdBoletim());
@@ -113,7 +114,7 @@ public class ListaParadaActivity extends ActivityGeneric {
                 apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
                 apontTO.setRealizApont(0L);
                 apontTO.setStatusApont(0L);
-                ManipDadosEnvio.getInstance().salvaApontamento(apontTO);
+                apontTO.insert();
                 Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();

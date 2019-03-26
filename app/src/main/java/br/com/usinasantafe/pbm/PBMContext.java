@@ -10,7 +10,7 @@ public class PBMContext extends Application {
     public static String versaoAplic = "1.1";
     private ColabTO colabTO;
     private ApontTO apontTO;
-    private int verTela;
+    private int verTela; //1 - Parada Normal; 2 - Parada para Fechar Boletim
 
     @Override
     public void onCreate() {

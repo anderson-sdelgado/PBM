@@ -54,7 +54,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
 
-                if(verFunc){
+                if (verFunc) {
 
                     ArrayList boletimPesqList = new ArrayList();
                     EspecificaPesquisa pesquisa = new EspecificaPesquisa();
@@ -69,12 +69,12 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
 
                     BoletimTO boletimTO = new BoletimTO();
                     List boletimList = boletimTO.get(boletimPesqList);
-                    if(boletimList.size() == 0){
+                    if (boletimList.size() == 0) {
                         boletimTO.setIdFuncBoletim(colabTO.getIdColab());
                         boletimTO.setDthrInicialBoletim(Tempo.getInstance().datahora());
                         boletimTO.setIdExtBoletim(0L);
                         boletimTO.setStatusBoletim(1L);
-                        ManipDadosEnvio.getInstance().salvaBoletimAberto(boletimTO);
+                        boletimTO.insert();
                     }
 
                     boletimPesqList.clear();
@@ -116,7 +116,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder alerta = new AlertDialog.Builder(  FuncionarioLeitorActivity.this);
+                AlertDialog.Builder alerta = new AlertDialog.Builder(FuncionarioLeitorActivity.this);
                 alerta.setTitle("ATENÇÃO");
                 alerta.setMessage("DESEJA REALMENTE ATUALIZAR BASE DE DADOS?");
                 alerta.setNegativeButton("SIM", new DialogInterface.OnClickListener() {
@@ -137,7 +137,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
 
                         } else {
 
-                            AlertDialog.Builder alerta = new AlertDialog.Builder( FuncionarioLeitorActivity.this);
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(FuncionarioLeitorActivity.this);
                             alerta.setTitle("ATENÇÃO");
                             alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
                             alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -170,25 +170,24 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
 
     }
 
-    public void callZXing(View view){
+    public void callZXing(View view) {
         Intent it = new Intent(FuncionarioLeitorActivity.this, br.com.usinasantafe.pbm.zxing.CaptureActivity.class);
         startActivityForResult(it, REQUEST_CODE);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(REQUEST_CODE == requestCode && RESULT_OK == resultCode){
+        if (REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
             matricula = data.getStringExtra("SCAN_RESULT");
-            if(matricula.length() == 8){
-                matricula = matricula.substring(0,7);
+            if (matricula.length() == 8) {
+                matricula = matricula.substring(0, 7);
                 colabTO = new ColabTO();
                 List listColab = colabTO.get("matricColab", Long.parseLong(matricula));
                 if (listColab.size() > 0) {
                     verFunc = true;
                     txtRetFunc.setText(matricula + "\n" + colabTO.getNomeColab());
-                }
-                else{
+                } else {
                     verFunc = false;
                     txtRetFunc.setText("Funcionário Inexistente");
                 }
@@ -197,7 +196,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
 
     }
 
-    public void onBackPressed()  {
+    public void onBackPressed() {
         Intent it = new Intent(FuncionarioLeitorActivity.this, MenuInicialActivity.class);
         startActivity(it);
         finish();

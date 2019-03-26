@@ -36,6 +36,8 @@ public class OSActivity extends ActivityGeneric {
                 // TODO Auto-generated method stub
                 if (!editTextPadrao.getText().toString().equals("")) {
 
+                    pbmContext.getApontTO().setOsApont(Long.parseLong(editTextPadrao.getText().toString()));
+
                     try {
 
                         ConexaoWeb conexaoWeb = new ConexaoWeb();

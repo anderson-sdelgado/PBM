@@ -11,19 +11,27 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
+import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ComponenteTO;
 import br.com.usinasantafe.pbm.to.estaticas.ItemOSTO;
 import br.com.usinasantafe.pbm.to.estaticas.ServicoTO;
+import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class ListaItemOSActivity extends ActivityGeneric {
 
     private ListView lista;
     private List listItemOS;
+    private PBMContext pbmContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_item_os);
+
+        pbmContext = (PBMContext) getApplication();
 
         Button buttonRetItemOS = (Button) findViewById(R.id.buttonRetItemOS);
 
@@ -60,8 +68,50 @@ public class ListaItemOSActivity extends ActivityGeneric {
                                     long id) {
                 // TODO Auto-generated method stub
 
-                Intent it = new Intent(ListaItemOSActivity.this, MenuFuncaoActivity.class);
+                ItemOSTO itemOSTO = (ItemOSTO) listItemOS.get(position);
+                pbmContext.getApontTO().setItemOSApont(itemOSTO.getSeqItemOS());
+
+                ArrayList boletimPesqList = new ArrayList();
+                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                pesquisa.setCampo("idFuncBoletim");
+                pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                boletimPesqList.add(pesquisa);
+
+                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                pesquisa2.setCampo("statusBoletim");
+                pesquisa2.setValor(1L);
+                boletimPesqList.add(pesquisa2);
+
+                BoletimTO boletimTO = new BoletimTO();
+                List boletimList = boletimTO.get(boletimPesqList);
+                boletimTO = (BoletimTO) boletimList.get(0);
+
+                ApontTO apontaTO = new ApontTO();
+                List apontList = apontaTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+                if(apontList.size() > 0) {
+                    apontaTO = (ApontTO) apontList.get(0);
+                    if(apontaTO.getParadaApont() == 0L){
+                        apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                        apontaTO.setStatusApont(0L);
+                        apontaTO.update();
+                    }
+                }
+
+                ApontTO apontTO = new ApontTO();
+                apontTO.setDthrInicialApont(Tempo.getInstance().datahora());
+                apontTO.setDthrFinalApont("");
+                apontTO.setIdBolApont(boletimTO.getIdBoletim());
+                apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
+                apontTO.setOsApont(pbmContext.getApontTO().getOsApont());
+                apontTO.setItemOSApont(pbmContext.getApontTO().getItemOSApont());
+                apontTO.setParadaApont(0L);
+                apontTO.setRealizApont(0L);
+                apontTO.setStatusApont(0L);
+                apontTO.insert();
+
+                Intent it = new Intent(ListaItemOSActivity.this, MenuInicialActivity.class);
                 startActivity(it);
+                finish();
 
             }
 

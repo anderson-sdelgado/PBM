@@ -9,10 +9,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class OpcaoInterFinalActivity extends ActivityGeneric {
 
     private ListView lista;
+    private PBMContext pbmContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +28,11 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
 
         ArrayList<String> itens = new ArrayList<String>();
 
+        pbmContext = (PBMContext) getApplication();
+
         itens.add("FINALIZAR");
         itens.add("INTERROPER");
+        itens.add("CANCELAR");
 
         AdapterList adapterList = new AdapterList(this, itens);
         lista = (ListView) findViewById(R.id.listViewMenuOpcao);
@@ -37,14 +47,53 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                 TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 String text = textView.getText().toString();
 
+                ArrayList boletimPesqList = new ArrayList();
+                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                pesquisa.setCampo("idFuncBoletim");
+                pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                boletimPesqList.add(pesquisa);
+
+                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                pesquisa2.setCampo("statusBoletim");
+                pesquisa2.setValor(1L);
+                boletimPesqList.add(pesquisa2);
+
+                BoletimTO boletimTO = new BoletimTO();
+                List boletimList = boletimTO.get(boletimPesqList);
+                boletimTO = (BoletimTO) boletimList.get(0);
+
+                ApontTO apontaTO = new ApontTO();
+                List apontList = apontaTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+
                 if (text.equals("FINALIZAR")) {
-                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
+
+                    apontaTO = (ApontTO) apontList.get(0);
+                    apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                    apontaTO.setRealizApont(1L);
+                    apontaTO.setStatusApont(0L);
+                    apontaTO.update();
+
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
                     startActivity(it);
                     finish();
+
                 } else if (text.equals("INTERROPER")) {
-                    Intent it = new Intent(OpcaoInterFinalActivity.this,  MenuFuncaoActivity.class);
+
+                    apontaTO = (ApontTO) apontList.get(0);
+                    apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                    apontaTO.setStatusApont(0L);
+                    apontaTO.update();
+
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
                     startActivity(it);
                     finish();
+
+                } else if (text.equals("CANCELAR")) {
+
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+                    startActivity(it);
+                    finish();
+
                 }
 
             }
