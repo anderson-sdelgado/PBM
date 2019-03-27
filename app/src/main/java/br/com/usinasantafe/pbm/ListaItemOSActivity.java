@@ -109,7 +109,8 @@ public class ListaItemOSActivity extends ActivityGeneric {
                 apontTO.setStatusApont(0L);
                 apontTO.insert();
 
-                Intent it = new Intent(ListaItemOSActivity.this, MenuInicialActivity.class);
+//                Intent it = new Intent(ListaItemOSActivity.this, MenuInicialActivity.class);
+                Intent it = new Intent(ListaItemOSActivity.this, MenuFuncaoActivity.class);
                 startActivity(it);
                 finish();
 

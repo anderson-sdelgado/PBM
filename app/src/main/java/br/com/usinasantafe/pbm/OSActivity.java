@@ -9,11 +9,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
+import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.to.estaticas.ItemOSTO;
 import br.com.usinasantafe.pbm.to.estaticas.OSTO;
+import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
 public class OSActivity extends ActivityGeneric {
 
@@ -40,24 +45,73 @@ public class OSActivity extends ActivityGeneric {
 
                     try {
 
-                        ConexaoWeb conexaoWeb = new ConexaoWeb();
-                        if (conexaoWeb.verificaConexao(OSActivity.this)) {
+                        ArrayList boletimPesqList = new ArrayList();
+                        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                        pesquisa.setCampo("idFuncBoletim");
+                        pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                        boletimPesqList.add(pesquisa);
 
-                            progressBar = new ProgressDialog(v.getContext());
-                            progressBar.setCancelable(true);
-                            progressBar.setMessage("Pequisando a OS...");
-                            progressBar.show();
+                        EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                        pesquisa2.setCampo("statusBoletim");
+                        pesquisa2.setValor(1L);
+                        boletimPesqList.add(pesquisa2);
 
-                            ManipDadosVerif.getInstance().verDados(editTextPadrao.getText().toString(), "OS"
-                                    , OSActivity.this, ListaItemOSActivity.class, progressBar);
+                        BoletimTO boletimTO = new BoletimTO();
+                        List boletimList = boletimTO.get(boletimPesqList);
+                        boletimTO = (BoletimTO) boletimList.get(0);
 
-                        } else {
+                        ArrayList apontPesqList = new ArrayList();
+                        EspecificaPesquisa pesquisa3 = new EspecificaPesquisa();
+                        pesquisa3.setCampo("idBolApont");
+                        pesquisa3.setValor(boletimTO.getIdBoletim());
+                        apontPesqList.add(pesquisa3);
 
-                            Intent it = new Intent(OSActivity.this, ItemOSDigActivity.class);
+                        EspecificaPesquisa pesquisa4 = new EspecificaPesquisa();
+                        pesquisa4.setCampo("osApont");
+                        pesquisa4.setValor(pbmContext.getApontTO().getOsApont());
+                        apontPesqList.add(pesquisa4);
+
+                        ApontTO apontTO = new ApontTO();
+                        List apontList = apontTO.get(apontPesqList);
+
+                        OSTO osto = new OSTO();
+                        List osList = osto.get("nroOS",pbmContext.getApontTO().getOsApont());
+
+                        if((apontList.size() > 0) && (osList.size() > 0)) {
+
+                            Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);
                             startActivity(it);
                             finish();
 
                         }
+                        else{
+
+                            ConexaoWeb conexaoWeb = new ConexaoWeb();
+                            if (conexaoWeb.verificaConexao(OSActivity.this)) {
+
+                                progressBar = new ProgressDialog(v.getContext());
+                                progressBar.setCancelable(true);
+                                progressBar.setMessage("Pequisando a OS...");
+                                progressBar.show();
+
+                                osto.deleteAll();
+                                ItemOSTO itemOSTO = new ItemOSTO();
+                                itemOSTO.deleteAll();
+
+                                ManipDadosVerif.getInstance().verDados(editTextPadrao.getText().toString(), "OS"
+                                        , OSActivity.this, ListaItemOSActivity.class, progressBar);
+
+                            } else {
+
+                                Intent it = new Intent(OSActivity.this, ItemOSDigActivity.class);
+                                startActivity(it);
+                                finish();
+
+                            }
+
+
+                        }
+
 
                     } catch (Exception e) {
 

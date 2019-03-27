@@ -73,7 +73,8 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                     apontaTO.setStatusApont(0L);
                     apontaTO.update();
 
-                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 
@@ -84,13 +85,15 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                     apontaTO.setStatusApont(0L);
                     apontaTO.update();
 
-                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 
                 } else if (text.equals("CANCELAR")) {
 
-                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 
