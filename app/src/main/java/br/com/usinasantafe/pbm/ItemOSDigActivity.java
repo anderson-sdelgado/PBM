@@ -59,7 +59,7 @@ public class ItemOSDigActivity extends ActivityGeneric {
                         boletimTO = (BoletimTO) boletimList.get(0);
 
                         ApontTO apontaTO = new ApontTO();
-                        List apontList = apontaTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+                        List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
                         if(apontList.size() > 0) {
                             apontaTO = (ApontTO) apontList.get(0);
                             if(apontaTO.getParadaApont() == 0L){
@@ -81,7 +81,8 @@ public class ItemOSDigActivity extends ActivityGeneric {
                         apontTO.setStatusApont(0L);
                         apontTO.insert();
 
-                        Intent it = new Intent(ItemOSDigActivity.this, MenuInicialActivity.class);
+//                        Intent it = new Intent(ItemOSDigActivity.this, MenuInicialActivity.class);
+                        Intent it = new Intent(ItemOSDigActivity.this, MenuFuncaoActivity.class);
                         startActivity(it);
                         finish();
 

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -66,7 +67,7 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                 boletimTO = (BoletimTO) boletimList.get(0);
 
                 ApontTO apontTO = new ApontTO();
-                List apontList = apontTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+                List apontList = apontTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
 
                 if (text.equals("APONTAMENTO")) {
 
@@ -77,7 +78,7 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
                         List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
                         escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                        if(Tempo.getInstance().verifDataHora(Tempo.getInstance().dataSHora() + " " + escalaTrabTO.getHorarioEntEscalaTrab())){
+                        if(Tempo.getInstance().verifDataHora(Tempo.getInstance().dataSHoraComTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab())){
                             it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                             startActivity(it);
                             finish();
@@ -158,7 +159,6 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         apontTO = (ApontTO) apontList.get(0);
                         if(apontTO.getParadaApont() == 0L){
 
-                            apontTO = (ApontTO) apontList.get(0);
                             if(apontTO.getParadaApont() == 0L){
                                 apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
                                 apontTO.setStatusApont(0L);

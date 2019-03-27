@@ -57,7 +57,7 @@ public class ManipDadosEnvio {
             jsonArrayBoletim.add(gsonCabec.toJsonTree(boletimTO, boletimTO.getClass()));
 
             ApontTO apontTO = new ApontTO();
-            List apontaList = apontTO.get("idBolAponta", boletimTO.getIdBoletim());
+            List apontaList = apontTO.get("idBolApont", boletimTO.getIdBoletim());
 
             for (int j = 0; j < apontaList.size(); j++) {
 
@@ -109,7 +109,7 @@ public class ManipDadosEnvio {
             jsonArrayBoletim.add(gsonCabec.toJsonTree(boletimTO, boletimTO.getClass()));
 
             ApontTO apontTO = new ApontTO();
-            List apontaList = apontTO.get("idBolAponta", boletimTO.getIdBoletim());
+            List apontaList = apontTO.get("idBolApont", boletimTO.getIdBoletim());
 
             for (int j = 0; j < apontaList.size(); j++) {
 
@@ -232,10 +232,10 @@ public class ManipDadosEnvio {
         }
 
         ApontTO apontTO = new ApontTO();
-        List apontaList = apontTO.in("idBolAponta", rLista);
+        List apontaList = apontTO.in("idBolApont", rLista);
 
-        for (int j = 0; j < apontaList.size(); j++) {
-            apontTO = (ApontTO) apontaList.get(j);
+        for (int i = 0; i < apontaList.size(); i++) {
+            apontTO = (ApontTO) apontaList.get(i);
             apontTO.delete();
         }
 
@@ -251,8 +251,8 @@ public class ManipDadosEnvio {
         ApontTO apontTO = new ApontTO();
         List apontaList = apontTO.all();
 
-        for (int j = 0; j < apontaList.size(); j++) {
-            apontTO = (ApontTO) apontaList.get(j);
+        for (int i = 0; i < apontaList.size(); i++) {
+            apontTO = (ApontTO) apontaList.get(i);
             apontTO.setStatusApont(1L);
             apontTO.update();
         }
@@ -288,7 +288,7 @@ public class ManipDadosEnvio {
 
     public List dadosApontamento() {
         ApontTO apontTO = new ApontTO();
-        return apontTO.get("statusAponta", 0L);
+        return apontTO.get("statusApont", 0L);
     }
 
 

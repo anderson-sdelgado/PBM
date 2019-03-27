@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
@@ -68,7 +67,7 @@ public class ListaParadaActivity extends ActivityGeneric {
             public void onItemClick(AdapterView<?> l, View v, int position,
                                     long id) {
 
-                TextView textView = (TextView) v.findViewById(R.id.textViewItemListParada);
+                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 textParada = textView.getText().toString();
 
                 ParadaTO paradaTO = new ParadaTO();
@@ -91,7 +90,7 @@ public class ListaParadaActivity extends ActivityGeneric {
                 boletimTO = (BoletimTO) boletimList.get(0);
 
                 ApontTO apontaTO = new ApontTO();
-                List apontList = apontaTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+                List apontList = apontaTO.get("idApont", boletimTO.getIdBoletim());
 
                 ApontTO apontTO = new ApontTO();
                 if(apontList.size() == 0){
@@ -99,10 +98,10 @@ public class ListaParadaActivity extends ActivityGeneric {
                     EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
                     List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
                     escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                    apontTO.setDthrInicialApont(Tempo.getInstance().dataSHora() + " " + escalaTrabTO.getHorarioEntEscalaTrab());
+                    apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
                 }
                 else{
-                    apontaTO = (ApontTO) apontList.get(0);
+                    apontaTO = (ApontTO) apontList.get(apontList.size() - 1);
                     apontTO.setDthrInicialApont(apontaTO.getDthrFinalApont());
                 }
 
@@ -115,7 +114,8 @@ public class ListaParadaActivity extends ActivityGeneric {
                 apontTO.setRealizApont(0L);
                 apontTO.setStatusApont(0L);
                 apontTO.insert();
-                Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
+//                Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
+                Intent it = new Intent(  ListaParadaActivity.this, MenuFuncaoActivity.class);
                 startActivity(it);
                 finish();
 

@@ -63,7 +63,7 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                 boletimTO = (BoletimTO) boletimList.get(0);
 
                 ApontTO apontaTO = new ApontTO();
-                List apontList = apontaTO.getAndOrderBy("idAponta", boletimTO.getIdBoletim(), "idAponta", false);
+                List apontList = apontaTO.getAndOrderBy("idApont", boletimTO.getIdBoletim(), "idApont", false);
 
                 if (text.equals("FINALIZAR")) {
 
