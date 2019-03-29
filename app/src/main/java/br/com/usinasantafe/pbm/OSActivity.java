@@ -98,7 +98,7 @@ public class OSActivity extends ActivityGeneric {
                                 itemOSTO.deleteAll();
 
                                 ManipDadosVerif.getInstance().verDados(editTextPadrao.getText().toString(), "OS"
-                                        , OSActivity.this, ItemOSListaActivity.class, progressBar);
+                                        , OSActivity.this, DescrOSActivity.class, progressBar);
 
                             } else {
 

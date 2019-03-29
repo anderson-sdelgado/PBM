@@ -24,7 +24,9 @@ import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
+import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 
 public class MenuInicialActivity extends ActivityGeneric {
@@ -62,28 +64,28 @@ public class MenuInicialActivity extends ActivityGeneric {
 
         progressBar = new ProgressDialog(this);
 
-//        if(conexaoWeb.verificaConexao(this))
-//        {
-//
-//            configTO = new ConfiguracaoTO();
-//            configList = configTO.all();
-//            if(configList.size() > 0){
-//
-//                progressBar.setCancelable(true);
-//                progressBar.setMessage("Buscando Atualização...");
-//                progressBar.show();
-//
-//                configTO = (ConfiguracaoTO) configList.get(0);
-//                AtualizaTO atualizaTO = new AtualizaTO();
-//                atualizaTO.setIdEquipAtualizacao(configTO.getEquipConfig());
-//                atualizaTO.setVersaoAtual(pbmContext.versaoAplic);
-//                ManipDadosVerif.getInstance().verAtualizacao(atualizaTO, this, progressBar);
-//            }
-//
-//        }
-//        else{
+        if(conexaoWeb.verificaConexao(this))
+        {
+
+            configTO = new ConfiguracaoTO();
+            configList = configTO.all();
+            if(configList.size() > 0){
+
+                progressBar.setCancelable(true);
+                progressBar.setMessage("Buscando Atualização...");
+                progressBar.show();
+
+                configTO = (ConfiguracaoTO) configList.get(0);
+                AtualizaTO atualizaTO = new AtualizaTO();
+                atualizaTO.setIdEquipAtualizacao(configTO.getEquipConfig());
+                atualizaTO.setVersaoAtual(pbmContext.versaoAplic);
+                ManipDadosVerif.getInstance().verAtualizacao(atualizaTO, this, progressBar);
+            }
+
+        }
+        else{
             startTimer();
-//        }
+        }
 
         configList.clear();
         listarMenuInicial();

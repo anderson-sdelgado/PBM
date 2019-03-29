@@ -113,4 +113,7 @@ public class ApontTO extends Entidade {
     public void setStatusApont(Long statusApont) {
         this.statusApont = statusApont;
     }
+
+
+
 }

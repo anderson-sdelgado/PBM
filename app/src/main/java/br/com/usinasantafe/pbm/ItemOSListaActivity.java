@@ -14,6 +14,7 @@ import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ComponenteTO;
 import br.com.usinasantafe.pbm.to.estaticas.ItemOSTO;
+import br.com.usinasantafe.pbm.to.estaticas.OSTO;
 import br.com.usinasantafe.pbm.to.estaticas.ServicoTO;
 import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
@@ -33,8 +34,13 @@ public class ItemOSListaActivity extends ActivityGeneric {
 
         Button buttonRetItemOS = (Button) findViewById(R.id.buttonRetItemOS);
 
+        OSTO osto = new OSTO();
+        List osList = osto.get("nroOS", pbmContext.getApontTO().getOsApont());
+        osto = (OSTO) osList.get(0);
+        osList.clear();
+
         ItemOSTO itemOSTO = new ItemOSTO();
-        listItemOS = itemOSTO.orderBy("seqItemOS",true);
+        listItemOS = itemOSTO.getAndOrderBy("idOS", osto.getIdOS(),"seqItemOS",true);
 
         ArrayList<String> itens = new ArrayList<String>();
 

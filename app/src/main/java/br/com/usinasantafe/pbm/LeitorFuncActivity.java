@@ -18,6 +18,7 @@ import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
+import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 
 public class LeitorFuncActivity extends ActivityGeneric {
 
@@ -77,6 +78,12 @@ public class LeitorFuncActivity extends ActivityGeneric {
                     BoletimTO boletimTO = new BoletimTO();
                     List boletimList = boletimTO.get(boletimPesqList);
                     if (boletimList.size() == 0) {
+
+                        ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
+                        List configuracaoList = configuracaoTO.all();
+                        configuracaoTO = (ConfiguracaoTO) configuracaoList.get(0);
+
+                        boletimTO.setEquipBoletim(configuracaoTO.getEquipConfig());
                         boletimTO.setIdFuncBoletim(colabTO.getIdColab());
                         boletimTO.setDthrInicialBoletim(Tempo.getInstance().datahora());
                         boletimTO.setIdExtBoletim(0L);
@@ -197,6 +204,7 @@ public class LeitorFuncActivity extends ActivityGeneric {
                 colabTO = new ColabTO();
                 List listColab = colabTO.get("matricColab", Long.parseLong(matricula));
                 if (listColab.size() > 0) {
+                    colabTO = (ColabTO) listColab.get(0);
                     verFunc = true;
                     txtRetFunc.setText(matricula + "\n" + colabTO.getNomeColab());
                 } else {

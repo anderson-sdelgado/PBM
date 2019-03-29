@@ -16,6 +16,8 @@ public class OSTO extends Entidade {
     private Long nroOS;
     @DatabaseField
     private Long equipOS;
+    @DatabaseField
+    private String descrEquipOS;
 
     public OSTO() {
     }
@@ -43,4 +45,13 @@ public class OSTO extends Entidade {
     public void setEquipOS(Long equipOS) {
         this.equipOS = equipOS;
     }
+
+    public String getDescrEquipOS() {
+        return descrEquipOS;
+    }
+
+    public void setDescrEquipOS(String descrEquipOS) {
+        this.descrEquipOS = descrEquipOS;
+    }
+
 }

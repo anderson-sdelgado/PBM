@@ -25,6 +25,8 @@ public class AtualizarAplicativo extends AsyncTask<String ,Integer ,Boolean> {
 
     private ProgressDialog bar;
     private Context context;
+    private static String URL = "http://www.usinasantafe.com.br/pbmqa/pbmqa.apk";
+    private static String ARQUIVO = "pbmqa.apk";
 
     @Override
     protected void onPreExecute() {
@@ -87,7 +89,7 @@ public class AtualizarAplicativo extends AsyncTask<String ,Integer ,Boolean> {
 
         try {
 
-            URL url = new URL("http://www.usinasantafe.com.br/pmm/pmm.apk");
+            URL url = new URL(URL);
 
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             c.setRequestMethod("GET");
@@ -99,7 +101,7 @@ public class AtualizarAplicativo extends AsyncTask<String ,Integer ,Boolean> {
             File file = new File(PATH);
             file.mkdirs();
 
-            File outputFile = new File(file,"pmm.apk");
+            File outputFile = new File(file, ARQUIVO);
 
             if(outputFile.exists()){
                 outputFile.delete();
@@ -139,7 +141,7 @@ public class AtualizarAplicativo extends AsyncTask<String ,Integer ,Boolean> {
     void OpenNewVersion(String location) {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(new File(location + "/pmm.apk")),
+        intent.setDataAndType(Uri.fromFile(new File(location + ARQUIVO)),
                 "application/vnd.android.package-archive");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);

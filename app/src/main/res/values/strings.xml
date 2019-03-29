@@ -164,4 +164,7 @@
     <string name="texto_hist_hr_inicial">07:40</string>
     <string name="texto_hist_hr_final">09:00</string>
     <string name="texto_titulo_hist">HISTÓRICO</string>
+    <string name="texto_titulo_equip_os">EQUIPAMENTO DA OS</string>
+    <string name="texto_cod_equip">715</string>
+    <string name="texto_descr_equip">COLHEDORA</string>
 </resources>

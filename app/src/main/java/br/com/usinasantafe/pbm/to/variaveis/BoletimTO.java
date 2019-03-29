@@ -17,6 +17,8 @@ public class BoletimTO extends Entidade {
     @DatabaseField
     private Long idFuncBoletim;
     @DatabaseField
+    private Long equipBoletim;
+    @DatabaseField
     private String dthrInicialBoletim;
     @DatabaseField
     private String dthrFinalBoletim;
@@ -82,5 +84,13 @@ public class BoletimTO extends Entidade {
 
     public void setAtualBoletim(Long atualBoletim) {
         this.atualBoletim = atualBoletim;
+    }
+
+    public Long getEquipBoletim() {
+        return equipBoletim;
+    }
+
+    public void setEquipBoletim(Long equipBoletim) {
+        this.equipBoletim = equipBoletim;
     }
 }

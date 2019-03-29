@@ -15,6 +15,7 @@ import java.util.List;
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosReceb;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
+import br.com.usinasantafe.pbm.to.estaticas.EquipTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 
 public class ConfiguracaoActivity extends ActivityGeneric {
@@ -28,11 +29,11 @@ public class ConfiguracaoActivity extends ActivityGeneric {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuracao);
 
-        Button btOkConfig =  (Button) findViewById(R.id.buttonSalvarConfig );
+        Button btOkConfig = (Button) findViewById(R.id.buttonSalvarConfig);
         Button btCancConfig = (Button) findViewById(R.id.buttonCancConfig);
         Button btAtualBDConfig = (Button) findViewById(R.id.buttonAtualizarBD);
-        editTextEquipConfig = (EditText)  findViewById(R.id.editTextEquipConfig);
-        editTextSenhaConfig = (EditText)  findViewById(R.id.editTextSenhaConfig);
+        editTextEquipConfig = (EditText) findViewById(R.id.editTextEquipConfig);
+        editTextSenhaConfig = (EditText) findViewById(R.id.editTextSenhaConfig);
 
         ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
 
@@ -51,28 +52,42 @@ public class ConfiguracaoActivity extends ActivityGeneric {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
 
-                if(!editTextEquipConfig.getText().toString().equals("") &&
-                        !editTextSenhaConfig.getText().toString().equals("")){
+                if (!editTextEquipConfig.getText().toString().equals("") &&
+                        !editTextSenhaConfig.getText().toString().equals("")) {
 
-//                    progressBar = new ProgressDialog(v.getContext());
-//                    progressBar.setCancelable(true);
-//                    progressBar.setMessage("Pequisando o Equipamento...");
-//                    progressBar.show();
-//
-//                    ManipDadosVerif.getInstance().setSenha(editTextSenhaConfig.getText().toString());
-//                    ManipDadosVerif.getInstance().verDados(editTextEquipConfig.getText().toString(), "Equip"
-//                            ,ConfiguracaoActivity.this ,MenuInicialActivity.class, progressBar);
+                    EquipTO equipTO = new EquipTO();
+                    List equipList = equipTO.get("numEquip", Long.parseLong(editTextEquipConfig.getText().toString()));
 
-                    ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
-                    configuracaoTO.deleteAll();
-                    configuracaoTO.setEquipConfig(Long.parseLong(editTextEquipConfig.getText().toString()));
-                    configuracaoTO.setSenhaConfig(editTextSenhaConfig.getText().toString());
-                    configuracaoTO.insert();
-                    configuracaoTO.commit();
+                    if (equipList.size() > 0) {
 
-                    Intent it = new Intent(ConfiguracaoActivity.this, MenuInicialActivity.class);
-                    startActivity(it);
-                    finish();
+                        equipTO = (EquipTO) equipList.get(0);
+
+                        ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
+                        configuracaoTO.deleteAll();
+                        configuracaoTO.setEquipConfig(equipTO.getIdEquip());
+                        configuracaoTO.setSenhaConfig(editTextSenhaConfig.getText().toString());
+                        configuracaoTO.insert();
+                        configuracaoTO.commit();
+
+                        Intent it = new Intent(ConfiguracaoActivity.this, MenuInicialActivity.class);
+                        startActivity(it);
+                        finish();
+
+                    } else {
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(ConfiguracaoActivity.this);
+                        alerta.setTitle("ATENÇÃO");
+                        alerta.setMessage("EQUIPAMENTO INEXISTENTE! POR FAVOR, VERIFIQUE A NUMERAÇÃO DO MESMO.");
+                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        alerta.show();
+                    }
+
+                    equipList.clear();
 
                 }
 
@@ -98,7 +113,7 @@ public class ConfiguracaoActivity extends ActivityGeneric {
 
                 ConexaoWeb conexaoWeb = new ConexaoWeb();
 
-                if(conexaoWeb.verificaConexao(ConfiguracaoActivity.this)){
+                if (conexaoWeb.verificaConexao(ConfiguracaoActivity.this)) {
                     progressBar = new ProgressDialog(v.getContext());
                     progressBar.setCancelable(true);
                     progressBar.setMessage("ATUALIZANDO ...");
@@ -108,8 +123,7 @@ public class ConfiguracaoActivity extends ActivityGeneric {
                     progressBar.show();
                     ManipDadosReceb.getInstance().setContext(ConfiguracaoActivity.this);
                     ManipDadosReceb.getInstance().atualizarBD(progressBar);
-                }
-                else{
+                } else {
                     AlertDialog.Builder alerta = new AlertDialog.Builder(ConfiguracaoActivity.this);
                     alerta.setTitle("ATENÇÃO");
                     alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
@@ -127,7 +141,7 @@ public class ConfiguracaoActivity extends ActivityGeneric {
 
     }
 
-    public void onBackPressed()  {
+    public void onBackPressed() {
     }
 
 }
