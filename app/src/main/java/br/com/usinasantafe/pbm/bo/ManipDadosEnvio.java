@@ -303,6 +303,20 @@ public class ManipDadosEnvio {
     }
 
     public Boolean verifAponta() {
+
+        List apontList = dadosApontamento();
+        for (int i = 0; i < apontList.size(); i++) {
+            ApontTO apontTO = (ApontTO) apontList.get(i);
+            if(apontTO.getIdExtBolApont() == 0){
+                BoletimTO boletimTO = new BoletimTO();
+                List boletimList = boletimTO.get("idBoletim", apontTO.getIdBolApont());
+                boletimTO = (BoletimTO) boletimList.get(0);
+                boletimList.clear();
+                apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
+                apontTO.update();
+            }
+        }
+
         return dadosApontamento().size() > 0;
     }
 
@@ -361,10 +375,5 @@ public class ManipDadosEnvio {
     public void setEnviando(boolean enviando) {
         this.enviando = enviando;
     }
-
-    public void setStatusEnvio(int statusEnvio) {
-        this.statusEnvio = statusEnvio;
-    }
-
 
 }

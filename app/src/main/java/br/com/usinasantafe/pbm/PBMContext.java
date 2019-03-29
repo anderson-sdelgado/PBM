@@ -24,13 +24,13 @@ public class PBMContext extends Application {
         return apontTO;
     }
 
-    public ColabTO getColabTO() {
-        return colabTO;
-    }
-
-    public void setColabTO(ColabTO colabTO) {
-        this.colabTO = colabTO;
-    }
+//    public ColabTO getColabTO() {
+//        return colabTO;
+//    }
+//
+//    public void setColabTO(ColabTO colabTO) {
+//        this.colabTO = colabTO;
+//    }
 
     public int getVerTela() {
         return verTela;

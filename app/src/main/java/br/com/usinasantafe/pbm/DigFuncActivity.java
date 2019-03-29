@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,14 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
-public class FuncionarioDigActivity extends ActivityGeneric {
+public class DigFuncActivity extends ActivityGeneric {
 
     private PBMContext pbmContext;
     private ProgressDialog progressBar;
@@ -40,7 +38,7 @@ public class FuncionarioDigActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder alerta = new AlertDialog.Builder(  FuncionarioDigActivity.this);
+                AlertDialog.Builder alerta = new AlertDialog.Builder(  DigFuncActivity.this);
                 alerta.setTitle("ATENÇÃO");
                 alerta.setMessage("DESEJA REALMENTE ATUALIZAR BASE DE DADOS?");
                 alerta.setNegativeButton("SIM", new DialogInterface.OnClickListener() {
@@ -49,19 +47,19 @@ public class FuncionarioDigActivity extends ActivityGeneric {
 
                         ConexaoWeb conexaoWeb = new ConexaoWeb();
 
-                        if (conexaoWeb.verificaConexao(FuncionarioDigActivity.this)) {
+                        if (conexaoWeb.verificaConexao(DigFuncActivity.this)) {
 
-                            progressBar = new ProgressDialog(FuncionarioDigActivity.this);
+                            progressBar = new ProgressDialog(DigFuncActivity.this);
                             progressBar.setCancelable(true);
                             progressBar.setMessage("Atualizando Colaborador...");
                             progressBar.show();
 
                             ManipDadosVerif.getInstance().verDados("", "Colab"
-                                    , FuncionarioDigActivity.this, FuncionarioDigActivity.class, progressBar);
+                                    , DigFuncActivity.this, DigFuncActivity.class, progressBar);
 
                         } else {
 
-                            AlertDialog.Builder alerta = new AlertDialog.Builder( FuncionarioDigActivity.this);
+                            AlertDialog.Builder alerta = new AlertDialog.Builder( DigFuncActivity.this);
                             alerta.setTitle("ATENÇÃO");
                             alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
                             alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -106,6 +104,15 @@ public class FuncionarioDigActivity extends ActivityGeneric {
 
                         colabTO = (ColabTO) colabList.get(0);
 
+                        BoletimTO bolTO = new BoletimTO();
+                        List bolList = bolTO.all();
+                        for (int i = 0; i < bolList.size(); i++) {
+                            bolTO = (BoletimTO) bolList.get(i);
+                            bolTO.setAtualBoletim(0L);
+                            bolTO.update();
+                        }
+                        bolList.clear();
+
                         ArrayList boletimPesqList = new ArrayList();
                         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
                         pesquisa.setCampo("idFuncBoletim");
@@ -124,20 +131,25 @@ public class FuncionarioDigActivity extends ActivityGeneric {
                             boletimTO.setDthrInicialBoletim(Tempo.getInstance().datahora());
                             boletimTO.setIdExtBoletim(0L);
                             boletimTO.setStatusBoletim(1L);
+                            boletimTO.setAtualBoletim(1L);
                             boletimTO.insert();
+                        }
+                        else{
+                            boletimTO = (BoletimTO) boletimList.get(0);
+                            boletimTO.setAtualBoletim(1L);
+                            boletimTO.update();
                         }
 
                         boletimList.clear();
                         boletimPesqList.clear();
                         colabList.clear();
-                        pbmContext.setColabTO(colabTO);
-                        Intent it = new Intent(FuncionarioDigActivity.this, MenuFuncaoActivity.class);
+                        Intent it = new Intent(DigFuncActivity.this, MenuFuncaoActivity.class);
                         startActivity(it);
                         finish();
 
                     } else {
 
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(FuncionarioDigActivity.this);
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(DigFuncActivity.this);
                         alerta.setTitle("ATENÇÃO");
                         alerta.setMessage("NUMERAÇÃO DO FUNCIONÁRIO INEXISTENTE! FAVOR VERIFICA A MESMA.");
                         alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -170,7 +182,7 @@ public class FuncionarioDigActivity extends ActivityGeneric {
     }
 
     public void onBackPressed()  {
-        Intent it = new Intent(FuncionarioDigActivity.this, MenuInicialActivity.class);
+        Intent it = new Intent(DigFuncActivity.this, MenuInicialActivity.class);
         startActivity(it);
         finish();
     }

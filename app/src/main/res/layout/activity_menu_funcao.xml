@@ -24,6 +24,11 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <TextView
+        android:id="@+id/textViewProcesso"
+        style="@style/TextViewItemList"
+        android:text="@string/texto_item_list" />
+
     <Button
         android:id="@+id/buttonRetMenuFuncao"
         style="@style/BotaoAvulso"

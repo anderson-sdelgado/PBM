@@ -49,8 +49,8 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
 
                 ArrayList boletimPesqList = new ArrayList();
                 EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("idFuncBoletim");
-                pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                pesquisa.setCampo("atualBoletim");
+                pesquisa.setValor(1L);
                 boletimPesqList.add(pesquisa);
 
                 EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
@@ -63,7 +63,7 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                 boletimTO = (BoletimTO) boletimList.get(0);
 
                 ApontTO apontaTO = new ApontTO();
-                List apontList = apontaTO.getAndOrderBy("idApont", boletimTO.getIdBoletim(), "idApont", false);
+                List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
 
                 if (text.equals("FINALIZAR")) {
 
@@ -73,8 +73,8 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                     apontaTO.setStatusApont(0L);
                     apontaTO.update();
 
-//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
-                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 
@@ -85,15 +85,15 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                     apontaTO.setStatusApont(0L);
                     apontaTO.update();
 
-//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
-                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 
                 } else if (text.equals("CANCELAR")) {
 
-//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
-                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
+                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
+//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 

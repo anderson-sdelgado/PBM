@@ -250,13 +250,13 @@ public class Tempo {
 
     }
 
-    public String manipDHSemTZ(String dthrInicio){
+    public String manipDHSemTZ(String dthr){
 
-        String diaStr = dthrInicio.substring(0, 2);
-        String mesStr = dthrInicio.substring(3, 5);
-        String anoStr = dthrInicio.substring(6, 10);
-        String horaStr= dthrInicio.substring(11, 13);
-        String minutoStr= dthrInicio.substring(14, 16);
+        String diaStr = dthr.substring(0, 2);
+        String mesStr = dthr.substring(3, 5);
+        String anoStr = dthr.substring(6, 10);
+        String horaStr= dthr.substring(11, 13);
+        String minutoStr= dthr.substring(14, 16);
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(diaStr));
@@ -270,6 +270,73 @@ public class Tempo {
         Date d = new Date();
         Calendar calendar = Calendar.getInstance();
         Long dt =  dataHoraInicio.getTime() - tz.getOffset(d.getTime());
+        calendar.setTimeInMillis(dt);
+
+        int mes = calendar.get(Calendar.MONTH);
+        int dia = calendar.get(Calendar.DAY_OF_MONTH);
+        int ano = calendar.get(Calendar.YEAR);
+        int horas = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutos = calendar.get(Calendar.MINUTE);
+        mes = mes + 1;
+
+        mesStr = "";
+        if(mes < 10){
+            mesStr = "0" + mes;
+        }
+        else{
+            mesStr = String.valueOf(mes);
+        }
+
+        diaStr = "";
+        if(dia < 10){
+            diaStr = "0" + dia;
+        }
+        else{
+            diaStr = String.valueOf(dia);
+        }
+
+        String horasStr = "";
+        if(horas < 10){
+            horasStr = "0" + horas;
+        }
+        else{
+            horasStr = String.valueOf(horas);
+        }
+
+        String minutosStr = "";
+        if(minutos < 10){
+            minutosStr = "0" + minutos;
+        }
+        else{
+            minutosStr = String.valueOf(minutos);
+        }
+
+        Log.i("PBM", "DATA HORA DE INICIO  = " +diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr);
+
+        return diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr;
+
+    }
+
+    public String manipDHComTZ(String dthr){
+
+        String diaStr = dthr.substring(0, 2);
+        String mesStr = dthr.substring(3, 5);
+        String anoStr = dthr.substring(6, 10);
+        String horaStr= dthr.substring(11, 13);
+        String minutoStr= dthr.substring(14, 16);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(diaStr));
+        cal.set(Calendar.MONTH, Integer.parseInt(mesStr) - 1);
+        cal.set(Calendar.YEAR, Integer.parseInt(anoStr));
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaStr));
+        cal.set(Calendar.MINUTE, Integer.parseInt(minutoStr));
+
+        Date dataHoraInicio = cal.getTime();
+        TimeZone tz = TimeZone.getDefault();
+        Date d = new Date();
+        Calendar calendar = Calendar.getInstance();
+        Long dt =  dataHoraInicio.getTime() + tz.getOffset(d.getTime());
         calendar.setTimeInMillis(dt);
 
         int mes = calendar.get(Calendar.MONTH);

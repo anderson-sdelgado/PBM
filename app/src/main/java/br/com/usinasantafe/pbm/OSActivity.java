@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,8 +46,8 @@ public class OSActivity extends ActivityGeneric {
 
                         ArrayList boletimPesqList = new ArrayList();
                         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                        pesquisa.setCampo("idFuncBoletim");
-                        pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                        pesquisa.setCampo("atualBoletim");
+                        pesquisa.setValor(1L);
                         boletimPesqList.add(pesquisa);
 
                         EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
@@ -79,7 +78,7 @@ public class OSActivity extends ActivityGeneric {
 
                         if((apontList.size() > 0) && (osList.size() > 0)) {
 
-                            Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);
+                            Intent it = new Intent(OSActivity.this, ItemOSListaActivity.class);
                             startActivity(it);
                             finish();
 
@@ -99,7 +98,7 @@ public class OSActivity extends ActivityGeneric {
                                 itemOSTO.deleteAll();
 
                                 ManipDadosVerif.getInstance().verDados(editTextPadrao.getText().toString(), "OS"
-                                        , OSActivity.this, ListaItemOSActivity.class, progressBar);
+                                        , OSActivity.this, ItemOSListaActivity.class, progressBar);
 
                             } else {
 

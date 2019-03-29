@@ -76,8 +76,8 @@ public class ListaParadaActivity extends ActivityGeneric {
 
                 ArrayList boletimPesqList = new ArrayList();
                 EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("idFuncBoletim");
-                pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                pesquisa.setCampo("atualBoletim");
+                pesquisa.setValor(1L);
                 boletimPesqList.add(pesquisa);
 
                 EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
@@ -90,18 +90,21 @@ public class ListaParadaActivity extends ActivityGeneric {
                 boletimTO = (BoletimTO) boletimList.get(0);
 
                 ApontTO apontaTO = new ApontTO();
-                List apontList = apontaTO.get("idApont", boletimTO.getIdBoletim());
+                List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
 
                 ApontTO apontTO = new ApontTO();
+
                 if(apontList.size() == 0){
-                    ColabTO colabTO = pbmContext.getColabTO();
+                    ColabTO colabTO = new ColabTO();
+                    List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
+                    colabTO = (ColabTO) colabList.get(0);
                     EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
                     List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
                     escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
                     apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
                 }
                 else{
-                    apontaTO = (ApontTO) apontList.get(apontList.size() - 1);
+                    apontaTO = (ApontTO) apontList.get(0);
                     apontTO.setDthrInicialApont(apontaTO.getDthrFinalApont());
                 }
 
@@ -114,8 +117,15 @@ public class ListaParadaActivity extends ActivityGeneric {
                 apontTO.setRealizApont(0L);
                 apontTO.setStatusApont(0L);
                 apontTO.insert();
-//                Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
-                Intent it = new Intent(  ListaParadaActivity.this, MenuFuncaoActivity.class);
+
+                if(pbmContext.getVerTela() == 2){
+                    boletimTO.setDthrFinalBoletim(Tempo.getInstance().datahora());
+                    boletimTO.setStatusBoletim(2L);
+                    boletimTO.update();
+                }
+
+                Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
+//                Intent it = new Intent(  ListaParadaActivity.this, MenuFuncaoActivity.class);
                 startActivity(it);
                 finish();
 

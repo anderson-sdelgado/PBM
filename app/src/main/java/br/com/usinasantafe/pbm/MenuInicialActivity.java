@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
@@ -21,11 +23,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
+import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
-import br.com.usinasantafe.pbm.to.variaveis.VerApontaFuncTO;
 
 public class MenuInicialActivity extends ActivityGeneric {
 
@@ -34,10 +34,15 @@ public class MenuInicialActivity extends ActivityGeneric {
     private ConfiguracaoTO configTO;
     private PBMContext pbmContext;
 
+    private TextView textViewProcesso;
+    private Handler customHandler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicial);
+
+        textViewProcesso = (TextView) findViewById(R.id.textViewProcesso);
 
         if(!checkPermission(Manifest.permission.CAMERA)){
             String[] PERMISSIONS = {android.Manifest.permission.CAMERA};
@@ -48,6 +53,8 @@ public class MenuInicialActivity extends ActivityGeneric {
             String[] PERMISSIONS = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
             ActivityCompat.requestPermissions((Activity) this, PERMISSIONS, 112);
         }
+
+        customHandler.postDelayed(updateTimerThread, 0);
 
         ConexaoWeb conexaoWeb = new ConexaoWeb();
         configTO = new ConfiguracaoTO();
@@ -105,7 +112,7 @@ public class MenuInicialActivity extends ActivityGeneric {
                 String text = textView.getText().toString();
 
                 if (text.equals("APONTAMENTO")) {
-                    Intent it = new Intent(MenuInicialActivity.this, FuncionarioLeitorActivity.class);
+                    Intent it = new Intent(MenuInicialActivity.this, LeitorFuncActivity.class);
                     startActivity(it);
                     finish();
                 } else if (text.equals("CONFIGURAÇÃO")) {
@@ -160,5 +167,32 @@ public class MenuInicialActivity extends ActivityGeneric {
             Log.i("PMM", "TIMER já ativo");
         }
     }
+
+    private Runnable updateTimerThread = new Runnable() {
+
+        public void run() {
+
+            ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
+            List configList = configuracaoTO.all();
+            if(configList.size() > 0) {
+                if (ManipDadosEnvio.getInstance().getStatusEnvio() == 1) {
+                    textViewProcesso.setTextColor(Color.YELLOW);
+                    textViewProcesso.setText("Enviando Dados...");
+                } else if (ManipDadosEnvio.getInstance().getStatusEnvio() == 2) {
+                    textViewProcesso.setTextColor(Color.RED);
+                    textViewProcesso.setText("Existem Dados para serem Enviados");
+                } else if (ManipDadosEnvio.getInstance().getStatusEnvio() == 3) {
+                    textViewProcesso.setTextColor(Color.GREEN);
+                    textViewProcesso.setText("Todos os Dados já foram Enviados");
+                }
+            }
+            else{
+                textViewProcesso.setTextColor(Color.RED);
+                textViewProcesso.setText("Aparelho sem Equipamento");
+            }
+            customHandler.postDelayed(this, 10000);
+        }
+    };
+
 
 }

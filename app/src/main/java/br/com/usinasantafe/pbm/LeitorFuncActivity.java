@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,14 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
-public class FuncionarioLeitorActivity extends ActivityGeneric {
+public class LeitorFuncActivity extends ActivityGeneric {
 
     public static final int REQUEST_CODE = 0;
     private PBMContext pbmContext;
@@ -56,6 +54,15 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
 
                 if (verFunc) {
 
+                    BoletimTO bolTO = new BoletimTO();
+                    List bolList = bolTO.all();
+                    for (int i = 0; i < bolList.size(); i++) {
+                        bolTO = (BoletimTO) bolList.get(i);
+                        bolTO.setAtualBoletim(0L);
+                        bolTO.update();
+                    }
+                    bolList.clear();
+
                     ArrayList boletimPesqList = new ArrayList();
                     EspecificaPesquisa pesquisa = new EspecificaPesquisa();
                     pesquisa.setCampo("idFuncBoletim");
@@ -74,13 +81,18 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
                         boletimTO.setDthrInicialBoletim(Tempo.getInstance().datahora());
                         boletimTO.setIdExtBoletim(0L);
                         boletimTO.setStatusBoletim(1L);
+                        boletimTO.setAtualBoletim(1L);
                         boletimTO.insert();
+                    }
+                    else{
+                        boletimTO = (BoletimTO) boletimList.get(0);
+                        boletimTO.setAtualBoletim(1L);
+                        boletimTO.update();
                     }
 
                     boletimPesqList.clear();
                     boletimList.clear();
-                    pbmContext.setColabTO(colabTO);
-                    Intent it = new Intent(FuncionarioLeitorActivity.this, MenuFuncaoActivity.class);
+                    Intent it = new Intent(LeitorFuncActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
                 }
@@ -93,7 +105,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent it = new Intent(FuncionarioLeitorActivity.this, MenuInicialActivity.class);
+                Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();
             }
@@ -105,7 +117,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Intent it = new Intent(FuncionarioLeitorActivity.this, FuncionarioDigActivity.class);
+                Intent it = new Intent(LeitorFuncActivity.this, DigFuncActivity.class);
                 startActivity(it);
                 finish();
             }
@@ -116,7 +128,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder alerta = new AlertDialog.Builder(FuncionarioLeitorActivity.this);
+                AlertDialog.Builder alerta = new AlertDialog.Builder(LeitorFuncActivity.this);
                 alerta.setTitle("ATENÇÃO");
                 alerta.setMessage("DESEJA REALMENTE ATUALIZAR BASE DE DADOS?");
                 alerta.setNegativeButton("SIM", new DialogInterface.OnClickListener() {
@@ -125,19 +137,19 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
 
                         ConexaoWeb conexaoWeb = new ConexaoWeb();
 
-                        if (conexaoWeb.verificaConexao(FuncionarioLeitorActivity.this)) {
+                        if (conexaoWeb.verificaConexao(LeitorFuncActivity.this)) {
 
-                            progressBar = new ProgressDialog(FuncionarioLeitorActivity.this);
+                            progressBar = new ProgressDialog(LeitorFuncActivity.this);
                             progressBar.setCancelable(true);
                             progressBar.setMessage("Atualizando Colaborador...");
                             progressBar.show();
 
                             ManipDadosVerif.getInstance().verDados("", "Colab"
-                                    , FuncionarioLeitorActivity.this, FuncionarioLeitorActivity.class, progressBar);
+                                    , LeitorFuncActivity.this, LeitorFuncActivity.class, progressBar);
 
                         } else {
 
-                            AlertDialog.Builder alerta = new AlertDialog.Builder(FuncionarioLeitorActivity.this);
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(LeitorFuncActivity.this);
                             alerta.setTitle("ATENÇÃO");
                             alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
                             alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -171,7 +183,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
     }
 
     public void callZXing(View view) {
-        Intent it = new Intent(FuncionarioLeitorActivity.this, br.com.usinasantafe.pbm.zxing.CaptureActivity.class);
+        Intent it = new Intent(LeitorFuncActivity.this, br.com.usinasantafe.pbm.zxing.CaptureActivity.class);
         startActivityForResult(it, REQUEST_CODE);
     }
 
@@ -197,7 +209,7 @@ public class FuncionarioLeitorActivity extends ActivityGeneric {
     }
 
     public void onBackPressed() {
-        Intent it = new Intent(FuncionarioLeitorActivity.this, MenuInicialActivity.class);
+        Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);
         startActivity(it);
         finish();
     }

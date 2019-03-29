@@ -32,6 +32,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -44,26 +45,30 @@
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <receiver android:name=".ReceberAlarme">
             <intent-filter>
                 <action android:name="EXECUTAR_ALARME" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".ConfiguracaoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FuncionarioDigActivity"
+            android:name=".DigFuncActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SenhaActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FuncionarioLeitorActivity"
+            android:name=".LeitorFuncActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MenuFuncaoActivity"
@@ -81,11 +86,12 @@
             android:name=".OpcaoInterFinalActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ListaItemOSActivity"
+            android:name=".ItemOSListaActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ItemOSDigActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".ListaHistoricoActivity"></activity>
     </application>
 
 </manifest>

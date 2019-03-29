@@ -45,8 +45,8 @@ public class ItemOSDigActivity extends ActivityGeneric {
 
                         ArrayList boletimPesqList = new ArrayList();
                         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                        pesquisa.setCampo("idFuncBoletim");
-                        pesquisa.setValor(pbmContext.getColabTO().getIdColab());
+                        pesquisa.setCampo("atualBoletim");
+                        pesquisa.setValor(1L);
                         boletimPesqList.add(pesquisa);
 
                         EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
@@ -60,13 +60,12 @@ public class ItemOSDigActivity extends ActivityGeneric {
 
                         ApontTO apontaTO = new ApontTO();
                         List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
+
                         if(apontList.size() > 0) {
                             apontaTO = (ApontTO) apontList.get(0);
-                            if(apontaTO.getParadaApont() == 0L){
-                                apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
-                                apontaTO.setStatusApont(0L);
-                                apontaTO.update();
-                            }
+                            apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                            apontaTO.setStatusApont(0L);
+                            apontaTO.update();
                         }
 
                         ApontTO apontTO = new ApontTO();
@@ -81,8 +80,8 @@ public class ItemOSDigActivity extends ActivityGeneric {
                         apontTO.setStatusApont(0L);
                         apontTO.insert();
 
-//                        Intent it = new Intent(ItemOSDigActivity.this, MenuInicialActivity.class);
-                        Intent it = new Intent(ItemOSDigActivity.this, MenuFuncaoActivity.class);
+                        Intent it = new Intent(ItemOSDigActivity.this, MenuInicialActivity.class);
+//                        Intent it = new Intent(ItemOSDigActivity.this, MenuFuncaoActivity.class);
                         startActivity(it);
                         finish();
 

@@ -22,6 +22,8 @@ public class BoletimTO extends Entidade {
     private String dthrFinalBoletim;
     @DatabaseField
     private Long statusBoletim; // 1 - Aberto; 2 - Fechado
+    @DatabaseField
+    private Long atualBoletim; //0 - Não esta sendo apontado; 1 - Esta sendo Apontado
 
     public BoletimTO() {
     }
@@ -72,5 +74,13 @@ public class BoletimTO extends Entidade {
 
     public void setStatusBoletim(Long statusBoletim) {
         this.statusBoletim = statusBoletim;
+    }
+
+    public Long getAtualBoletim() {
+        return atualBoletim;
+    }
+
+    public void setAtualBoletim(Long atualBoletim) {
+        this.atualBoletim = atualBoletim;
     }
 }
