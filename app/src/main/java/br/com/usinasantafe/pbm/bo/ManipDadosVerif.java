@@ -149,14 +149,14 @@ public class ManipDadosVerif {
 
             if (this.tipo.equals("Atualiza")) {
 
-                String verAtualizacao = result.trim();
+                String verAtual = result.trim();
 
-                if (verAtualizacao.equals("S")) {
+                if (verAtual.equals("SIM")) {
                     AtualizarAplicativo atualizarAplicativo = new AtualizarAplicativo();
                     atualizarAplicativo.setContext(this.menuInicialActivity);
                     atualizarAplicativo.execute();
                 } else {
-                    this.menuInicialActivity.startTimer();
+                    this.menuInicialActivity.startTimer(verAtual);
                 }
 
             }

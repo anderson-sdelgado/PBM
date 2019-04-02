@@ -26,6 +26,7 @@ import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.to.estaticas.ParametroTO;
 import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 
@@ -84,7 +85,7 @@ public class MenuInicialActivity extends ActivityGeneric {
 
         }
         else{
-            startTimer();
+            startTimer("OFF");
         }
 
         configList.clear();
@@ -142,9 +143,22 @@ public class MenuInicialActivity extends ActivityGeneric {
     public void onBackPressed()  {
     }
 
-    public void startTimer() {
+    public void startTimer(String retorno) {
 
         boolean alarmeAtivo = (PendingIntent.getBroadcast(this, 0, new Intent("ALARME_DISPARADO"), PendingIntent.FLAG_NO_CREATE) == null);
+
+        if(!retorno.equals("OFF")){
+            int pos1 = retorno.indexOf("=") + 1;
+            int pos2 = retorno.indexOf("_") + 1;
+            String minutos = retorno.substring(pos1, (pos2 - 1));
+
+            ParametroTO parametroTO = new ParametroTO();
+            parametroTO.setMinParametro(Long.parseLong(minutos));
+            parametroTO.deleteAll();
+            parametroTO.insert();
+
+        }
+
 
         if(progressBar.isShowing()){
             progressBar.dismiss();

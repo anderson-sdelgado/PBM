@@ -17,6 +17,7 @@ import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 
@@ -83,9 +84,13 @@ public class LeitorFuncActivity extends ActivityGeneric {
                         List configuracaoList = configuracaoTO.all();
                         configuracaoTO = (ConfiguracaoTO) configuracaoList.get(0);
 
+                        EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
+                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                        escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
+                        boletimTO.setDthrInicialBoletim(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
+
                         boletimTO.setEquipBoletim(configuracaoTO.getEquipConfig());
                         boletimTO.setIdFuncBoletim(colabTO.getIdColab());
-                        boletimTO.setDthrInicialBoletim(Tempo.getInstance().datahora());
                         boletimTO.setIdExtBoletim(0L);
                         boletimTO.setStatusBoletim(1L);
                         boletimTO.setAtualBoletim(1L);

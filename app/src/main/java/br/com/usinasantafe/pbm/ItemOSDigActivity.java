@@ -16,6 +16,8 @@ import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
 import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 
@@ -61,15 +63,26 @@ public class ItemOSDigActivity extends ActivityGeneric {
                         ApontTO apontaTO = new ApontTO();
                         List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
 
+                        ApontTO apontTO = new ApontTO();
+
                         if(apontList.size() > 0) {
                             apontaTO = (ApontTO) apontList.get(0);
                             apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
                             apontaTO.setStatusApont(0L);
                             apontaTO.update();
+
+                            apontTO.setDthrInicialApont(Tempo.getInstance().datahora());
+
+                        }else{
+                            ColabTO colabTO = new ColabTO();
+                            List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
+                            colabTO = (ColabTO) colabList.get(0);
+                            EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
+                            List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                            escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
+                            apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
                         }
 
-                        ApontTO apontTO = new ApontTO();
-                        apontTO.setDthrInicialApont(Tempo.getInstance().datahora());
                         apontTO.setDthrFinalApont("");
                         apontTO.setIdBolApont(boletimTO.getIdBoletim());
                         apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());

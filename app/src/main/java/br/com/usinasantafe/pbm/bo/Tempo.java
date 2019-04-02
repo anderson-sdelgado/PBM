@@ -11,9 +11,12 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import br.com.usinasantafe.pbm.to.estaticas.ParametroTO;
 
 public class Tempo {
 
@@ -187,8 +190,12 @@ public class Tempo {
         cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaStr));
         cal.set(Calendar.MINUTE, Integer.parseInt(minutoStr));
 
+        ParametroTO parametroTO = new ParametroTO();
+        List parametroList = parametroTO.all();
+        parametroTO = (ParametroTO) parametroList.get(0);
+
         Date dataHoraInicio = cal.getTime();
-        dataHoraInicio = new Date(dataHoraInicio.getTime() + (2 * 60 * 1000));
+        dataHoraInicio = new Date(dataHoraInicio.getTime() + (parametroTO.getMinParametro() * 60 * 1000));
 
         TimeZone tz = TimeZone.getDefault();
         Date d = new Date();
