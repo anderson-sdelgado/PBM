@@ -45,7 +45,6 @@
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -53,7 +52,6 @@
         <receiver android:name=".ReceberAlarme">
             <intent-filter>
                 <action android:name="EXECUTAR_ALARME" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -91,7 +89,9 @@
         <activity
             android:name=".ItemOSDigActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ListaHistoricoActivity"></activity>
+        <activity
+            android:name=".ListaHistoricoActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

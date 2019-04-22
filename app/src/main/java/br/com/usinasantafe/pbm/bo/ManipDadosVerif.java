@@ -82,6 +82,7 @@ public class ManipDadosVerif {
     }
 
     public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog) {
+
         verTerm = false;
         urlsConexaoHttp = new UrlsConexaoHttp();
         this.telaAtual = telaAtual;
@@ -246,11 +247,13 @@ public class ManipDadosVerif {
 
                         }
 
+                        verTerm = true;
                         Intent it = new Intent(telaAtual, telaProx);
                         telaAtual.startActivity(it);
 
                     } else {
 
+                        verTerm = true;
                         this.progressDialog.dismiss();
 
                         AlertDialog.Builder alerta = new AlertDialog.Builder(telaAtual);

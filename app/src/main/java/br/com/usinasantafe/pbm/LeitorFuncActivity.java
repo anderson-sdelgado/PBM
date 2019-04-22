@@ -95,11 +95,14 @@ public class LeitorFuncActivity extends ActivityGeneric {
                         boletimTO.setStatusBoletim(1L);
                         boletimTO.setAtualBoletim(1L);
                         boletimTO.insert();
+
                     }
                     else{
+
                         boletimTO = (BoletimTO) boletimList.get(0);
                         boletimTO.setAtualBoletim(1L);
                         boletimTO.update();
+
                     }
 
                     boletimPesqList.clear();

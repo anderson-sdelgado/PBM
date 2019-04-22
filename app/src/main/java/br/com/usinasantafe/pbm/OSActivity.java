@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
@@ -23,6 +24,7 @@ public class OSActivity extends ActivityGeneric {
 
     private ProgressDialog progressBar;
     private PBMContext pbmContext;
+    private Handler customHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,8 @@ public class OSActivity extends ActivityGeneric {
                                 ItemOSTO itemOSTO = new ItemOSTO();
                                 itemOSTO.deleteAll();
 
+                                customHandler.postDelayed(updateTimerThread, 10000);
+
                                 ManipDadosVerif.getInstance().verDados(editTextPadrao.getText().toString(), "OS"
                                         , OSActivity.this, DescrOSActivity.class, progressBar);
 
@@ -149,4 +153,25 @@ public class OSActivity extends ActivityGeneric {
         startActivity(it);
         finish();
     }
+
+    private Runnable updateTimerThread = new Runnable() {
+
+        public void run() {
+
+            if(!ManipDadosVerif.getInstance().isVerTerm()) {
+
+                ManipDadosVerif.getInstance().cancelVer();
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
+
+                Intent it = new Intent(OSActivity.this, ItemOSListaActivity.class);
+                startActivity(it);
+                finish();
+
+            }
+
+        }
+    };
+
 }
