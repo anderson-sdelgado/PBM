@@ -49,6 +49,8 @@ public class MenuFuncaoActivity extends ActivityGeneric {
         itens.add("APONTAMENTO");
         itens.add("FINALIZAR/INTERROPER");
         itens.add("FINALIZAR TURNO");
+        itens.add("CALIBRAGEM DE PNEU");
+        itens.add("TROCA DE PNEU");
         itens.add("HISTÓRICO");
 
         AdapterList adapterList = new AdapterList(this, itens);

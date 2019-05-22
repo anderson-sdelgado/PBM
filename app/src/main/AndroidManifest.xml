@@ -27,6 +27,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".PressaoEncPneuActivity"></activity>
+        <activity android:name=".PressaoColPneuActivity" />
+        <activity android:name=".PneuCalibActivity" />
+        <activity android:name=".PneuColActivity" />
+        <activity android:name=".PneuRetActivity" />
+        <activity android:name=".ListaPosPneuActivity" />
         <activity
             android:name=".MenuInicialActivity"
             android:screenOrientation="portrait">
@@ -45,6 +51,7 @@
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -52,6 +59,7 @@
         <receiver android:name=".ReceberAlarme">
             <intent-filter>
                 <action android:name="EXECUTAR_ALARME" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>

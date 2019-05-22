@@ -26,6 +26,7 @@ import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.estaticas.ParametroTO;
 import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
@@ -115,9 +116,12 @@ public class MenuInicialActivity extends ActivityGeneric {
                 String text = textView.getText().toString();
 
                 if (text.equals("APONTAMENTO")) {
-                    Intent it = new Intent(MenuInicialActivity.this, LeitorFuncActivity.class);
-                    startActivity(it);
-                    finish();
+                    ColabTO colabTO = new ColabTO();
+                    if(colabTO.hasElements()) {
+                        Intent it = new Intent(MenuInicialActivity.this, LeitorFuncActivity.class);
+                        startActivity(it);
+                        finish();
+                    }
                 } else if (text.equals("CONFIGURAÇÃO")) {
                     Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);
                     startActivity(it);

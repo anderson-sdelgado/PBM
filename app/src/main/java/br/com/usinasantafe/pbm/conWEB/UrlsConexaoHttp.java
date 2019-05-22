@@ -4,7 +4,6 @@ public class UrlsConexaoHttp {
 
     private int tipoEnvio = 1;
 
-
     public static String urlPrincipal = "http://www.usinasantafe.com.br/pbmqa/";
     public static String urlPrincEnvio = "http://www.usinasantafe.com.br/pbmqa/";
 

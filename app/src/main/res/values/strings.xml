@@ -167,4 +167,10 @@
     <string name="texto_titulo_equip_os">EQUIPAMENTO DA OS</string>
     <string name="texto_cod_equip">715</string>
     <string name="texto_descr_equip">COLHEDORA</string>
+    <string name="texto_pos_pneu">POSIÇÃO PNEU</string>
+    <string name="texto_pneu_calib">PNEU CALIBRADO:</string>
+    <string name="texto_pneu_col">PNEU COLOCADO:</string>
+    <string name="texto_pneu_ret">PNEU RETIRADO:</string>
+    <string name="texto_pressao_enc">PRESSÃO ENCONTRADA:</string>
+    <string name="texto_pressao_col">PRESSÃO COLOCADA:</string>
 </resources>
