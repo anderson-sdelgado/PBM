@@ -27,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PressaoEncPneuActivity"></activity>
+        <activity android:name=".EquipActivity"></activity>
+        <activity android:name=".PressaoEncPneuActivity" />
         <activity android:name=".PressaoColPneuActivity" />
         <activity android:name=".PneuCalibActivity" />
         <activity android:name=".PneuColActivity" />

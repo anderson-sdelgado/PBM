@@ -20,9 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.usinasantafe.pbm.MenuInicialActivity;
+import br.com.usinasantafe.pbm.PneuColActivity;
 import br.com.usinasantafe.pbm.conWEB.ConHttpPostVerGenerico;
 import br.com.usinasantafe.pbm.conWEB.UrlsConexaoHttp;
 import br.com.usinasantafe.pbm.pst.GenericRecordable;
+import br.com.usinasantafe.pbm.to.estaticas.PneuTO;
 import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
 
 /**
@@ -40,9 +42,10 @@ public class ManipDadosVerif {
     private String tipo;
     private AtualizaTO atualizaTO;
     private MenuInicialActivity menuInicialActivity;
+    private PneuColActivity pneuColActivity;
     private ConHttpPostVerGenerico conHttpPostVerGenerico;
     private boolean verTerm;
-    private String senha;
+    private int tipoTela;
 
     public ManipDadosVerif() {
         //genericRecordable = new GenericRecordable();
@@ -107,6 +110,34 @@ public class ManipDadosVerif {
 
     }
 
+    public void verDadosPneu(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog, int tipoTela) {
+
+        urlsConexaoHttp = new UrlsConexaoHttp();
+        this.telaAtual = telaAtual;
+        this.telaProx = telaProx;
+        this.progressDialog = progressDialog;
+        this.dado = dado;
+        this.tipo = tipo;
+        this.tipoTela = tipoTela;
+
+        envioDados();
+
+    }
+
+    public void verDadosPneu(String dado, String tipo, PneuColActivity pneuRetActivity, Class telaProx, ProgressDialog progressDialog, int tipoTela) {
+
+        urlsConexaoHttp = new UrlsConexaoHttp();
+        this.pneuColActivity = pneuRetActivity;
+        this.telaProx = telaProx;
+        this.progressDialog = progressDialog;
+        this.dado = dado;
+        this.tipo = tipo;
+        this.tipoTela = tipoTela;
+
+        envioDados();
+
+    }
+
     public void envioAtualizacao() {
 
         JsonArray jsonArray = new JsonArray();
@@ -163,96 +194,91 @@ public class ManipDadosVerif {
             }
             else if(this.tipo.equals("Colab")) {
 
-                if (!result.contains("exceeded")) {
-                    JSONObject jObj = new JSONObject(result);
-                    JSONArray jsonArray = jObj.getJSONArray("dados");
-                    Class classe = Class.forName(urlsConexaoHttp.localPSTEstatica + "ColabTO");
-
-                    if (jsonArray.length() > 0) {
-                        genericRecordable = new GenericRecordable();
-                        genericRecordable.deleteAll(classe);
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject objeto = jsonArray.getJSONObject(i);
-                            Gson gson = new Gson();
-                            genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
-                        }
-
-                        this.progressDialog.dismiss();
-                    }
-                }
-                else{
-                    this.progressDialog.dismiss();
-                }
+                recDadosGenerico(result, "ColabTO");
 
             }
             else if(this.tipo.equals("Parada")) {
 
-                if (!result.contains("exceeded")) {
-                    JSONObject jObj = new JSONObject(result);
-                    JSONArray jsonArray = jObj.getJSONArray("dados");
-                    Class classe = Class.forName(urlsConexaoHttp.localPSTEstatica + "ParadaTO");
-
-                    if (jsonArray.length() > 0) {
-                        genericRecordable = new GenericRecordable();
-                        genericRecordable.deleteAll(classe);
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject objeto = jsonArray.getJSONObject(i);
-                            Gson gson = new Gson();
-                            genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
-                        }
-
-                        this.progressDialog.dismiss();
-                    }
-                }
-                else{
-                    this.progressDialog.dismiss();
-                }
+                recDadosGenerico(result, "ParadaTO");
 
             }
             else if(this.tipo.equals("OS")) {
 
-                if (!result.contains("exceeded")) {
+                recDadosOS(result);
 
-                    int posicao = result.indexOf("#") + 1;
-                    String objPrinc = result.substring(0, result.indexOf("#"));
-                    String objSeg = result.substring(posicao, result.length());
+            }
+            else if(this.tipo.equals("Pneu")) {
 
-                    JSONObject jObj = new JSONObject(objPrinc);
-                    JSONArray jsonArray = jObj.getJSONArray("dados");
-                    Class classe = Class.forName(urlsConexaoHttp.localPSTEstatica + "OSTO");
+                recDadosPneu(result);
 
-                    if (jsonArray.length() > 0) {
+            }
 
-                        genericRecordable = new GenericRecordable();
 
-                        for (int i = 0; i < jsonArray.length(); i++) {
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.i("PMM", "Erro Manip atualizar = " + e);
+        }
 
-                            JSONObject objeto = jsonArray.getJSONObject(i);
-                            Gson gson = new Gson();
-                            genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
+    }
 
-                        }
+    public void cancelVer() {
+        verTerm = true;
+        if (conHttpPostVerGenerico.getStatus() == AsyncTask.Status.RUNNING) {
+            conHttpPostVerGenerico.cancel(true);
+        }
+    }
 
-                        jObj = new JSONObject(objSeg);
-                        jsonArray = jObj.getJSONArray("dados");
-                        classe = Class.forName(urlsConexaoHttp.localPSTEstatica + "ItemOSTO");
+    public boolean isVerTerm() {
+        return verTerm;
+    }
 
-                        for (int j = 0; j < jsonArray.length(); j++) {
+    public void recDadosOS(String result) {
 
-                            JSONObject objeto = jsonArray.getJSONObject(j);
-                            Gson gson = new Gson();
-                            genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
+        try {
 
-                        }
+            if (!result.contains("exceeded")) {
 
+                int posicao = result.indexOf("#") + 1;
+                String objPrinc = result.substring(0, result.indexOf("#"));
+                String objSeg = result.substring(posicao, result.length());
+
+                JSONObject jObj = new JSONObject(objPrinc);
+                JSONArray jsonArray = jObj.getJSONArray("dados");
+                Class classe = Class.forName(urlsConexaoHttp.localPSTEstatica + "OSTO");
+
+                if (jsonArray.length() > 0) {
+
+                    genericRecordable = new GenericRecordable();
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject objeto = jsonArray.getJSONObject(i);
+                        Gson gson = new Gson();
+                        genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
+
+                    }
+
+                    jObj = new JSONObject(objSeg);
+                    jsonArray = jObj.getJSONArray("dados");
+                    classe = Class.forName(urlsConexaoHttp.localPSTEstatica + "ItemOSTO");
+
+                    for (int j = 0; j < jsonArray.length(); j++) {
+
+                        JSONObject objeto = jsonArray.getJSONObject(j);
+                        Gson gson = new Gson();
+                        genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
+
+                    }
+
+                    if(!verTerm) {
                         verTerm = true;
                         Intent it = new Intent(telaAtual, telaProx);
                         telaAtual.startActivity(it);
+                    }
 
-                    } else {
+                } else {
 
+                    if(!verTerm) {
                         verTerm = true;
                         this.progressDialog.dismiss();
 
@@ -268,10 +294,136 @@ public class ManipDadosVerif {
                             }
                         });
                         alerta.show();
+                    }
+
+                }
+
+            } else {
+
+                if(!verTerm) {
+                    this.progressDialog.dismiss();
+
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(telaAtual);
+                    alerta.setTitle("ATENÇÃO");
+                    alerta.setMessage("EXCEDEU TEMPO LIMITE DE PESQUISA! POR FAVOR, PROCURE UM PONTO MELHOR DE CONEXÃO DOS DADOS.");
+
+                    alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO Auto-generated method stub
+
+                        }
+                    });
+                    alerta.show();
+                }
+
+            }
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.i("PMM", "Erro Manip atualizar = " + e);
+        }
+
+    }
+
+    public void recDadosGenerico(String result, String c) {
+
+        try {
+
+            if (!result.contains("exceeded")) {
+
+                JSONObject jObj = new JSONObject(result);
+                JSONArray jsonArray = jObj.getJSONArray("dados");
+                Class classe = Class.forName(urlsConexaoHttp.localPSTEstatica + c);
+
+                if (jsonArray.length() > 0) {
+
+                    genericRecordable = new GenericRecordable();
+                    genericRecordable.deleteAll(classe);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject objeto = jsonArray.getJSONObject(i);
+                        Gson gson = new Gson();
+                        genericRecordable.insert(gson.fromJson(objeto.toString(), classe), classe);
 
                     }
 
+                    this.progressDialog.dismiss();
+
                 } else {
+
+                    this.progressDialog.dismiss();
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.i("PMM", "Erro Manip atualizar = " + e);
+        }
+
+    }
+
+    public void recDadosPneu(String result) {
+
+        try {
+
+            if (!result.contains("exceeded")) {
+
+                JSONObject jObj = new JSONObject(result);
+                JSONArray jsonArray = jObj.getJSONArray("dados");
+
+                if (jsonArray.length() > 0) {
+
+                    PneuTO pneuTO = new PneuTO();
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject objeto = jsonArray.getJSONObject(i);
+                        Gson gson = new Gson();
+                        pneuTO = gson.fromJson(objeto.toString(), PneuTO.class);
+                        pneuTO.insert();
+
+                    }
+
+                    if(!verTerm) {
+                        verTerm = true;
+                        if(tipoTela == 2){
+                            pneuColActivity.salvarBoletimPneu();
+                        }
+                        Intent it = new Intent(telaAtual, telaProx);
+                        telaAtual.startActivity(it);
+                    }
+
+                } else {
+
+                    if(!verTerm) {
+
+                        verTerm = true;
+                        this.progressDialog.dismiss();
+
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(telaAtual);
+                        alerta.setTitle("ATENÇÃO");
+                        alerta.setMessage("PNEU INEXISTENTE NA BASE DE DADOS! FAVOR VERIFICA A NUMERAÇÃO.");
+
+                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // TODO Auto-generated method stub
+
+                            }
+                        });
+                        alerta.show();
+
+                    }
+
+                }
+
+            } else {
+
+                if(!verTerm) {
 
                     this.progressDialog.dismiss();
 
@@ -287,31 +439,15 @@ public class ManipDadosVerif {
                         }
                     });
                     alerta.show();
-
                 }
 
             }
-
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
             Log.i("PMM", "Erro Manip atualizar = " + e);
         }
 
-    }
-
-    public void cancelVer() {
-        if (conHttpPostVerGenerico.getStatus() == AsyncTask.Status.RUNNING) {
-            conHttpPostVerGenerico.cancel(true);
-        }
-    }
-
-    public boolean isVerTerm() {
-        return verTerm;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
 }

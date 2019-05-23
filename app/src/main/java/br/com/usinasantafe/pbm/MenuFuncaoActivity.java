@@ -240,6 +240,22 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                     finish();
 
                 }
+                else if (text.equals("CALIBRAGEM DE PNEU")) {
+
+                    pbmContext.setVerTela(3);
+                    Intent it = new Intent(MenuFuncaoActivity.this, EquipActivity.class);
+                    startActivity(it);
+                    finish();
+
+                }
+                else if (text.equals("TROCA DE PNEU")) {
+
+                    pbmContext.setVerTela(4);
+                    Intent it = new Intent(MenuFuncaoActivity.this, EquipActivity.class);
+                    startActivity(it);
+                    finish();
+
+                }
 
             }
 
