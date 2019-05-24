@@ -62,7 +62,7 @@ public class PneuRetActivity extends ActivityGeneric {
                             customHandler.postDelayed(updateTimerThread, 10000);
 
                             ManipDadosVerif.getInstance().verDadosPneu(editTextPadrao.getText().toString(), "Pneu"
-                                    , PneuRetActivity.this, PneuColActivity.class, progressBar, 1);
+                                    , PneuRetActivity.this, PneuColActivity.class, progressBar);
 
                         }
                         else{

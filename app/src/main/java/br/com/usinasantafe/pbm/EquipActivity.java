@@ -31,6 +31,8 @@ public class EquipActivity extends ActivityGeneric {
         Button buttonCancEquip = (Button) findViewById(R.id.buttonCancPadrao);
         Button buttonAtualEquip = (Button) findViewById(R.id.buttonAtualPadrao);
 
+        pbmContext = (PBMContext) getApplication();
+
         buttonAtualEquip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

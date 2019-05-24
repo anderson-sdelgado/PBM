@@ -3,6 +3,7 @@ package br.com.usinasantafe.pbm;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
@@ -91,20 +93,24 @@ public class ListaPosPneuActivity extends ActivityGeneric {
 
             }
             else{
+                Log.i("PMM", "CHEGOU AKI 1");
                 boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(0);
                 ItemMedPneuTO itemMedPneuTO = new ItemMedPneuTO();
                 List itemMedPneuList = itemMedPneuTO.get("idBolItemMedPneu", boletimPneuTO.getIdBolPneu());
                 boolean verCad;
                 for(int i = 0; i < rEquipPneuList.size(); i++){
                     rEquipPneuTO = (REquipPneuTO) rEquipPneuList.get(i);
+                    Log.i("PMM", "CHEGOU AKI 2 = " + rEquipPneuTO.getIdPosConfPneu());
                     verCad = true;
                     for(int j = 0; j < itemMedPneuList.size(); j++) {
                         itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(j);
-                        if(rEquipPneuTO.getIdPosConfPneu() == itemMedPneuTO.getPosItemMedPneu()){
+                        Log.i("PMM", "CHEGOU AKI 3 = " + itemMedPneuTO.getPosItemMedPneu());
+                        if(Objects.equals(rEquipPneuTO.getIdPosConfPneu(), itemMedPneuTO.getPosItemMedPneu())){
                             verCad = false;
                         }
                     }
                     if(verCad) {
+                        Log.i("PMM", "CHEGOU AKI 4 = " + rEquipPneuTO.getPosPneu());
                         itens.add(rEquipPneuTO.getPosPneu());
                     }
                 }
@@ -139,9 +145,21 @@ public class ListaPosPneuActivity extends ActivityGeneric {
                 String posPneu = textView.getText().toString();
 
                 REquipPneuTO rEquipPneuTO = new REquipPneuTO();
-                List rEquipPneuList = rEquipPneuTO.get("posPneu", posPneu);
+                ArrayList equipPneuPesqList = new ArrayList();
+                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                pesquisa.setCampo("idEquip");
+                pesquisa.setValor(pbmContext.getBoletimPneuTO().getEquipBolPneu());
+                equipPneuPesqList.add(pesquisa);
+
+                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                pesquisa2.setCampo("posPneu");
+                pesquisa2.setValor(posPneu);
+                equipPneuPesqList.add(pesquisa2);
+
+                List rEquipPneuList = rEquipPneuTO.get(equipPneuPesqList);
                 rEquipPneuTO = (REquipPneuTO) rEquipPneuList.get(0);
                 rEquipPneuList.clear();
+                equipPneuPesqList.clear();
 
                 if(pbmContext.getVerTela() == 3) {
                     pbmContext.getItemMedPneuTO().setPosItemMedPneu(rEquipPneuTO.getIdPosConfPneu());

@@ -29,7 +29,10 @@ import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.estaticas.ParametroTO;
 import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
+import br.com.usinasantafe.pbm.to.variaveis.ItemManutPneuTO;
+import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
 
 public class MenuInicialActivity extends ActivityGeneric {
 
@@ -118,6 +121,9 @@ public class MenuInicialActivity extends ActivityGeneric {
                 if (text.equals("APONTAMENTO")) {
                     ColabTO colabTO = new ColabTO();
                     if(colabTO.hasElements()) {
+
+                        clear();
+
                         Intent it = new Intent(MenuInicialActivity.this, LeitorFuncActivity.class);
                         startActivity(it);
                         finish();
@@ -214,5 +220,39 @@ public class MenuInicialActivity extends ActivityGeneric {
         }
     };
 
+    public void clear(){
+
+        BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
+        List boletimPneuList = boletimPneuTO.get("statusBolPneu", 1L);
+
+        ArrayList<Long> rLista = new ArrayList<Long>();
+
+        for (int i = 0; i < boletimPneuList.size(); i++) {
+            boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(i);
+            rLista.add(boletimPneuTO.getIdBolPneu());
+        }
+
+        ItemMedPneuTO itemMedPneuTO = new ItemMedPneuTO();
+        List itemMedPneuList = itemMedPneuTO.in("idBolItemMedPneu", rLista);
+
+        for (int i = 0; i < itemMedPneuList.size(); i++) {
+            itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(i);
+            itemMedPneuTO.delete();
+        }
+
+        ItemManutPneuTO itemManutPneuTO = new ItemManutPneuTO();
+        List itemManutPneuList = itemManutPneuTO.in("idBolItemManutPneu", rLista);
+
+        for (int i = 0; i < itemManutPneuList.size(); i++) {
+            itemManutPneuTO = (ItemManutPneuTO) itemManutPneuList.get(i);
+            itemManutPneuTO.delete();
+        }
+
+        for (int i = 0; i < boletimPneuList.size(); i++) {
+            boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(i);
+            boletimPneuTO.delete();
+        }
+
+    }
 
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.List;
+import java.util.Objects;
 
 import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.to.estaticas.REquipPneuTO;
@@ -55,21 +56,24 @@ public class PressaoColPneuActivity extends ActivityGeneric {
 
                         REquipPneuTO rEquipPneuTO = new REquipPneuTO();
                         List rEquipPneuList = rEquipPneuTO.get("idEquip", boletimPneuTO.getEquipBolPneu());
-
                         List itemMedPneuList = itemMedPneuTO.get("idBolItemMedPneu", boletimPneuTO.getIdBolPneu());
                         int verCad = 0;
                         for(int i = 0; i < rEquipPneuList.size(); i++){
                             rEquipPneuTO = (REquipPneuTO) rEquipPneuList.get(i);
                             for(int j = 0; j < itemMedPneuList.size(); j++) {
                                 itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(j);
-                                if(rEquipPneuTO.getIdPosConfPneu() == itemMedPneuTO.getPosItemMedPneu()){
+                                if(Objects.equals(rEquipPneuTO.getIdPosConfPneu(), itemMedPneuTO.getPosItemMedPneu())){
                                     verCad++;
                                 }
                             }
                         }
 
                         if(rEquipPneuList.size() == verCad){
-                            Intent it = new Intent(PressaoColPneuActivity.this, MenuFuncaoActivity.class);
+
+                            boletimPneuTO.setStatusBolPneu(2L);
+                            boletimPneuTO.update();
+
+                            Intent it = new Intent(PressaoColPneuActivity.this, MenuInicialActivity.class);
                             startActivity(it);
                             finish();
 

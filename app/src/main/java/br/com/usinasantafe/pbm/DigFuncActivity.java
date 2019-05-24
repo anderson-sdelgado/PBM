@@ -138,7 +138,6 @@ public class DigFuncActivity extends ActivityGeneric {
                             List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
                             escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
                             boletimTO.setDthrInicialBoletim(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
-
                             boletimTO.setEquipBoletim(configuracaoTO.getEquipConfig());
                             boletimTO.setIdFuncBoletim(colabTO.getIdColab());
                             boletimTO.setIdExtBoletim(0L);

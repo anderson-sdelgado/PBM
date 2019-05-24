@@ -61,7 +61,7 @@ public class PneuCalibActivity extends ActivityGeneric {
                             customHandler.postDelayed(updateTimerThread, 10000);
 
                             ManipDadosVerif.getInstance().verDadosPneu(editTextPadrao.getText().toString(), "Pneu"
-                                    , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar, 1);
+                                    , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar);
 
                         }
                         else{

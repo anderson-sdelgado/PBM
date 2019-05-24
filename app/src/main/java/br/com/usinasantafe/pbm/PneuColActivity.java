@@ -8,13 +8,17 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.bo.ConexaoWeb;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
+import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
 import br.com.usinasantafe.pbm.to.estaticas.PneuTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 import br.com.usinasantafe.pbm.to.variaveis.ItemManutPneuTO;
 
 public class PneuColActivity extends ActivityGeneric {
@@ -59,14 +63,14 @@ public class PneuColActivity extends ActivityGeneric {
 
                             customHandler.postDelayed(updateTimerThread, 10000);
 
-                            ManipDadosVerif.getInstance().verDadosPneu(editTextPadrao.getText().toString(), "Pneu"
-                                    , PneuColActivity.this, MenuFuncaoActivity.class, progressBar, 2);
+                            ManipDadosVerif.getInstance().verDadosPneuFinal(editTextPadrao.getText().toString(), "Pneu"
+                                    , PneuColActivity.this, MenuInicialActivity.class, progressBar);
 
                         }
                         else{
 
                             salvarBoletimPneu();
-                            Intent it = new Intent(PneuColActivity.this, MenuFuncaoActivity.class);
+                            Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
                             startActivity(it);
 
                         }
@@ -75,7 +79,7 @@ public class PneuColActivity extends ActivityGeneric {
                     else {
 
                         salvarBoletimPneu();
-                        Intent it = new Intent(PneuColActivity.this, MenuFuncaoActivity.class);
+                        Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
                         startActivity(it);
                     }
 
@@ -117,7 +121,7 @@ public class PneuColActivity extends ActivityGeneric {
 
                 salvarBoletimPneu();
 
-                Intent it = new Intent(PneuColActivity.this, MenuFuncaoActivity.class);
+                Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();
 
@@ -128,8 +132,31 @@ public class PneuColActivity extends ActivityGeneric {
 
     public void salvarBoletimPneu(){
 
+        ArrayList boletimPesqList = new ArrayList();
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("atualBoletim");
+        pesquisa.setValor(1L);
+        boletimPesqList.add(pesquisa);
+
+        EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+        pesquisa2.setCampo("statusBoletim");
+        pesquisa2.setValor(1L);
+        boletimPesqList.add(pesquisa2);
+
+        BoletimTO boletimTO = new BoletimTO();
+        List boletimList = boletimTO.get(boletimPesqList);
+        boletimTO = (BoletimTO) boletimList.get(0);
+        boletimList.clear();
+        boletimPesqList.clear();
+
+        ColabTO colabTO = new ColabTO();
+        List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
+        colabTO = (ColabTO) colabList.get(0);
+        colabList.clear();
+
         BoletimPneuTO boletimPneuTO = pbmContext.getBoletimPneuTO();
         boletimPneuTO.setDthrBolPneu(Tempo.getInstance().datahora());
+        boletimPneuTO.setFuncBolPneu(colabTO.getMatricColab());
         boletimPneuTO.setStatusBolPneu(1L);
         boletimPneuTO.insert();
 
@@ -143,6 +170,10 @@ public class PneuColActivity extends ActivityGeneric {
 
         boletimPneuTO.setStatusBolPneu(2L);
         boletimPneuTO.update();
+
+        Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
+        startActivity(it);
+        finish();
 
     }
 

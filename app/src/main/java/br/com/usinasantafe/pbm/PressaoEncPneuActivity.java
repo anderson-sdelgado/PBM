@@ -17,6 +17,8 @@ public class PressaoEncPneuActivity extends ActivityGeneric {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pressao_enc_pneu);
 
+        pbmContext = (PBMContext) getApplication();
+
         Button buttonOkPressaoEnc = (Button) findViewById(R.id.buttonOkPadrao);
         Button buttonCancPressaoEnc = (Button) findViewById(R.id.buttonCancPadrao);
 

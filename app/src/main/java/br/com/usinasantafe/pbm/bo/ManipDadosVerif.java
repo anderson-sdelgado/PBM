@@ -98,41 +98,31 @@ public class ManipDadosVerif {
 
     }
 
-    public void verDados(String dado, String tipo, Context telaAtual, Class telaProx) {
+    public void verDadosPneu(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog) {
 
-        urlsConexaoHttp = new UrlsConexaoHttp();
-        this.telaAtual = telaAtual;
-        this.telaProx = telaProx;
-        this.dado = dado;
-        this.tipo = tipo;
-
-        envioDados();
-
-    }
-
-    public void verDadosPneu(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog, int tipoTela) {
-
+        verTerm = false;
         urlsConexaoHttp = new UrlsConexaoHttp();
         this.telaAtual = telaAtual;
         this.telaProx = telaProx;
         this.progressDialog = progressDialog;
         this.dado = dado;
         this.tipo = tipo;
-        this.tipoTela = tipoTela;
+        this.tipoTela = 1;
 
         envioDados();
 
     }
 
-    public void verDadosPneu(String dado, String tipo, PneuColActivity pneuRetActivity, Class telaProx, ProgressDialog progressDialog, int tipoTela) {
+    public void verDadosPneuFinal(String dado, String tipo, PneuColActivity pneuRetActivity, Class telaProx, ProgressDialog progressDialog) {
 
+        verTerm = false;
         urlsConexaoHttp = new UrlsConexaoHttp();
         this.pneuColActivity = pneuRetActivity;
         this.telaProx = telaProx;
         this.progressDialog = progressDialog;
         this.dado = dado;
         this.tipo = tipo;
-        this.tipoTela = tipoTela;
+        this.tipoTela = 2;
 
         envioDados();
 
@@ -390,11 +380,13 @@ public class ManipDadosVerif {
 
                     if(!verTerm) {
                         verTerm = true;
-                        if(tipoTela == 2){
-                            pneuColActivity.salvarBoletimPneu();
+                        if(tipoTela == 1){
+                            Intent it = new Intent(telaAtual, telaProx);
+                            telaAtual.startActivity(it);
                         }
-                        Intent it = new Intent(telaAtual, telaProx);
-                        telaAtual.startActivity(it);
+                        else{
+                            this.pneuColActivity.salvarBoletimPneu();
+                        }
                     }
 
                 } else {

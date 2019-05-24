@@ -19,7 +19,10 @@ import br.com.usinasantafe.pbm.conWEB.ConHttpPostCadGenerico;
 import br.com.usinasantafe.pbm.conWEB.UrlsConexaoHttp;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
+import br.com.usinasantafe.pbm.to.variaveis.ItemManutPneuTO;
+import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
 
 public class ManipDadosEnvio {
 
@@ -175,6 +178,66 @@ public class ManipDadosEnvio {
 
     }
 
+    public void enviarBolPneu() {
+
+        BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
+        List boletimPneuList = boletinsPneu();
+
+        JsonArray jsonArrayBolPneu = new JsonArray();
+        JsonArray jsonArrayItemMedPneu = new JsonArray();
+        JsonArray jsonArrayItemManutPneu = new JsonArray();
+
+        for (int i = 0; i < boletimPneuList.size(); i++) {
+
+            boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(i);
+            Gson gsonCabec = new Gson();
+            jsonArrayBolPneu.add(gsonCabec.toJsonTree(boletimPneuTO, boletimPneuTO.getClass()));
+
+            ItemMedPneuTO itemMedPneuTO = new ItemMedPneuTO();
+            List itemMedPneuList = itemMedPneuTO.get("idBolItemMedPneu", boletimPneuTO.getIdBolPneu());
+
+            for (int j = 0; j < itemMedPneuList.size(); j++) {
+                itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(j);
+                Gson gsonItem = new Gson();
+                jsonArrayItemMedPneu.add(gsonItem.toJsonTree(itemMedPneuTO, itemMedPneuTO.getClass()));
+            }
+
+            ItemManutPneuTO itemManutPneuTO = new ItemManutPneuTO();
+            List itemManutPneuList = itemManutPneuTO.get("idBolItemManutPneu", boletimPneuTO.getIdBolPneu());
+
+            for (int m = 0; m < itemManutPneuList.size(); m++) {
+                itemManutPneuTO = (ItemManutPneuTO) itemManutPneuList.get(m);
+                Gson gsonItem = new Gson();
+                jsonArrayItemManutPneu.add(gsonItem.toJsonTree(itemManutPneuTO, itemManutPneuTO.getClass()));
+            }
+
+        }
+
+        JsonObject jsonBolPneu = new JsonObject();
+        jsonBolPneu.add("bolpneu", jsonArrayBolPneu);
+
+        JsonObject jsonItemMedPneu = new JsonObject();
+        jsonItemMedPneu.add("itemmedpneu", jsonArrayItemMedPneu);
+
+        JsonObject jsonItemManutPneu = new JsonObject();
+        jsonItemManutPneu.add("itemmanutpneu", jsonArrayItemManutPneu);
+
+        String dados = jsonBolPneu.toString() + "_" + jsonItemMedPneu.toString() + "|" + jsonItemManutPneu.toString();
+
+        Log.i("PMM", "BOLETIM PNEU = " + dados);
+
+        UrlsConexaoHttp urlsConexaoHttp = new UrlsConexaoHttp();
+
+        String[] url = {urlsConexaoHttp.getsInsertBolPneu()};
+        Map<String, Object> parametrosPost = new HashMap<String, Object>();
+        parametrosPost.put("dado", dados);
+
+        ConHttpPostCadGenerico conHttpPostGenerico = new ConHttpPostCadGenerico();
+        conHttpPostGenerico.setParametrosPost(parametrosPost);
+        conHttpPostGenerico.execute(url);
+
+    }
+
     /////////////////////////////// DELETAR DADOS ///////////////////////////////////////////////
 
     public void atualDadosBolAberto(String retorno) {
@@ -259,8 +322,48 @@ public class ManipDadosEnvio {
 
     }
 
+    public void delBolPneu() {
+
+        BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
+        List boletimPneuList = boletimPneuTO.get("statusBolPneu", 2L);
+
+        ArrayList<Long> rLista = new ArrayList<Long>();
+
+        for (int i = 0; i < boletimPneuList.size(); i++) {
+            boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(i);
+            rLista.add(boletimPneuTO.getIdBolPneu());
+        }
+
+        ItemMedPneuTO itemMedPneuTO = new ItemMedPneuTO();
+        List itemMedPneuList = itemMedPneuTO.in("idBolItemMedPneu", rLista);
+
+        for (int i = 0; i < itemMedPneuList.size(); i++) {
+            itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(i);
+            itemMedPneuTO.delete();
+        }
+
+        ItemManutPneuTO itemManutPneuTO = new ItemManutPneuTO();
+        List itemManutPneuList = itemManutPneuTO.in("idBolItemManutPneu", rLista);
+
+        for (int i = 0; i < itemManutPneuList.size(); i++) {
+            itemManutPneuTO = (ItemManutPneuTO) itemManutPneuList.get(i);
+            itemManutPneuTO.delete();
+        }
+
+        for (int i = 0; i < boletimPneuList.size(); i++) {
+            boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(i);
+            boletimPneuTO.delete();
+        }
+
+    }
+
 
     //////////////////////////TRAZER DADOS////////////////////////////
+
+    public List boletinsPneu() {
+        BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
+        return boletimPneuTO.get("statusBolPneu", 2L);
+    }
 
     public List boletinsAbertoSemEnvio() {
 
@@ -293,6 +396,10 @@ public class ManipDadosEnvio {
 
 
     //////////////////////VERIFICAÇÃO DE DADOS///////////////////////////
+
+    public Boolean verifBolPneu() {
+        return boletinsPneu().size() > 0;
+    }
 
     public Boolean verifBolAbertoSemEnvio() {
         return boletinsAbertoSemEnvio().size() > 0;
@@ -344,6 +451,11 @@ public class ManipDadosEnvio {
                 if (verifAponta()) {
                     envioApontamento();
                 }
+                else{
+                    if(verifBolPneu()){
+                        enviarBolPneu();
+                    }
+                }
             }
         }
     }
@@ -351,7 +463,8 @@ public class ManipDadosEnvio {
     public boolean verifDadosEnvio() {
         if ((!verifBolFechado())
                 && (!verifBolAbertoSemEnvio())
-                && (!verifAponta())) {
+                && (!verifAponta())
+                && (!verifBolPneu())) {
             enviando = false;
             return false;
         } else {
