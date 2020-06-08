@@ -32,6 +32,9 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
     private TextView textViewProcesso;
     private Handler customHandler = new Handler();
+    private BoletimTO boletimTO;
+    private ApontTO apontTO;
+    private List apontList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +80,12 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                 pesquisa2.setValor(1L);
                 boletimPesqList.add(pesquisa2);
 
-                BoletimTO boletimTO = new BoletimTO();
+                boletimTO = new BoletimTO();
                 List boletimList = boletimTO.get(boletimPesqList);
                 boletimTO = (BoletimTO) boletimList.get(0);
 
-                ApontTO apontTO = new ApontTO();
-                List apontList = apontTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
+                apontTO = new ApontTO();
+                apontList = apontTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
 
                 if (text.equals("APONTAMENTO")) {
 
@@ -173,30 +176,24 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                 } else if (text.equals("FINALIZAR TURNO")) {
 
-                    Intent it;
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
+                    alerta.setTitle("ATENÇÃO");
 
-                    if (apontList.size() > 0) {
+                    String label = "DESEJA REALMENTE FINALIZAR O TURNO?";
 
-                        apontTO = (ApontTO) apontList.get(0);
-                        if (apontTO.getParadaApont() == 0L) {
+                    alerta.setMessage(label);
 
+                    alerta.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        Intent it;
+
+                        if (apontList.size() > 0) {
+
+                            apontTO = (ApontTO) apontList.get(0);
                             if (apontTO.getParadaApont() == 0L) {
-                                apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
-                                apontTO.setStatusApont(0L);
-                                apontTO.update();
-                            }
 
-                            boletimTO.setDthrFinalBoletim(Tempo.getInstance().datahora());
-                            boletimTO.setStatusBoletim(2L);
-                            boletimTO.update();
-
-                            it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
-                            startActivity(it);
-                            finish();
-                        } else {
-                            if (Tempo.getInstance().verifDataHora(apontTO.getDthrFinalApont())) {
-
-                                apontTO = (ApontTO) apontList.get(0);
                                 if (apontTO.getParadaApont() == 0L) {
                                     apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
                                     apontTO.setStatusApont(0L);
@@ -210,28 +207,60 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                                 it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
                                 startActivity(it);
                                 finish();
-
                             } else {
-                                pbmContext.setVerTela(2);
-                                it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
-                                startActivity(it);
-                                finish();
+                                if (Tempo.getInstance().verifDataHora(apontTO.getDthrFinalApont())) {
+
+                                    apontTO = (ApontTO) apontList.get(0);
+                                    if (apontTO.getParadaApont() == 0L) {
+                                        apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                                        apontTO.setStatusApont(0L);
+                                        apontTO.update();
+                                    }
+
+                                    boletimTO.setDthrFinalBoletim(Tempo.getInstance().datahora());
+                                    boletimTO.setStatusBoletim(2L);
+                                    boletimTO.update();
+
+                                    it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
+                                    startActivity(it);
+                                    finish();
+
+                                } else {
+                                    pbmContext.setVerTela(2);
+                                    it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
+                                    startActivity(it);
+                                    finish();
+                                }
                             }
+
+                        } else {
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
+                            alerta.setTitle("ATENÇÃO");
+                            alerta.setMessage("O BOLETIM NÃO PODE SER ENCERRADO SEM APONTAMENTO! POR FAVOR, APONTE O MESMO.");
+                            alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                            alerta.show();
                         }
 
-                    } else {
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
-                        alerta.setTitle("ATENÇÃO");
-                        alerta.setMessage("O BOLETIM NÃO PODE SER ENCERRADO SEM APONTAMENTO! POR FAVOR, APONTE O MESMO.");
-                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                        }
 
-                            }
-                        });
+                    });
 
-                        alerta.show();
-                    }
+
+                    alerta.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+
+                    });
+
+                    alerta.show();
 
                 } else if (text.equals("HISTÓRICO")) {
 

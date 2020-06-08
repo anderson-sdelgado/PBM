@@ -10,7 +10,7 @@ import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
 
 public class PBMContext extends Application {
 
-    public static String versaoAplic = "1.0";
+    public static String versaoAplic = "1.03";
     private ApontTO apontTO;
     private BoletimPneuTO boletimPneuTO;
     private ItemManutPneuTO itemManutPneuTO;

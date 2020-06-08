@@ -70,64 +70,89 @@ public class ListaParadaActivity extends ActivityGeneric {
                 TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 textParada = textView.getText().toString();
 
-                ParadaTO paradaTO = new ParadaTO();
-                List paradaList = paradaTO.get("codParada", textParada.substring(0, textParada.indexOf('-')).trim());
-                paradaTO = (ParadaTO) paradaList.get(0);
+                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);
+                alerta.setTitle("ATENÇÃO");
 
-                ArrayList boletimPesqList = new ArrayList();
-                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("atualBoletim");
-                pesquisa.setValor(1L);
-                boletimPesqList.add(pesquisa);
+                String label = "DESEJA REALMENTE REALIZAR A PARADA '" + textParada + "' ?";
 
-                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                pesquisa2.setCampo("statusBoletim");
-                pesquisa2.setValor(1L);
-                boletimPesqList.add(pesquisa2);
+                alerta.setMessage(label);
 
-                BoletimTO boletimTO = new BoletimTO();
-                List boletimList = boletimTO.get(boletimPesqList);
-                boletimTO = (BoletimTO) boletimList.get(0);
+                alerta.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                ApontTO apontaTO = new ApontTO();
-                List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
+                    ParadaTO paradaTO = new ParadaTO();
+                    List paradaList = paradaTO.get("codParada", textParada.substring(0, textParada.indexOf('-')).trim());
+                    paradaTO = (ParadaTO) paradaList.get(0);
 
-                ApontTO apontTO = new ApontTO();
+                    ArrayList boletimPesqList = new ArrayList();
+                    EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+                    pesquisa.setCampo("atualBoletim");
+                    pesquisa.setValor(1L);
+                    boletimPesqList.add(pesquisa);
 
-                if(apontList.size() == 0){
-                    ColabTO colabTO = new ColabTO();
-                    List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
-                    colabTO = (ColabTO) colabList.get(0);
-                    EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                    List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
-                    escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                    apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
-                }
-                else{
-                    apontaTO = (ApontTO) apontList.get(0);
-                    apontTO.setDthrInicialApont(apontaTO.getDthrFinalApont());
-                }
+                    EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
+                    pesquisa2.setCampo("statusBoletim");
+                    pesquisa2.setValor(1L);
+                    boletimPesqList.add(pesquisa2);
 
-                apontTO.setIdBolApont(boletimTO.getIdBoletim());
-                apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
-                apontTO.setOsApont(0L);
-                apontTO.setItemOSApont(0L);
-                apontTO.setParadaApont(paradaTO.getIdParada());
-                apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
-                apontTO.setRealizApont(0L);
-                apontTO.setStatusApont(0L);
-                apontTO.insert();
+                    BoletimTO boletimTO = new BoletimTO();
+                    List boletimList = boletimTO.get(boletimPesqList);
+                    boletimTO = (BoletimTO) boletimList.get(0);
 
-                if(pbmContext.getVerTela() == 2){
-                    boletimTO.setDthrFinalBoletim(Tempo.getInstance().datahora());
-                    boletimTO.setStatusBoletim(2L);
-                    boletimTO.update();
-                }
+                    ApontTO apontaTO = new ApontTO();
+                    List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
 
-                Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
-//                Intent it = new Intent(  ListaParadaActivity.this, MenuFuncaoActivity.class);
-                startActivity(it);
-                finish();
+                    ApontTO apontTO = new ApontTO();
+
+                    if(apontList.size() == 0){
+                        ColabTO colabTO = new ColabTO();
+                        List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
+                        colabTO = (ColabTO) colabList.get(0);
+                        EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
+                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                        escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
+                        apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
+                    }
+                    else{
+                        apontaTO = (ApontTO) apontList.get(0);
+                        apontTO.setDthrInicialApont(apontaTO.getDthrFinalApont());
+                    }
+
+                    apontTO.setIdBolApont(boletimTO.getIdBoletim());
+                    apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
+                    apontTO.setOsApont(0L);
+                    apontTO.setItemOSApont(0L);
+                    apontTO.setParadaApont(paradaTO.getIdParada());
+                    apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                    apontTO.setRealizApont(0L);
+                    apontTO.setStatusApont(0L);
+                    apontTO.insert();
+
+                    if(pbmContext.getVerTela() == 2){
+                        boletimTO.setDthrFinalBoletim(Tempo.getInstance().datahora());
+                        boletimTO.setStatusBoletim(2L);
+                        boletimTO.update();
+                    }
+
+                    Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
+                    startActivity(it);
+                    finish();
+
+                    }
+
+                });
+
+
+                alerta.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+
+                });
+
+                alerta.show();
 
             }
 
@@ -144,13 +169,11 @@ public class ListaParadaActivity extends ActivityGeneric {
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
                                           int arg3) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
             }
         });
 
@@ -158,7 +181,6 @@ public class ListaParadaActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 ConexaoWeb conexaoWeb = new ConexaoWeb();
 
@@ -195,7 +217,6 @@ public class ListaParadaActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 Intent it = new Intent(ListaParadaActivity.this, MenuFuncaoActivity.class);
                 startActivity(it);

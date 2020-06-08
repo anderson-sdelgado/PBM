@@ -76,7 +76,7 @@ public class OSActivity extends ActivityGeneric {
                         List apontList = apontTO.get(apontPesqList);
 
                         OSTO osto = new OSTO();
-                        List osList = osto.get("nroOS",pbmContext.getApontTO().getOsApont());
+                        List osList = osto.get("nroOS", pbmContext.getApontTO().getOsApont());
 
                         if((apontList.size() > 0) && (osList.size() > 0)) {
 
@@ -165,7 +165,7 @@ public class OSActivity extends ActivityGeneric {
                     progressBar.dismiss();
                 }
 
-                Intent it = new Intent(OSActivity.this, ItemOSListaActivity.class);
+                Intent it = new Intent(OSActivity.this, ItemOSDigActivity.class);
                 startActivity(it);
                 finish();
 

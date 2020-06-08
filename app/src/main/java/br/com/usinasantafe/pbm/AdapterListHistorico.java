@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.to.estaticas.ParadaTO;
 import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
@@ -67,8 +68,8 @@ public class AdapterListHistorico extends BaseAdapter {
             textViewHistApont.setTextColor(Color.RED);
         }
 
-        textViewHistHrInicial.setText("HORÁRIO INICIAL: " + apontTO.getDthrInicialApont());
-        textViewHistHrFinal.setText("HORÁRIO FINAL: " + apontTO.getDthrFinalApont());
+        textViewHistHrInicial.setText("HORÁRIO INICIAL: " + Tempo.getInstance().manipDHComTZ(apontTO.getDthrInicialApont()));
+        textViewHistHrFinal.setText("HORÁRIO FINAL: " + Tempo.getInstance().manipDHComTZ(apontTO.getDthrFinalApont()));
 
         return view;
     }

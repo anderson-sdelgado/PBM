@@ -41,7 +41,13 @@ public class ConfiguracaoActivity extends ActivityGeneric {
 
             List configList = configuracaoTO.all();
             configuracaoTO = (ConfiguracaoTO) configList.get(0);
-            editTextEquipConfig.setText(String.valueOf(configuracaoTO.getEquipConfig()));
+
+            EquipTO equipTO = new EquipTO();
+            List equipList = equipTO.get("idEquip", configuracaoTO.getEquipConfig());
+            equipTO = (EquipTO) equipList.get(0);
+            equipList.clear();
+
+            editTextEquipConfig.setText(String.valueOf(equipTO.getNumEquip()));
             editTextSenhaConfig.setText(configuracaoTO.getSenhaConfig());
             configList.clear();
         }

@@ -27,9 +27,12 @@ import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
 import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
 import br.com.usinasantafe.pbm.bo.Tempo;
 import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
+import br.com.usinasantafe.pbm.to.estaticas.OSTO;
 import br.com.usinasantafe.pbm.to.estaticas.ParametroTO;
+import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
 import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
 import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
+import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
 import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
 import br.com.usinasantafe.pbm.to.variaveis.ItemManutPneuTO;
 import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
@@ -62,6 +65,8 @@ public class MenuInicialActivity extends ActivityGeneric {
         }
 
         customHandler.postDelayed(updateTimerThread, 0);
+
+        teste();
 
         ConexaoWeb conexaoWeb = new ConexaoWeb();
         configTO = new ConfiguracaoTO();
@@ -120,7 +125,8 @@ public class MenuInicialActivity extends ActivityGeneric {
 
                 if (text.equals("APONTAMENTO")) {
                     ColabTO colabTO = new ColabTO();
-                    if(colabTO.hasElements()) {
+                    ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
+                    if(colabTO.hasElements() && configuracaoTO.hasElements()) {
 
                         clear();
 
@@ -155,6 +161,7 @@ public class MenuInicialActivity extends ActivityGeneric {
 
     public void startTimer(String retorno) {
 
+        Intent intent = new Intent(this, ReceberAlarme.class);
         boolean alarmeAtivo = (PendingIntent.getBroadcast(this, 0, new Intent("ALARME_DISPARADO"), PendingIntent.FLAG_NO_CREATE) == null);
 
         if(!retorno.equals("OFF")){
@@ -177,9 +184,8 @@ public class MenuInicialActivity extends ActivityGeneric {
         if(alarmeAtivo){
 
             Log.i("PMM", "NOVO TIMER");
-
-            Intent intent = new Intent("EXECUTAR_ALARME");
-            PendingIntent p = PendingIntent.getBroadcast(this, 0, intent, 0);
+            PendingIntent p = PendingIntent.getBroadcast(getApplicationContext(), 0,
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(System.currentTimeMillis());
@@ -254,5 +260,64 @@ public class MenuInicialActivity extends ActivityGeneric {
         }
 
     }
+
+    public void teste() {
+
+        BoletimTO boletimTO = new BoletimTO();
+        List boletimList = boletimTO.all();
+
+        Log.i("PMM", "AKI");
+
+        for (int i = 0; i < boletimList.size(); i++) {
+
+            boletimTO = (BoletimTO) boletimList.get(i);
+            Log.i("PMM", "BOLETIM");
+            Log.i("PMM", "idBoletim = " + boletimTO.getIdBoletim());
+            Log.i("PMM", "idExtBoletim = " + boletimTO.getIdExtBoletim());
+            Log.i("PMM", "idFuncBoletim = " + boletimTO.getIdFuncBoletim());
+            Log.i("PMM", "EquipBoletim = " + boletimTO.getEquipBoletim());
+            Log.i("PMM", "dthrInicialBoletim = " + boletimTO.getDthrInicialBoletim());
+            Log.i("PMM", "dthrFinalBoletim = " + boletimTO.getDthrFinalBoletim());
+            Log.i("PMM", "statusBoletim = " + boletimTO.getStatusBoletim());
+            Log.i("PMM", "atualBoletim = " + boletimTO.getAtualBoletim());
+
+        }
+
+        ApontTO apontTO = new ApontTO();
+        List apontList = apontTO.all();
+
+        for (int i = 0; i < apontList.size(); i++) {
+
+            apontTO = (ApontTO) apontList.get(i);
+            Log.i("PMM", "APONTAMENTO");
+            Log.i("PMM", "idApont = " + apontTO.getIdApont());
+            Log.i("PMM", "idBolApont = " + apontTO.getIdBolApont());
+            Log.i("PMM", "idExtBolApont = " + apontTO.getIdExtBolApont());
+            Log.i("PMM", "osApont = " + apontTO.getOsApont());
+            Log.i("PMM", "itemOSApont = " + apontTO.getItemOSApont());
+            Log.i("PMM", "paradaApont = " + apontTO.getParadaApont());
+            Log.i("PMM", "dthrInicialAponta = " + apontTO.getDthrInicialApont());
+            Log.i("PMM", "dthrFinalAponta = " + apontTO.getDthrFinalApont());
+            Log.i("PMM", "realizAponta = " + apontTO.getRealizApont());
+            Log.i("PMM", "statusAponta = " + apontTO.getStatusApont());
+
+        }
+
+        OSTO osTO = new OSTO();
+        List osList = osTO.all();
+
+        for (int i = 0; i < osList.size(); i++) {
+
+            osTO = (OSTO) osList.get(i);
+            Log.i("PMM", "OS");
+            Log.i("PMM", "idOS = " + osTO.getIdOS());
+            Log.i("PMM", "nroOS = " + osTO.getNroOS());
+            Log.i("PMM", "equipOS = " + osTO.getEquipOS());
+            Log.i("PMM", "descrEquipOS = " + osTO.getDescrEquipOS());
+
+        }
+
+    }
+
 
 }

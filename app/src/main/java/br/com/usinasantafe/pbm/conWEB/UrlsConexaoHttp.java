@@ -4,8 +4,8 @@ public class UrlsConexaoHttp {
 
     private int tipoEnvio = 1;
 
-    public static String urlPrincipal = "http://www.usinasantafe.com.br/pbmdev/";
-    public static String urlPrincEnvio = "http://www.usinasantafe.com.br/pbmdev/";
+    public static String urlPrincipal = "http://www.usinasantafe.com.br/pbmqa/";
+    public static String urlPrincEnvio = "http://www.usinasantafe.com.br/pbmqa/";
 
     public static String localPSTEstatica = "br.com.usinasantafe.pbm.to.estaticas.";
     public static String localUrl = "br.com.usinasantafe.pbm.conWEB.UrlsConexaoHttp";
@@ -41,17 +41,17 @@ public class UrlsConexaoHttp {
     public String urlVerifica(String classe) {
         String retorno = "";
         if (classe.equals("Equip")) {
-            retorno = urlPrincEnvio + "verequip.php";
+            retorno = urlPrincipal + "verequip.php";
         } else if (classe.equals("Colab")) {
-            retorno = urlPrincEnvio + "colab.php";
+            retorno = urlPrincipal + "colab.php";
         } else if (classe.equals("Parada")) {
-            retorno = urlPrincEnvio + "parada.php";
+            retorno = urlPrincipal + "parada.php";
         } else if (classe.equals("Atualiza")) {
-            retorno = urlPrincEnvio + "atualizaaplic.php";
+            retorno = urlPrincipal + "atualaplic.php";
         } else if (classe.equals("OS")) {
-            retorno = urlPrincEnvio + "verifos.php";
+            retorno = urlPrincipal + "os.php";
         } else if (classe.equals("Pneu")) {
-            retorno = urlPrincEnvio + "verifpneu.php";
+            retorno = urlPrincipal + "pneu.php";
         }
         return retorno;
     }

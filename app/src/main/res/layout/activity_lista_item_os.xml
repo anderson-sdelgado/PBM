@@ -24,11 +24,28 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/buttonRetItemOS"
-        style="@style/BotaoAvulso"
+
+    <LinearLayout
+        android:id="@+id/rightRelLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/texto_padrao_retornar" />
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/buttonAtualItemOS"
+            style="@style/BotaoAvulso"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/texto_atualizar" />
+
+        <Button
+            android:id="@+id/buttonRetItemOS"
+            style="@style/BotaoAvulso"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/texto_padrao_retornar" />
+
+    </LinearLayout>
 
 </LinearLayout>

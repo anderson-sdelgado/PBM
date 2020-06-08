@@ -11,7 +11,7 @@ public class REquipPneuTO extends Entidade {
 
     private static final long serialVersionUID = 1L;
 
-    @DatabaseField(id=true)
+    @DatabaseField(generatedId=true)
     private Long idREquipPneu;
     @DatabaseField
     private Long idEquip;

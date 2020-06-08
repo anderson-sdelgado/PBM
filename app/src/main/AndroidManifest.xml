@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="br.com.usinasantafe.pbm">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -36,7 +37,8 @@
         <activity android:name=".ListaPosPneuActivity" />
         <activity
             android:name=".MenuInicialActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,59 +50,66 @@
             android:configChanges="orientation|keyboardHidden"
             android:label="ScanBar"
             android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <receiver android:name=".ReceberAlarme">
-            <intent-filter>
-                <action android:name="EXECUTAR_ALARME" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </receiver>
 
         <activity
             android:name=".ConfiguracaoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".DigFuncActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".SenhaActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".LeitorFuncActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".MenuFuncaoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ListaParadaActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".OSActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".DescrOSActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".OpcaoInterFinalActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ItemOSListaActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ItemOSDigActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ListaHistoricoActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

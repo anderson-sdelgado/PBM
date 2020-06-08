@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -121,6 +122,40 @@ public class ManipDadosReceb {
         
 	}
 
+	public void atualItemOSBD(ProgressDialog progressDialog){
+
+		try {
+
+			this.tipoReceb = 3;
+			this.progressDialog = progressDialog;
+			tabelaAtualizar = new ArrayList();
+			Class<?> retClasse = Class.forName(urlsConexaoHttp.localUrl);
+
+			for (Field field : retClasse.getDeclaredFields()) {
+				String campo = field.getName();
+				Log.i("PBM", "Campo = " + campo);
+				if (campo.equals("ServicoTO") || campo.equals("ComponenteTO")) {
+					tabelaAtualizar.add(campo);
+				}
+
+			}
+
+			classe = (String) tabelaAtualizar.get(contAtualizaBD);
+
+			String[] url = {classe};
+
+			contAtualizaBD++;
+
+			ConHttpGetBDGenerico conHttpGetBDGenerico = new ConHttpGetBDGenerico();
+			conHttpGetBDGenerico.execute(url);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.i("PMM", "ERRO Manip2 = " + e);
+		}
+
+	}
+
 	public void atualizarBD() {
 
 		try {
@@ -156,7 +191,7 @@ public class ManipDadosReceb {
 	
 	public void atualizandoBD(){
 
-		if(this.tipoReceb == 1){
+		if((this.tipoReceb == 1) || (this.tipoReceb == 3)) {
 		
 			qtdeBD = tabelaAtualizar.size();
 			
@@ -175,14 +210,16 @@ public class ManipDadosReceb {
 			{
 				this.progressDialog.dismiss();
 				contAtualizaBD = 0;
-//				ManipDadosEnvio.getInstance().envioDados(this.context);
 				AlertDialog.Builder alerta = new AlertDialog.Builder(this.context);
 				alerta.setTitle("ATENCAO");
 				alerta.setMessage("FOI ATUALIZADO COM SUCESSO OS DADOS.");
 				alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-	
+						if(tipoReceb == 3){
+							Intent it = new Intent(context, context.getClass());
+							context.startActivity(it);
+						}
 					}
 				});
 				
@@ -215,7 +252,7 @@ public class ManipDadosReceb {
 
 	public void encerrar(){
 		
-		if(this.tipoReceb == 1){
+		if((this.tipoReceb == 1) || (this.tipoReceb == 3)) {
 			
 			this.progressDialog.dismiss();
 			AlertDialog.Builder alerta = new AlertDialog.Builder(this.context);
@@ -233,36 +270,6 @@ public class ManipDadosReceb {
 		}
 	}
 
-	public void tempo(){
-
-		try {
-
-			Class<?> retClasse = Class.forName(urlsConexaoHttp.localUrl);
-			tabelaAtualizar = new ArrayList();
-
-			for (Field field : retClasse.getDeclaredFields()) {
-				String campo = field.getName();
-				Log.i("PMM", "Campo = " + campo);
-				if (campo.equals("datahorahttp")) {
-					Log.i("PMM", "Campo = " + campo);
-					tabelaAtualizar.add(campo);
-				}
-
-			}
-
-			classe = (String) tabelaAtualizar.get(contAtualizaBD);
-
-			String[] url = {classe};
-
-			ConHttpGetBDGenerico conHttpGetBDGenerico = new ConHttpGetBDGenerico();
-			conHttpGetBDGenerico.execute(url);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Log.i("PMM", "Erro Manip2 = " + e);
-		}
-
-	}
 
 	public String manipLocalClasse(String classe){
 	    if(classe.contains("TO")){
