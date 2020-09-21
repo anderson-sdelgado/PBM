@@ -1,6 +1,5 @@
 package br.com.usinasantafe.pbm;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,15 +10,11 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
-import br.com.usinasantafe.pbm.to.estaticas.PneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
-import br.com.usinasantafe.pbm.to.variaveis.ItemManutPneuTO;
+import br.com.usinasantafe.pbm.util.ConexaoWeb;
+import br.com.usinasantafe.pbm.util.VerifDadosServ;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class PneuColActivity extends ActivityGeneric {
 
@@ -41,7 +36,6 @@ public class PneuColActivity extends ActivityGeneric {
             @SuppressWarnings("rawtypes")
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
@@ -63,7 +57,7 @@ public class PneuColActivity extends ActivityGeneric {
 
                             customHandler.postDelayed(updateTimerThread, 10000);
 
-                            ManipDadosVerif.getInstance().verDadosPneuFinal(editTextPadrao.getText().toString(), "Pneu"
+                            VerifDadosServ.getInstance().verDadosPneuFinal(editTextPadrao.getText().toString(), "Pneu"
                                     , PneuColActivity.this, MenuInicialActivity.class, progressBar);
 
                         }
@@ -93,7 +87,6 @@ public class PneuColActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (editTextPadrao.getText().toString().length() > 0) {
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
@@ -112,9 +105,9 @@ public class PneuColActivity extends ActivityGeneric {
 
         public void run() {
 
-            if(!ManipDadosVerif.getInstance().isVerTerm()) {
+            if(!VerifDadosServ.getInstance().isVerTerm()) {
 
-                ManipDadosVerif.getInstance().cancelVer();
+                VerifDadosServ.getInstance().cancelVer();
                 if (progressBar.isShowing()) {
                     progressBar.dismiss();
                 }
@@ -149,14 +142,14 @@ public class PneuColActivity extends ActivityGeneric {
         boletimList.clear();
         boletimPesqList.clear();
 
-        ColabTO colabTO = new ColabTO();
-        List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
-        colabTO = (ColabTO) colabList.get(0);
+        ColabBean colabBean = new ColabBean();
+        List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
+        colabBean = (ColabBean) colabList.get(0);
         colabList.clear();
 
         BoletimPneuTO boletimPneuTO = pbmContext.getBoletimPneuTO();
         boletimPneuTO.setDthrBolPneu(Tempo.getInstance().datahora());
-        boletimPneuTO.setFuncBolPneu(colabTO.getMatricColab());
+        boletimPneuTO.setFuncBolPneu(colabBean.getMatricColab());
         boletimPneuTO.setStatusBolPneu(1L);
         boletimPneuTO.insert();
 

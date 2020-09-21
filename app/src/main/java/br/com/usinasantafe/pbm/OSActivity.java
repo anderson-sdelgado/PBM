@@ -12,13 +12,9 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.estaticas.ItemOSTO;
-import br.com.usinasantafe.pbm.to.estaticas.OSTO;
-import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
+import br.com.usinasantafe.pbm.util.ConexaoWeb;
+import br.com.usinasantafe.pbm.util.VerifDadosServ;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
 
 public class OSActivity extends ActivityGeneric {
 
@@ -39,7 +35,7 @@ public class OSActivity extends ActivityGeneric {
         buttonOkOS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+
                 if (!editTextPadrao.getText().toString().equals("")) {
 
                     pbmContext.getApontTO().setOsApont(Long.parseLong(editTextPadrao.getText().toString()));
@@ -101,7 +97,7 @@ public class OSActivity extends ActivityGeneric {
 
                                 customHandler.postDelayed(updateTimerThread, 10000);
 
-                                ManipDadosVerif.getInstance().verDados(editTextPadrao.getText().toString(), "OS"
+                                VerifDadosServ.getInstance().verDados(editTextPadrao.getText().toString(), "OS"
                                         , OSActivity.this, DescrOSActivity.class, progressBar);
 
                             } else {
@@ -139,7 +135,6 @@ public class OSActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (editTextPadrao.getText().toString().length() > 0) {
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
@@ -158,9 +153,9 @@ public class OSActivity extends ActivityGeneric {
 
         public void run() {
 
-            if(!ManipDadosVerif.getInstance().isVerTerm()) {
+            if(!VerifDadosServ.getInstance().isVerTerm()) {
 
-                ManipDadosVerif.getInstance().cancelVer();
+                VerifDadosServ.getInstance().cancelVer();
                 if (progressBar.isShowing()) {
                     progressBar.dismiss();
                 }

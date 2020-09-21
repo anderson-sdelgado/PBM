@@ -1,7 +1,6 @@
 package br.com.usinasantafe.pbm;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,9 +9,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
 
 public class ListaHistoricoActivity extends ActivityGeneric {
 
@@ -49,7 +48,6 @@ public class ListaHistoricoActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent it = new Intent(ListaHistoricoActivity.this, MenuFuncaoActivity.class);
                 startActivity(it);
                 finish();

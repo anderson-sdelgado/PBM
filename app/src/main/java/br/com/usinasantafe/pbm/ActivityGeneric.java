@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 
-import br.com.usinasantafe.pbm.pst.DatabaseHelper;
+import br.com.usinasantafe.pbm.model.pst.DatabaseHelper;
 
 /**
  * Created by anderson on 01/10/2015.
@@ -18,14 +18,12 @@ public class ActivityGeneric extends OrmLiteBaseActivity<DatabaseHelper> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         getHelper();
     }
 
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
 
         if ((EditText) findViewById(R.id.editTextPadrao) != null) {

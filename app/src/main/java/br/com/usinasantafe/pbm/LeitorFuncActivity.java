@@ -12,14 +12,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
-import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
-import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
+import br.com.usinasantafe.pbm.util.ConexaoWeb;
+import br.com.usinasantafe.pbm.util.VerifDadosServ;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class LeitorFuncActivity extends ActivityGeneric {
 
@@ -29,7 +26,7 @@ public class LeitorFuncActivity extends ActivityGeneric {
     private String matricula;
     private Boolean verFunc;
     private ProgressDialog progressBar;
-    private ColabTO colabTO;
+    private ColabBean colabBean;
 
 
     @Override
@@ -52,7 +49,6 @@ public class LeitorFuncActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 if (verFunc) {
 
@@ -68,7 +64,7 @@ public class LeitorFuncActivity extends ActivityGeneric {
                     ArrayList boletimPesqList = new ArrayList();
                     EspecificaPesquisa pesquisa = new EspecificaPesquisa();
                     pesquisa.setCampo("idFuncBoletim");
-                    pesquisa.setValor(colabTO.getIdColab());
+                    pesquisa.setValor(colabBean.getIdColab());
                     boletimPesqList.add(pesquisa);
 
                     EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
@@ -85,12 +81,12 @@ public class LeitorFuncActivity extends ActivityGeneric {
                         configuracaoTO = (ConfiguracaoTO) configuracaoList.get(0);
 
                         EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
                         escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
                         boletimTO.setDthrInicialBoletim(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
 
                         boletimTO.setEquipBoletim(configuracaoTO.getEquipConfig());
-                        boletimTO.setIdFuncBoletim(colabTO.getIdColab());
+                        boletimTO.setIdFuncBoletim(colabBean.getIdColab());
                         boletimTO.setIdExtBoletim(0L);
                         boletimTO.setStatusBoletim(1L);
                         boletimTO.setAtualBoletim(1L);
@@ -119,7 +115,6 @@ public class LeitorFuncActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();
@@ -131,7 +126,6 @@ public class LeitorFuncActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent it = new Intent(LeitorFuncActivity.this, DigFuncActivity.class);
                 startActivity(it);
                 finish();
@@ -159,7 +153,7 @@ public class LeitorFuncActivity extends ActivityGeneric {
                             progressBar.setMessage("Atualizando Colaborador...");
                             progressBar.show();
 
-                            ManipDadosVerif.getInstance().verDados("", "Colab"
+                            VerifDadosServ.getInstance().verDados("", "Colab"
                                     , LeitorFuncActivity.this, LeitorFuncActivity.class, progressBar);
 
                         } else {
@@ -209,12 +203,12 @@ public class LeitorFuncActivity extends ActivityGeneric {
             matricula = data.getStringExtra("SCAN_RESULT");
             if (matricula.length() == 8) {
                 matricula = matricula.substring(0, 7);
-                colabTO = new ColabTO();
-                List listColab = colabTO.get("matricColab", Long.parseLong(matricula));
+                colabBean = new ColabBean();
+                List listColab = colabBean.get("matricColab", Long.parseLong(matricula));
                 if (listColab.size() > 0) {
-                    colabTO = (ColabTO) listColab.get(0);
+                    colabBean = (ColabBean) listColab.get(0);
                     verFunc = true;
-                    txtRetFunc.setText(matricula + "\n" + colabTO.getNomeColab());
+                    txtRetFunc.setText(matricula + "\n" + colabBean.getNomeColab());
                 } else {
                     verFunc = false;
                     txtRetFunc.setText("Funcionário Inexistente");

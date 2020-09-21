@@ -2,49 +2,43 @@ package br.com.usinasantafe.pbm;
 
 import android.app.Application;
 
-import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
-import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.ItemManutPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
+import br.com.usinasantafe.pbm.control.ConfigCTR;
+import br.com.usinasantafe.pbm.control.MecanicoCTR;
+import br.com.usinasantafe.pbm.control.PneuCTR;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ItemManutPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ItemMedPneuBean;
 
 public class PBMContext extends Application {
 
-    public static String versaoAplic = "1.03";
-    private ApontTO apontTO;
-    private BoletimPneuTO boletimPneuTO;
-    private ItemManutPneuTO itemManutPneuTO;
-    private ItemMedPneuTO itemMedPneuTO;
+    public static String versaoAplic = "2.00";
+    private ConfigCTR configCTR;
+    private MecanicoCTR mecanicoCTR;
+    private PneuCTR pneuCTR;
     private int verTela; //1 - Parada Normal; 2 - Parada para Fechar Boletim; 3 - Calibragem de Pneu; 4 - Troca de Pneu;
 
     @Override
     public void onCreate() {
-        // TODO Auto-generated method stub
         super.onCreate();
     }
 
-    public BoletimPneuTO getBoletimPneuTO() {
-        if(boletimPneuTO == null)
-            boletimPneuTO = new BoletimPneuTO();
-        return boletimPneuTO;
+    public ConfigCTR getConfigCTR() {
+        if(configCTR == null)
+            configCTR = new ConfigCTR();
+        return configCTR;
     }
 
-    public ItemManutPneuTO getItemManutPneuTO() {
-        if(itemManutPneuTO == null)
-            itemManutPneuTO = new ItemManutPneuTO();
-        return itemManutPneuTO;
+    public MecanicoCTR getMecanicoCTR() {
+        if(mecanicoCTR == null)
+            mecanicoCTR = new MecanicoCTR();
+        return mecanicoCTR;
     }
 
-    public ItemMedPneuTO getItemMedPneuTO() {
-        if(itemMedPneuTO == null)
-            itemMedPneuTO = new ItemMedPneuTO();
-        return itemMedPneuTO;
-    }
-
-    public ApontTO getApontTO() {
-        if(apontTO == null)
-            apontTO = new ApontTO();
-        return apontTO;
+    public PneuCTR getPneuCTR() {
+        if(pneuCTR == null)
+            pneuCTR = new PneuCTR();
+        return pneuCTR;
     }
 
     public int getVerTela() {

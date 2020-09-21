@@ -28,13 +28,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EquipActivity"></activity>
-        <activity android:name=".PressaoEncPneuActivity" />
-        <activity android:name=".PressaoColPneuActivity" />
-        <activity android:name=".PneuCalibActivity" />
-        <activity android:name=".PneuColActivity" />
-        <activity android:name=".PneuRetActivity" />
-        <activity android:name=".ListaPosPneuActivity" />
+        <activity android:name=".EquipActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".PressaoEncPneuActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".PressaoColPneuActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".PneuCalibActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".PneuColActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".PneuRetActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".ListaPosPneuActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".MenuInicialActivity"
             android:screenOrientation="portrait"
@@ -63,7 +77,7 @@
         </receiver>
 
         <activity
-            android:name=".ConfiguracaoActivity"
+            android:name=".ConfigActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

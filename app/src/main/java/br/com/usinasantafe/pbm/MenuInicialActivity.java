@@ -22,26 +22,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
-import br.com.usinasantafe.pbm.to.estaticas.OSTO;
-import br.com.usinasantafe.pbm.to.estaticas.ParametroTO;
-import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
-import br.com.usinasantafe.pbm.to.variaveis.AtualizaTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
-import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
-import br.com.usinasantafe.pbm.to.variaveis.ItemManutPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
+import br.com.usinasantafe.pbm.util.ConexaoWeb;
+import br.com.usinasantafe.pbm.util.EnvioDadosServ;
+import br.com.usinasantafe.pbm.util.VerifDadosServ;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class MenuInicialActivity extends ActivityGeneric {
 
     private ListView lista;
     private ProgressDialog progressBar;
-    private ConfiguracaoTO configTO;
     private PBMContext pbmContext;
 
     private TextView textViewProcesso;
@@ -51,6 +40,8 @@ public class MenuInicialActivity extends ActivityGeneric {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicial);
+
+        pbmContext = (PBMContext) getApplication();
 
         textViewProcesso = (TextView) findViewById(R.id.textViewProcesso);
 
@@ -66,30 +57,19 @@ public class MenuInicialActivity extends ActivityGeneric {
 
         customHandler.postDelayed(updateTimerThread, 0);
 
-        teste();
-
-        ConexaoWeb conexaoWeb = new ConexaoWeb();
-        configTO = new ConfiguracaoTO();
-        List configList = configTO.all();
-
         progressBar = new ProgressDialog(this);
 
+        ConexaoWeb conexaoWeb = new ConexaoWeb();
         if(conexaoWeb.verificaConexao(this))
         {
 
-            configTO = new ConfiguracaoTO();
-            configList = configTO.all();
-            if(configList.size() > 0){
+            if(pbmContext.getConfigCTR().hasElements()){
 
                 progressBar.setCancelable(true);
                 progressBar.setMessage("Buscando Atualização...");
                 progressBar.show();
 
-                configTO = (ConfiguracaoTO) configList.get(0);
-                AtualizaTO atualizaTO = new AtualizaTO();
-                atualizaTO.setIdEquipAtualizacao(configTO.getEquipConfig());
-                atualizaTO.setVersaoAtual(pbmContext.versaoAplic);
-                ManipDadosVerif.getInstance().verAtualizacao(atualizaTO, this, progressBar);
+                VerifDadosServ.getInstance().verAtualAplic(pbmContext.versaoAplic, this, progressBar);
             }
 
         }
@@ -97,7 +77,6 @@ public class MenuInicialActivity extends ActivityGeneric {
             startTimer("OFF");
         }
 
-        configList.clear();
         listarMenuInicial();
 
     }
@@ -124,25 +103,29 @@ public class MenuInicialActivity extends ActivityGeneric {
                 String text = textView.getText().toString();
 
                 if (text.equals("APONTAMENTO")) {
-                    ColabTO colabTO = new ColabTO();
-                    ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
-                    if(colabTO.hasElements() && configuracaoTO.hasElements()) {
 
-                        clear();
+                    if(pbmContext.getConfigCTR().hasElements() && pbmContext.getMecanicoCTR().hasElementsColab()) {
+
+                        pbmContext.getPneuCTR().clear();
 
                         Intent it = new Intent(MenuInicialActivity.this, LeitorFuncActivity.class);
                         startActivity(it);
                         finish();
                     }
+
                 } else if (text.equals("CONFIGURAÇÃO")) {
+
                     Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);
                     startActivity(it);
                     finish();
+
                 } else if (text.equals("SAIR")) {
+
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+
                 }
 
             }
@@ -165,14 +148,12 @@ public class MenuInicialActivity extends ActivityGeneric {
         boolean alarmeAtivo = (PendingIntent.getBroadcast(this, 0, new Intent("ALARME_DISPARADO"), PendingIntent.FLAG_NO_CREATE) == null);
 
         if(!retorno.equals("OFF")){
+
             int pos1 = retorno.indexOf("=") + 1;
             int pos2 = retorno.indexOf("_") + 1;
             String minutos = retorno.substring(pos1, (pos2 - 1));
 
-            ParametroTO parametroTO = new ParametroTO();
-            parametroTO.setMinParametro(Long.parseLong(minutos));
-            parametroTO.deleteAll();
-            parametroTO.insert();
+            pbmContext.getMecanicoCTR().insertParametro(Long.parseLong(minutos));
 
         }
 
@@ -204,16 +185,14 @@ public class MenuInicialActivity extends ActivityGeneric {
 
         public void run() {
 
-            ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
-            List configList = configuracaoTO.all();
-            if(configList.size() > 0) {
-                if (ManipDadosEnvio.getInstance().getStatusEnvio() == 1) {
+            if(pbmContext.getConfigCTR().hasElements()) {
+                if (EnvioDadosServ.getInstance().getStatusEnvio() == 1) {
                     textViewProcesso.setTextColor(Color.YELLOW);
                     textViewProcesso.setText("Enviando Dados...");
-                } else if (ManipDadosEnvio.getInstance().getStatusEnvio() == 2) {
+                } else if (EnvioDadosServ.getInstance().getStatusEnvio() == 2) {
                     textViewProcesso.setTextColor(Color.RED);
                     textViewProcesso.setText("Existem Dados para serem Enviados");
-                } else if (ManipDadosEnvio.getInstance().getStatusEnvio() == 3) {
+                } else if (EnvioDadosServ.getInstance().getStatusEnvio() == 3) {
                     textViewProcesso.setTextColor(Color.GREEN);
                     textViewProcesso.setText("Todos os Dados já foram Enviados");
                 }
@@ -225,99 +204,5 @@ public class MenuInicialActivity extends ActivityGeneric {
             customHandler.postDelayed(this, 10000);
         }
     };
-
-    public void clear(){
-
-        BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
-        List boletimPneuList = boletimPneuTO.get("statusBolPneu", 1L);
-
-        ArrayList<Long> rLista = new ArrayList<Long>();
-
-        for (int i = 0; i < boletimPneuList.size(); i++) {
-            boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(i);
-            rLista.add(boletimPneuTO.getIdBolPneu());
-        }
-
-        ItemMedPneuTO itemMedPneuTO = new ItemMedPneuTO();
-        List itemMedPneuList = itemMedPneuTO.in("idBolItemMedPneu", rLista);
-
-        for (int i = 0; i < itemMedPneuList.size(); i++) {
-            itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(i);
-            itemMedPneuTO.delete();
-        }
-
-        ItemManutPneuTO itemManutPneuTO = new ItemManutPneuTO();
-        List itemManutPneuList = itemManutPneuTO.in("idBolItemManutPneu", rLista);
-
-        for (int i = 0; i < itemManutPneuList.size(); i++) {
-            itemManutPneuTO = (ItemManutPneuTO) itemManutPneuList.get(i);
-            itemManutPneuTO.delete();
-        }
-
-        for (int i = 0; i < boletimPneuList.size(); i++) {
-            boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(i);
-            boletimPneuTO.delete();
-        }
-
-    }
-
-    public void teste() {
-
-        BoletimTO boletimTO = new BoletimTO();
-        List boletimList = boletimTO.all();
-
-        Log.i("PMM", "AKI");
-
-        for (int i = 0; i < boletimList.size(); i++) {
-
-            boletimTO = (BoletimTO) boletimList.get(i);
-            Log.i("PMM", "BOLETIM");
-            Log.i("PMM", "idBoletim = " + boletimTO.getIdBoletim());
-            Log.i("PMM", "idExtBoletim = " + boletimTO.getIdExtBoletim());
-            Log.i("PMM", "idFuncBoletim = " + boletimTO.getIdFuncBoletim());
-            Log.i("PMM", "EquipBoletim = " + boletimTO.getEquipBoletim());
-            Log.i("PMM", "dthrInicialBoletim = " + boletimTO.getDthrInicialBoletim());
-            Log.i("PMM", "dthrFinalBoletim = " + boletimTO.getDthrFinalBoletim());
-            Log.i("PMM", "statusBoletim = " + boletimTO.getStatusBoletim());
-            Log.i("PMM", "atualBoletim = " + boletimTO.getAtualBoletim());
-
-        }
-
-        ApontTO apontTO = new ApontTO();
-        List apontList = apontTO.all();
-
-        for (int i = 0; i < apontList.size(); i++) {
-
-            apontTO = (ApontTO) apontList.get(i);
-            Log.i("PMM", "APONTAMENTO");
-            Log.i("PMM", "idApont = " + apontTO.getIdApont());
-            Log.i("PMM", "idBolApont = " + apontTO.getIdBolApont());
-            Log.i("PMM", "idExtBolApont = " + apontTO.getIdExtBolApont());
-            Log.i("PMM", "osApont = " + apontTO.getOsApont());
-            Log.i("PMM", "itemOSApont = " + apontTO.getItemOSApont());
-            Log.i("PMM", "paradaApont = " + apontTO.getParadaApont());
-            Log.i("PMM", "dthrInicialAponta = " + apontTO.getDthrInicialApont());
-            Log.i("PMM", "dthrFinalAponta = " + apontTO.getDthrFinalApont());
-            Log.i("PMM", "realizAponta = " + apontTO.getRealizApont());
-            Log.i("PMM", "statusAponta = " + apontTO.getStatusApont());
-
-        }
-
-        OSTO osTO = new OSTO();
-        List osList = osTO.all();
-
-        for (int i = 0; i < osList.size(); i++) {
-
-            osTO = (OSTO) osList.get(i);
-            Log.i("PMM", "OS");
-            Log.i("PMM", "idOS = " + osTO.getIdOS());
-            Log.i("PMM", "nroOS = " + osTO.getNroOS());
-            Log.i("PMM", "equipOS = " + osTO.getEquipOS());
-            Log.i("PMM", "descrEquipOS = " + osTO.getDescrEquipOS());
-
-        }
-
-    }
-
 
 }

@@ -8,14 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.estaticas.ParadaTO;
-import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ParadaBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
 
 /**
  * Created by anderson on 08/03/2018.
@@ -27,7 +24,6 @@ public class AdapterListHistorico extends BaseAdapter {
     private LayoutInflater layoutInflater;
 
     public AdapterListHistorico(Context context, List itens) {
-        // TODO Auto-generated constructor stub
         this.itens = itens;
         layoutInflater = LayoutInflater.from(context);
     }

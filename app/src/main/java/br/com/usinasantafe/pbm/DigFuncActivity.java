@@ -11,14 +11,11 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
-import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
-import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
+import br.com.usinasantafe.pbm.util.ConexaoWeb;
+import br.com.usinasantafe.pbm.util.VerifDadosServ;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class DigFuncActivity extends ActivityGeneric {
 
@@ -56,7 +53,7 @@ public class DigFuncActivity extends ActivityGeneric {
                             progressBar.setMessage("Atualizando Colaborador...");
                             progressBar.show();
 
-                            ManipDadosVerif.getInstance().verDados("", "Colab"
+                            VerifDadosServ.getInstance().verDados("", "Colab"
                                     , DigFuncActivity.this, DigFuncActivity.class, progressBar);
 
                         } else {
@@ -95,16 +92,15 @@ public class DigFuncActivity extends ActivityGeneric {
             @SuppressWarnings("rawtypes")
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
-                    ColabTO colabTO = new ColabTO();
-                    List colabList = colabTO.get("matricColab", Long.parseLong(editTextPadrao.getText().toString()));
+                    ColabBean colabBean = new ColabBean();
+                    List colabList = colabBean.get("matricColab", Long.parseLong(editTextPadrao.getText().toString()));
 
                     if (colabList.size() > 0) {
 
-                        colabTO = (ColabTO) colabList.get(0);
+                        colabBean = (ColabBean) colabList.get(0);
 
                         BoletimTO bolTO = new BoletimTO();
                         List bolList = bolTO.all();
@@ -118,7 +114,7 @@ public class DigFuncActivity extends ActivityGeneric {
                         ArrayList boletimPesqList = new ArrayList();
                         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
                         pesquisa.setCampo("idFuncBoletim");
-                        pesquisa.setValor(colabTO.getIdColab());
+                        pesquisa.setValor(colabBean.getIdColab());
                         boletimPesqList.add(pesquisa);
 
                         EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
@@ -135,11 +131,11 @@ public class DigFuncActivity extends ActivityGeneric {
                             configuracaoTO = (ConfiguracaoTO) configuracaoList.get(0);
 
                             EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                            List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                            List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
                             escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
                             boletimTO.setDthrInicialBoletim(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
                             boletimTO.setEquipBoletim(configuracaoTO.getEquipConfig());
-                            boletimTO.setIdFuncBoletim(colabTO.getIdColab());
+                            boletimTO.setIdFuncBoletim(colabBean.getIdColab());
                             boletimTO.setIdExtBoletim(0L);
                             boletimTO.setStatusBoletim(1L);
                             boletimTO.setAtualBoletim(1L);
@@ -186,7 +182,6 @@ public class DigFuncActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (editTextPadrao.getText().toString().length() > 0) {
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }

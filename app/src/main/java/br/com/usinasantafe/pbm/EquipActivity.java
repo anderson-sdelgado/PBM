@@ -1,6 +1,5 @@
 package br.com.usinasantafe.pbm;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -9,13 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.to.estaticas.EquipTO;
+import br.com.usinasantafe.pbm.util.ConexaoWeb;
+import br.com.usinasantafe.pbm.util.VerifDadosServ;
 
 public class EquipActivity extends ActivityGeneric {
 
@@ -53,7 +49,7 @@ public class EquipActivity extends ActivityGeneric {
                             progressBar.setMessage("Atualizando Colaborador...");
                             progressBar.show();
 
-                            ManipDadosVerif.getInstance().verDados("", "Equip"
+                            VerifDadosServ.getInstance().verDados("", "Equip"
                                     , EquipActivity.this, EquipActivity.class, progressBar);
 
                         } else {
@@ -92,7 +88,6 @@ public class EquipActivity extends ActivityGeneric {
             @SuppressWarnings("rawtypes")
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
@@ -133,7 +128,6 @@ public class EquipActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (editTextPadrao.getText().toString().length() > 0) {
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }

@@ -1,7 +1,6 @@
 package br.com.usinasantafe.pbm;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,10 +10,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
 
 public class OpcaoInterFinalActivity extends ActivityGeneric {
 
@@ -74,7 +73,6 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                     apontaTO.update();
 
                     Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
-//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 
@@ -86,14 +84,12 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                     apontaTO.update();
 
                     Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
-//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 
                 } else if (text.equals("CANCELAR")) {
 
                     Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
-//                    Intent it = new Intent(OpcaoInterFinalActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
 

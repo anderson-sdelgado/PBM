@@ -1,6 +1,5 @@
 package br.com.usinasantafe.pbm;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -12,11 +11,8 @@ import android.widget.Button;
 
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
-import br.com.usinasantafe.pbm.to.estaticas.PneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
+import br.com.usinasantafe.pbm.util.ConexaoWeb;
+import br.com.usinasantafe.pbm.util.VerifDadosServ;
 
 public class PneuCalibActivity extends ActivityGeneric {
 
@@ -38,7 +34,6 @@ public class PneuCalibActivity extends ActivityGeneric {
             @SuppressWarnings("rawtypes")
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
@@ -60,7 +55,7 @@ public class PneuCalibActivity extends ActivityGeneric {
 
                             customHandler.postDelayed(updateTimerThread, 10000);
 
-                            ManipDadosVerif.getInstance().verDadosPneu(editTextPadrao.getText().toString(), "Pneu"
+                            VerifDadosServ.getInstance().verDadosPneu(editTextPadrao.getText().toString(), "Pneu"
                                     , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar);
 
                         }
@@ -101,7 +96,6 @@ public class PneuCalibActivity extends ActivityGeneric {
                             alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // TODO Auto-generated method stub
 
                                 }
                             });
@@ -123,7 +117,6 @@ public class PneuCalibActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (editTextPadrao.getText().toString().length() > 0) {
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
@@ -142,9 +135,9 @@ public class PneuCalibActivity extends ActivityGeneric {
 
         public void run() {
 
-            if(!ManipDadosVerif.getInstance().isVerTerm()) {
+            if(!VerifDadosServ.getInstance().isVerTerm()) {
 
-                ManipDadosVerif.getInstance().cancelVer();
+                VerifDadosServ.getInstance().cancelVer();
                 if (progressBar.isShowing()) {
                     progressBar.dismiss();
                 }

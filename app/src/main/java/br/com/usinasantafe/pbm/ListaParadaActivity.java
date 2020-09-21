@@ -18,15 +18,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosVerif;
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
-import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
-import br.com.usinasantafe.pbm.to.estaticas.ParadaTO;
-import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
+import br.com.usinasantafe.pbm.util.ConexaoWeb;
+import br.com.usinasantafe.pbm.util.VerifDadosServ;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class ListaParadaActivity extends ActivityGeneric {
 
@@ -106,11 +102,11 @@ public class ListaParadaActivity extends ActivityGeneric {
                     ApontTO apontTO = new ApontTO();
 
                     if(apontList.size() == 0){
-                        ColabTO colabTO = new ColabTO();
-                        List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
-                        colabTO = (ColabTO) colabList.get(0);
+                        ColabBean colabBean = new ColabBean();
+                        List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
+                        colabBean = (ColabBean) colabList.get(0);
                         EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
                         escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
                         apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
                     }
@@ -191,7 +187,7 @@ public class ListaParadaActivity extends ActivityGeneric {
                     progressBar.setMessage("Atualizando Paradas...");
                     progressBar.show();
 
-                    ManipDadosVerif.getInstance().verDados("", "Parada"
+                    VerifDadosServ.getInstance().verDados("", "Parada"
                             , ListaParadaActivity.this, ListaParadaActivity.class, progressBar);
 
                 } else {

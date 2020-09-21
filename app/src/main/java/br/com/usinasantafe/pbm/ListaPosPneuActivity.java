@@ -1,6 +1,5 @@
 package br.com.usinasantafe.pbm;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,14 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
-import br.com.usinasantafe.pbm.to.estaticas.REquipPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
-import br.com.usinasantafe.pbm.to.variaveis.ConfiguracaoTO;
-import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ItemMedPneuBean;
 
 public class ListaPosPneuActivity extends ActivityGeneric {
 
@@ -74,14 +72,14 @@ public class ListaPosPneuActivity extends ActivityGeneric {
                 boletimList.clear();
                 boletimPesqList.clear();
 
-                ColabTO colabTO = new ColabTO();
-                List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
-                colabTO = (ColabTO) colabList.get(0);
+                ColabBean colabBean = new ColabBean();
+                List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
+                colabBean = (ColabBean) colabList.get(0);
                 colabList.clear();
 
                 boletimPneuTO.setIdApontBolPneu(0L);
                 boletimPneuTO.setEquipBolPneu(pbmContext.getBoletimPneuTO().getEquipBolPneu());
-                boletimPneuTO.setFuncBolPneu(colabTO.getMatricColab());
+                boletimPneuTO.setFuncBolPneu(colabBean.getMatricColab());
                 boletimPneuTO.setDthrBolPneu(Tempo.getInstance().datahora());
                 boletimPneuTO.setStatusBolPneu(1L);
                 boletimPneuTO.insert();
@@ -139,7 +137,6 @@ public class ListaPosPneuActivity extends ActivityGeneric {
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position,
                                     long id) {
-                // TODO Auto-generated method stub
 
                 TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 String posPneu = textView.getText().toString();

@@ -1,6 +1,5 @@
 package br.com.usinasantafe.pbm;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,10 +10,10 @@ import android.widget.Button;
 import java.util.List;
 import java.util.Objects;
 
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.to.estaticas.REquipPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimPneuTO;
-import br.com.usinasantafe.pbm.to.variaveis.ItemMedPneuTO;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ItemMedPneuBean;
 
 public class PressaoColPneuActivity extends ActivityGeneric {
 
@@ -34,7 +33,6 @@ public class PressaoColPneuActivity extends ActivityGeneric {
             @SuppressWarnings("rawtypes")
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
@@ -112,7 +110,6 @@ public class PressaoColPneuActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (editTextPadrao.getText().toString().length() > 0) {
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }

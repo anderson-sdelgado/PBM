@@ -1,10 +1,8 @@
 package br.com.usinasantafe.pbm;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,14 +10,11 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.bo.ConexaoWeb;
-import br.com.usinasantafe.pbm.bo.ManipDadosEnvio;
-import br.com.usinasantafe.pbm.bo.Tempo;
-import br.com.usinasantafe.pbm.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.to.estaticas.ColabTO;
-import br.com.usinasantafe.pbm.to.estaticas.EscalaTrabTO;
-import br.com.usinasantafe.pbm.to.variaveis.ApontTO;
-import br.com.usinasantafe.pbm.to.variaveis.BoletimTO;
+import br.com.usinasantafe.pbm.util.Tempo;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
 
 public class ItemOSDigActivity extends ActivityGeneric {
 
@@ -38,7 +33,7 @@ public class ItemOSDigActivity extends ActivityGeneric {
         buttonOkItemOSDig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+
                 if (!editTextPadrao.getText().toString().equals("")) {
 
                     if(Long.parseLong(editTextPadrao.getText().toString()) < 1000){
@@ -74,11 +69,11 @@ public class ItemOSDigActivity extends ActivityGeneric {
                             apontTO.setDthrInicialApont(Tempo.getInstance().datahora());
 
                         }else{
-                            ColabTO colabTO = new ColabTO();
-                            List colabList = colabTO.get("idColab", boletimTO.getIdFuncBoletim());
-                            colabTO = (ColabTO) colabList.get(0);
+                            ColabBean colabBean = new ColabBean();
+                            List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
+                            colabBean = (ColabBean) colabList.get(0);
                             EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                            List escalaTrabList = escalaTrabTO.get("idEscalaTrab",colabTO.getIdEscalaTrabColab());
+                            List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
                             escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
                             apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
                         }
@@ -121,7 +116,6 @@ public class ItemOSDigActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (editTextPadrao.getText().toString().length() > 0) {
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
