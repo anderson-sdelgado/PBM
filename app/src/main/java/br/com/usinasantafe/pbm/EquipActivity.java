@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import java.util.List;
 
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
 import br.com.usinasantafe.pbm.util.ConexaoWeb;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
 
@@ -91,13 +92,10 @@ public class EquipActivity extends ActivityGeneric {
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
-                    EquipTO equipTO = new EquipTO();
-                    List equipList = equipTO.get("numEquip", Long.parseLong(editTextPadrao.getText().toString()));
+                    if (pbmContext.getConfigCTR().verNroEquip(Long.parseLong(editTextPadrao.getText().toString()))) {
 
-                    if (equipList.size() > 0) {
+                        pbmContext.getPneuCTR().salvarBoletim(pbmContext.getConfigCTR().getEquip(Long.parseLong(editTextPadrao.getText().toString())).getIdEquip());
 
-                        equipTO = (EquipTO) equipList.get(0);
-                        pbmContext.getBoletimPneuTO().setEquipBolPneu(equipTO.getIdEquip());
                         Intent it = new Intent(EquipActivity.this, ListaPosPneuActivity.class);
                         startActivity(it);
                         finish();

@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.List;
-
 import br.com.usinasantafe.pbm.util.ConexaoWeb;
 import br.com.usinasantafe.pbm.util.AtualDadosServ;
 
@@ -101,7 +99,7 @@ public class ConfigActivity extends ActivityGeneric {
                     progressBar.setProgress(0);
                     progressBar.setMax(100);
                     progressBar.show();
-                    AtualDadosServ.getInstance().setContext(ConfigActivity.this);
+                    AtualDadosServ.getInstance().setTelaAtual(ConfigActivity.this);
                     AtualDadosServ.getInstance().atualizarBD(progressBar);
                 } else {
                     AlertDialog.Builder alerta = new AlertDialog.Builder(ConfigActivity.this);

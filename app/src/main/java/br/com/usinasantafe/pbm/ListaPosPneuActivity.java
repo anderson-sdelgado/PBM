@@ -14,18 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import br.com.usinasantafe.pbm.model.bean.variaveis.ItemCalibPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ItemManutPneuBean;
 import br.com.usinasantafe.pbm.util.Tempo;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
-import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ItemMedPneuBean;
 
 public class ListaPosPneuActivity extends ActivityGeneric {
 
     private PBMContext pbmContext;
-    private ListView lista;
+    private ListView posPneuListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,86 +43,14 @@ public class ListaPosPneuActivity extends ActivityGeneric {
 
         ArrayList<String> itens = new ArrayList<String>();
 
-        REquipPneuTO rEquipPneuTO = new REquipPneuTO();
-        List rEquipPneuList = rEquipPneuTO.get("idEquip", pbmContext.getBoletimPneuTO().getEquipBolPneu());
-
         if(pbmContext.getVerTela() == 3){
 
-            BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
-            List boletimPneuList = boletimPneuTO.get("statusBolPneu", 1L);
-
-            if(boletimPneuList.size() == 0){
-
-                ArrayList boletimPesqList = new ArrayList();
-                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("atualBoletim");
-                pesquisa.setValor(1L);
-                boletimPesqList.add(pesquisa);
-
-                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                pesquisa2.setCampo("statusBoletim");
-                pesquisa2.setValor(1L);
-                boletimPesqList.add(pesquisa2);
-
-                BoletimTO boletimTO = new BoletimTO();
-                List boletimList = boletimTO.get(boletimPesqList);
-                boletimTO = (BoletimTO) boletimList.get(0);
-                boletimList.clear();
-                boletimPesqList.clear();
-
-                ColabBean colabBean = new ColabBean();
-                List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
-                colabBean = (ColabBean) colabList.get(0);
-                colabList.clear();
-
-                boletimPneuTO.setIdApontBolPneu(0L);
-                boletimPneuTO.setEquipBolPneu(pbmContext.getBoletimPneuTO().getEquipBolPneu());
-                boletimPneuTO.setFuncBolPneu(colabBean.getMatricColab());
-                boletimPneuTO.setDthrBolPneu(Tempo.getInstance().datahora());
-                boletimPneuTO.setStatusBolPneu(1L);
-                boletimPneuTO.insert();
-
-                for(int i = 0; i < rEquipPneuList.size(); i++){
-                    rEquipPneuTO = (REquipPneuTO) rEquipPneuList.get(i);
-                    itens.add(rEquipPneuTO.getPosPneu());
-                }
-
-            }
-            else{
-                Log.i("PMM", "CHEGOU AKI 1");
-                boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(0);
-                ItemMedPneuTO itemMedPneuTO = new ItemMedPneuTO();
-                List itemMedPneuList = itemMedPneuTO.get("idBolItemMedPneu", boletimPneuTO.getIdBolPneu());
-                boolean verCad;
-                for(int i = 0; i < rEquipPneuList.size(); i++){
-                    rEquipPneuTO = (REquipPneuTO) rEquipPneuList.get(i);
-                    Log.i("PMM", "CHEGOU AKI 2 = " + rEquipPneuTO.getIdPosConfPneu());
-                    verCad = true;
-                    for(int j = 0; j < itemMedPneuList.size(); j++) {
-                        itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(j);
-                        Log.i("PMM", "CHEGOU AKI 3 = " + itemMedPneuTO.getPosItemMedPneu());
-                        if(Objects.equals(rEquipPneuTO.getIdPosConfPneu(), itemMedPneuTO.getPosItemMedPneu())){
-                            verCad = false;
-                        }
-                    }
-                    if(verCad) {
-                        Log.i("PMM", "CHEGOU AKI 4 = " + rEquipPneuTO.getPosPneu());
-                        itens.add(rEquipPneuTO.getPosPneu());
-                    }
-                }
-                itemMedPneuList.clear();
-            }
-
-            rEquipPneuList.clear();
-            boletimPneuList.clear();
+            itens = pbmContext.getPneuCTR().rEquipPneuCalibList();
 
         }
         else if(pbmContext.getVerTela() == 4){
 
-            for(int i = 0; i < rEquipPneuList.size(); i++){
-                rEquipPneuTO = (REquipPneuTO) rEquipPneuList.get(i);
-                itens.add(rEquipPneuTO.getPosPneu());
-            }
+            itens = pbmContext.getPneuCTR().rEquipPneuManutList();
 
         }
 
@@ -141,32 +67,25 @@ public class ListaPosPneuActivity extends ActivityGeneric {
                 TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 String posPneu = textView.getText().toString();
 
-                REquipPneuTO rEquipPneuTO = new REquipPneuTO();
-                ArrayList equipPneuPesqList = new ArrayList();
-                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("idEquip");
-                pesquisa.setValor(pbmContext.getBoletimPneuTO().getEquipBolPneu());
-                equipPneuPesqList.add(pesquisa);
-
-                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                pesquisa2.setCampo("posPneu");
-                pesquisa2.setValor(posPneu);
-                equipPneuPesqList.add(pesquisa2);
-
-                List rEquipPneuList = rEquipPneuTO.get(equipPneuPesqList);
-                rEquipPneuTO = (REquipPneuTO) rEquipPneuList.get(0);
-                rEquipPneuList.clear();
-                equipPneuPesqList.clear();
-
                 if(pbmContext.getVerTela() == 3) {
-                    pbmContext.getItemMedPneuTO().setPosItemMedPneu(rEquipPneuTO.getIdPosConfPneu());
+
+                    pbmContext.getPneuCTR().setItemCalibPneuBean(new ItemCalibPneuBean());
+                    pbmContext.getPneuCTR().getItemCalibPneuBean().setPosItemCalibPneu(pbmContext.getPneuCTR().getREquipPneu(Long.parseLong(posPneu)).getIdPosConfPneu());
+
                     Intent it = new Intent(ListaPosPneuActivity.this, PneuCalibActivity.class);
                     startActivity(it);
+                    finish();
+
                 }
                 else if(pbmContext.getVerTela() == 4){
-                    pbmContext.getItemManutPneuTO().setPosItemManutPneu(rEquipPneuTO.getIdPosConfPneu());
+
+                    pbmContext.getPneuCTR().setItemManutPneuBean(new ItemManutPneuBean());
+                    pbmContext.getPneuCTR().getItemManutPneuBean().setPosItemManutPneu(pbmContext.getPneuCTR().getREquipPneu(Long.parseLong(posPneu)).getIdPosConfPneu());
+
                     Intent it = new Intent(ListaPosPneuActivity.this, PneuRetActivity.class);
                     startActivity(it);
+                    finish();
+
                 }
 
             }

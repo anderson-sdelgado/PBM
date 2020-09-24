@@ -17,19 +17,14 @@ import java.util.List;
 
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
 import br.com.usinasantafe.pbm.util.Tempo;
-import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class MenuFuncaoActivity extends ActivityGeneric {
 
-    private ListView lista;
+    private ListView menuFuncaoListView;
     private PBMContext pbmContext;
 
     private TextView textViewProcesso;
     private Handler customHandler = new Handler();
-    private BoletimTO boletimTO;
-    private ApontTO apontTO;
-    private List apontList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +47,10 @@ public class MenuFuncaoActivity extends ActivityGeneric {
         itens.add("HISTÓRICO");
 
         AdapterList adapterList = new AdapterList(this, itens);
-        lista = (ListView) findViewById(R.id.listViewMenuFuncao);
-        lista.setAdapter(adapterList);
+        menuFuncaoListView = (ListView) findViewById(R.id.listViewMenuFuncao);
+        menuFuncaoListView.setAdapter(adapterList);
 
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        menuFuncaoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position,
@@ -64,36 +59,12 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                 TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 String text = textView.getText().toString();
 
-                ArrayList boletimPesqList = new ArrayList();
-                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("atualBoletim");
-                pesquisa.setValor(1L);
-                boletimPesqList.add(pesquisa);
-
-                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                pesquisa2.setCampo("statusBoletim");
-                pesquisa2.setValor(1L);
-                boletimPesqList.add(pesquisa2);
-
-                boletimTO = new BoletimTO();
-                List boletimList = boletimTO.get(boletimPesqList);
-                boletimTO = (BoletimTO) boletimList.get(0);
-
-                apontTO = new ApontTO();
-                apontList = apontTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
-
                 if (text.equals("APONTAMENTO")) {
 
                     Intent it;
 
-                    if (apontList.size() == 0) {
-                        ColabBean colabBean = new ColabBean();
-                        List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
-                        colabBean = (ColabBean) colabList.get(0);
-                        EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
-                        escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                        if (Tempo.getInstance().verifDataHora(Tempo.getInstance().dataSHoraComTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab())) {
+                    if (!pbmContext.getMecanicoCTR().verApont()) {
+                        if (Tempo.getInstance().verifDataHora(Tempo.getInstance().dataSHoraComTZ() + " " + pbmContext.getMecanicoCTR().getEscalaTrab(pbmContext.getMecanicoCTR().getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab())) {
                             it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                             startActivity(it);
                             finish();
@@ -105,19 +76,17 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         }
                     } else {
 
-                        apontTO = (ApontTO) apontList.get(0);
-
-                        if (apontTO.getDthrInicialApont().equals(Tempo.getInstance().datahora())) {
+                        if (pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApont().equals(Tempo.getInstance().dataHora())) {
                             Toast.makeText(MenuFuncaoActivity.this, "POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.",
                                     Toast.LENGTH_LONG).show();
                         } else {
 
-                            if (apontTO.getDthrFinalApont().equals("")) {
+                            if (pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont().equals("")) {
                                 it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                                 startActivity(it);
                                 finish();
                             } else {
-                                if (Tempo.getInstance().verifDataHora(apontTO.getDthrFinalApont())) {
+                                if (Tempo.getInstance().verifDataHora(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont())) {
                                     it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                                     startActivity(it);
                                     finish();
@@ -135,9 +104,8 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                 } else if (text.equals("FINALIZAR/INTERROPER")) {
 
-                    if (apontList.size() > 0) {
-                        apontTO = (ApontTO) apontList.get(0);
-                        if (apontTO.getParadaApont() == 0L) {
+                    if (pbmContext.getMecanicoCTR().verApont()) {
+                        if (pbmContext.getMecanicoCTR().getUltApont().getParadaApont() == 0L) {
                             Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterFinalActivity.class);
                             startActivity(it);
                             finish();
@@ -184,37 +152,23 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                         Intent it;
 
-                        if (apontList.size() > 0) {
+                        if (pbmContext.getMecanicoCTR().verApont()) {
 
-                            apontTO = (ApontTO) apontList.get(0);
-                            if (apontTO.getParadaApont() == 0L) {
+                            if (pbmContext.getMecanicoCTR().getUltApont().getParadaApont() == 0L) {
 
-                                if (apontTO.getParadaApont() == 0L) {
-                                    apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
-                                    apontTO.setStatusApont(0L);
-                                    apontTO.update();
-                                }
-
-                                boletimTO.setDthrFinalBoletim(Tempo.getInstance().datahora());
-                                boletimTO.setStatusBoletim(2L);
-                                boletimTO.update();
+                                pbmContext.getMecanicoCTR().fecharApont();
+                                pbmContext.getMecanicoCTR().fecharBoletim();
 
                                 it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
                                 startActivity(it);
                                 finish();
+
                             } else {
-                                if (Tempo.getInstance().verifDataHora(apontTO.getDthrFinalApont())) {
 
-                                    apontTO = (ApontTO) apontList.get(0);
-                                    if (apontTO.getParadaApont() == 0L) {
-                                        apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
-                                        apontTO.setStatusApont(0L);
-                                        apontTO.update();
-                                    }
+                                if (Tempo.getInstance().verifDataHora(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont())) {
 
-                                    boletimTO.setDthrFinalBoletim(Tempo.getInstance().datahora());
-                                    boletimTO.setStatusBoletim(2L);
-                                    boletimTO.update();
+                                    pbmContext.getMecanicoCTR().fecharApont();
+                                    pbmContext.getMecanicoCTR().fecharBoletim();
 
                                     it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
                                     startActivity(it);
@@ -235,7 +189,6 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                             alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
                                 }
                             });
 

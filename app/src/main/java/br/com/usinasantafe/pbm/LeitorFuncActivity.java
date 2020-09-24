@@ -23,8 +23,6 @@ public class LeitorFuncActivity extends ActivityGeneric {
     public static final int REQUEST_CODE = 0;
     private PBMContext pbmContext;
     private TextView txtRetFunc;
-    private String matricula;
-    private Boolean verFunc;
     private ProgressDialog progressBar;
     private ColabBean colabBean;
 
@@ -41,7 +39,12 @@ public class LeitorFuncActivity extends ActivityGeneric {
         Button buttonCancFunc = (Button) findViewById(R.id.buttonCancFunc);
         Button buttonDigFunc = (Button) findViewById(R.id.buttonDigFunc);
         Button buttonAtualPadrao = (Button) findViewById(R.id.buttonAtualPadrao);
-        verFunc = false;
+
+        colabBean = new ColabBean();
+        colabBean.setIdColab(0L);
+        colabBean.setMatricColab(0L);
+        colabBean.setIdEscalaTrabColab(0L);
+        colabBean.setNomeColab("");
 
         txtRetFunc.setText("Por Favor, realize a leitura do Cartão do Colaborador Mecânico.");
 
@@ -50,59 +53,11 @@ public class LeitorFuncActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
 
-                if (verFunc) {
+                if (colabBean.getIdColab() > 0) {
 
-                    BoletimTO bolTO = new BoletimTO();
-                    List bolList = bolTO.all();
-                    for (int i = 0; i < bolList.size(); i++) {
-                        bolTO = (BoletimTO) bolList.get(i);
-                        bolTO.setAtualBoletim(0L);
-                        bolTO.update();
-                    }
-                    bolList.clear();
+                    pbmContext.getMecanicoCTR().atualBoletimSApont();
+                    pbmContext.getMecanicoCTR().atualSalvarBoletim(colabBean);
 
-                    ArrayList boletimPesqList = new ArrayList();
-                    EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                    pesquisa.setCampo("idFuncBoletim");
-                    pesquisa.setValor(colabBean.getIdColab());
-                    boletimPesqList.add(pesquisa);
-
-                    EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                    pesquisa2.setCampo("statusBoletim");
-                    pesquisa2.setValor(1L);
-                    boletimPesqList.add(pesquisa2);
-
-                    BoletimTO boletimTO = new BoletimTO();
-                    List boletimList = boletimTO.get(boletimPesqList);
-                    if (boletimList.size() == 0) {
-
-                        ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
-                        List configuracaoList = configuracaoTO.all();
-                        configuracaoTO = (ConfiguracaoTO) configuracaoList.get(0);
-
-                        EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
-                        escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                        boletimTO.setDthrInicialBoletim(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
-
-                        boletimTO.setEquipBoletim(configuracaoTO.getEquipConfig());
-                        boletimTO.setIdFuncBoletim(colabBean.getIdColab());
-                        boletimTO.setIdExtBoletim(0L);
-                        boletimTO.setStatusBoletim(1L);
-                        boletimTO.setAtualBoletim(1L);
-                        boletimTO.insert();
-
-                    }
-                    else{
-
-                        boletimTO = (BoletimTO) boletimList.get(0);
-                        boletimTO.setAtualBoletim(1L);
-                        boletimTO.update();
-
-                    }
-
-                    boletimPesqList.clear();
-                    boletimList.clear();
                     Intent it = new Intent(LeitorFuncActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
@@ -153,8 +108,8 @@ public class LeitorFuncActivity extends ActivityGeneric {
                             progressBar.setMessage("Atualizando Colaborador...");
                             progressBar.show();
 
-                            VerifDadosServ.getInstance().verDados("", "Colab"
-                                    , LeitorFuncActivity.this, LeitorFuncActivity.class, progressBar);
+                            pbmContext.getMecanicoCTR().atualDadosColab(LeitorFuncActivity.this
+                                    , LeitorFuncActivity.class, progressBar);
 
                         } else {
 
@@ -200,17 +155,13 @@ public class LeitorFuncActivity extends ActivityGeneric {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
-            matricula = data.getStringExtra("SCAN_RESULT");
+            String matricula = data.getStringExtra("SCAN_RESULT");
             if (matricula.length() == 8) {
                 matricula = matricula.substring(0, 7);
-                colabBean = new ColabBean();
-                List listColab = colabBean.get("matricColab", Long.parseLong(matricula));
-                if (listColab.size() > 0) {
-                    colabBean = (ColabBean) listColab.get(0);
-                    verFunc = true;
+                if (pbmContext.getMecanicoCTR().verMatricColab(Long.parseLong(matricula))) {
+                    colabBean = pbmContext.getMecanicoCTR().getColab(Long.parseLong(matricula));
                     txtRetFunc.setText(matricula + "\n" + colabBean.getNomeColab());
                 } else {
-                    verFunc = false;
                     txtRetFunc.setText("Funcionário Inexistente");
                 }
             }

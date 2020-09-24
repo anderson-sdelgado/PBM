@@ -4,18 +4,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
+import br.com.usinasantafe.pbm.util.Tempo;
 
 public class BoletimPneuDAO {
 
     public BoletimPneuDAO() {
     }
 
-    public List<BoletimPneuBean> boletimPneuAbertList(){
+    public void salvarBoletimPneu(Long idEquip, Long matricColab){
+
+        if(!verBoletimPneuAberto()){
+            BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
+            boletimPneuBean.setIdApontBolPneu(0L);
+            boletimPneuBean.setEquipBolPneu(idEquip);
+            boletimPneuBean.setFuncBolPneu(matricColab);
+            boletimPneuBean.setDthrBolPneu(Tempo.getInstance().dataHora());
+            boletimPneuBean.setStatusBolPneu(1L);
+            boletimPneuBean.insert();
+        }
+
+    }
+
+    public boolean verBoletimPneuAberto(){
+        List<BoletimPneuBean> boletimPneuList = boletimPneuAbertoList();
+        boolean ret = (boletimPneuList.size() > 0);
+        boletimPneuList.clear();
+        return ret;
+    }
+
+    public BoletimPneuBean getBoletimPneuAberto(){
+        List<BoletimPneuBean> boletimPneuList = boletimPneuAbertoList();
+        BoletimPneuBean boletimPneuBean = boletimPneuList.get(0);
+        boletimPneuList.clear();
+        return boletimPneuBean;
+    }
+
+    public List<BoletimPneuBean> boletimPneuAbertoList(){
         BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
         return boletimPneuBean.get("statusBolPneu", 1L);
     }
 
-    public ArrayList<Long> idBolPneuList(List<BoletimPneuBean> boletimPneuList){
+    public ArrayList<Long> idBoletimPneuList(List<BoletimPneuBean> boletimPneuList){
         ArrayList<Long> idBolPneuList = new ArrayList<Long>();
         for (BoletimPneuBean boletimPneuBean : boletimPneuList) {
             idBolPneuList.add(boletimPneuBean.getIdBolPneu());
@@ -23,7 +52,7 @@ public class BoletimPneuDAO {
         return idBolPneuList;
     }
 
-    public void delete(List<BoletimPneuBean> boletimPneuList){
+    public void deleteBoletimPneu(List<BoletimPneuBean> boletimPneuList){
         for (BoletimPneuBean boletimPneuBean : boletimPneuList) {
             boletimPneuBean.delete();
         }

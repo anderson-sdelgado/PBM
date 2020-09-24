@@ -37,12 +37,9 @@ public class PneuCalibActivity extends ActivityGeneric {
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
-                    pbmContext.getItemMedPneuTO().setNroPneuItemMedPneu(editTextPadrao.getText().toString());
+                    pbmContext.getPneuCTR().getItemCalibPneuBean().setNroPneuItemCalibPneu(editTextPadrao.getText().toString());
 
-                    PneuTO pneuTO = new PneuTO();
-                    List pneuList = pneuTO.get("codPneu", editTextPadrao.getText().toString());
-
-                    if(pneuList.size() == 0){
+                    if(pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())){
 
                         ConexaoWeb conexaoWeb = new ConexaoWeb();
 
@@ -55,7 +52,7 @@ public class PneuCalibActivity extends ActivityGeneric {
 
                             customHandler.postDelayed(updateTimerThread, 10000);
 
-                            VerifDadosServ.getInstance().verDadosPneu(editTextPadrao.getText().toString(), "Pneu"
+                            pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()
                                     , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar);
 
                         }
@@ -63,29 +60,17 @@ public class PneuCalibActivity extends ActivityGeneric {
 
                             Intent it = new Intent(PneuCalibActivity.this, PressaoEncPneuActivity.class);
                             startActivity(it);
+                            finish();
 
                         }
 
                     }
                     else{
 
-                        boolean verCad = true;
-
-                        BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
-                        List boletimPneuList = boletimPneuTO.get("statusBolPneu", 1L);
-                        boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(0);
-                        ItemMedPneuTO itemMedPneuTO = new ItemMedPneuTO();
-                        List itemMedPneuList = itemMedPneuTO.get("idBolItemMedPneu", boletimPneuTO.getIdBolPneu());
-                        for(int i = 0; i < itemMedPneuList.size(); i++) {
-                            itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(i);
-                            if(editTextPadrao.getText().toString().equals(itemMedPneuTO.getNroPneuItemMedPneu())){
-                                verCad = false;
-                            }
-                        }
-
-                        if(verCad){
+                        if(!pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())){
                             Intent it = new Intent(PneuCalibActivity.this, PressaoEncPneuActivity.class);
                             startActivity(it);
+                            finish();
                         }
                         else{
 
@@ -104,8 +89,6 @@ public class PneuCalibActivity extends ActivityGeneric {
                         }
 
                     }
-
-                    pneuList.clear();
 
                 }
 

@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Objects;
 
 import br.com.usinasantafe.pbm.util.Tempo;
-import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ItemMedPneuBean;
 
 public class PressaoColPneuActivity extends ActivityGeneric {
 
@@ -40,17 +37,10 @@ public class PressaoColPneuActivity extends ActivityGeneric {
 
                     if (qtde < 1000) {
 
-                        pbmContext.getItemMedPneuTO().setPressaoColItemMedPneu(qtde);
-                        BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
-                        List boletimPneuList = boletimPneuTO.get("statusBolPneu", 1L);
-                        boletimPneuTO = (BoletimPneuTO) boletimPneuList.get(0);
-                        boletimPneuList.clear();
+                        pbmContext.getPneuCTR().getItemCalibPneuBean().setPressaoColItemCalibPneu(qtde);
+                        pbmContext.getPneuCTR().salvarItemCalibPneu();
 
-                        ItemMedPneuTO itemMedPneuTO = new ItemMedPneuTO();
-                        itemMedPneuTO = pbmContext.getItemMedPneuTO();
-                        itemMedPneuTO.setIdBolItemMedPneu(boletimPneuTO.getIdBolPneu());
-                        itemMedPneuTO.setDthrItemMedPneu(Tempo.getInstance().datahora());
-                        itemMedPneuTO.insert();
+
 
                         REquipPneuTO rEquipPneuTO = new REquipPneuTO();
                         List rEquipPneuList = rEquipPneuTO.get("idEquip", boletimPneuTO.getEquipBolPneu());

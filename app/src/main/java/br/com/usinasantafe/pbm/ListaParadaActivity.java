@@ -15,20 +15,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.model.bean.estaticas.ParadaBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
 import br.com.usinasantafe.pbm.util.ConexaoWeb;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
-import br.com.usinasantafe.pbm.util.Tempo;
-import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class ListaParadaActivity extends ActivityGeneric {
 
-    private ListView lista;
+    private ListView paradaListView;
     private ProgressDialog progressBar;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> stringArrayAdapter;
     private PBMContext pbmContext;
     private String textParada;
 
@@ -43,21 +41,21 @@ public class ListaParadaActivity extends ActivityGeneric {
 
         pbmContext = (PBMContext) getApplication();
 
-        ParadaTO paradaTO = new ParadaTO();
-        List paradaList = paradaTO.orderBy("codParada",true);
+        List<ParadaBean> paradaList = pbmContext.getMecanicoCTR().paradaList();
 
         String itens[] = new String[paradaList.size()];
 
-        for (int i = 0; i < paradaList.size(); i++) {
-            paradaTO = (ParadaTO) paradaList.get(i);
-            itens[i] = paradaTO.getCodParada() + " - " + paradaTO.getDescrParada();
+        int i = 0;
+        for (ParadaBean paradaBean : paradaList) {
+            itens[i] = paradaBean.getCodParada() + " - " + paradaBean.getDescrParada();
+            i++;
         }
 
-        adapter = new ArrayAdapter<String>(this, R.layout.activity_item_lista, R.id.textViewItemList, itens);
-        lista = (ListView) findViewById(R.id.listViewMotParada);
-        lista.setAdapter(adapter);
+        stringArrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_item_lista, R.id.textViewItemList, itens);
+        paradaListView = (ListView) findViewById(R.id.listViewMotParada);
+        paradaListView.setAdapter(stringArrayAdapter);
 
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        paradaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position,
@@ -77,63 +75,20 @@ public class ListaParadaActivity extends ActivityGeneric {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                    ParadaTO paradaTO = new ParadaTO();
-                    List paradaList = paradaTO.get("codParada", textParada.substring(0, textParada.indexOf('-')).trim());
-                    paradaTO = (ParadaTO) paradaList.get(0);
+                        pbmContext.getMecanicoCTR().setApontBean(new ApontBean());
+                        pbmContext.getMecanicoCTR().getApontBean().setOsApont(0L);
+                        pbmContext.getMecanicoCTR().getApontBean().setItemOSApont(0L);
+                        pbmContext.getMecanicoCTR().getApontBean().setParadaApont(pbmContext.getMecanicoCTR().getParadaCod(Long.parseLong(textParada.substring(0, textParada.indexOf('-')).trim())).getIdParada());
+                        pbmContext.getMecanicoCTR().getApontBean().setRealizApont(1L);
+                        pbmContext.getMecanicoCTR().salvarApont();
 
-                    ArrayList boletimPesqList = new ArrayList();
-                    EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                    pesquisa.setCampo("atualBoletim");
-                    pesquisa.setValor(1L);
-                    boletimPesqList.add(pesquisa);
+                        if(pbmContext.getVerTela() == 2){
+                            pbmContext.getMecanicoCTR().fecharBoletim();
+                        }
 
-                    EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                    pesquisa2.setCampo("statusBoletim");
-                    pesquisa2.setValor(1L);
-                    boletimPesqList.add(pesquisa2);
-
-                    BoletimTO boletimTO = new BoletimTO();
-                    List boletimList = boletimTO.get(boletimPesqList);
-                    boletimTO = (BoletimTO) boletimList.get(0);
-
-                    ApontTO apontaTO = new ApontTO();
-                    List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
-
-                    ApontTO apontTO = new ApontTO();
-
-                    if(apontList.size() == 0){
-                        ColabBean colabBean = new ColabBean();
-                        List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
-                        colabBean = (ColabBean) colabList.get(0);
-                        EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                        List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
-                        escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                        apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
-                    }
-                    else{
-                        apontaTO = (ApontTO) apontList.get(0);
-                        apontTO.setDthrInicialApont(apontaTO.getDthrFinalApont());
-                    }
-
-                    apontTO.setIdBolApont(boletimTO.getIdBoletim());
-                    apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
-                    apontTO.setOsApont(0L);
-                    apontTO.setItemOSApont(0L);
-                    apontTO.setParadaApont(paradaTO.getIdParada());
-                    apontTO.setDthrFinalApont(Tempo.getInstance().datahora());
-                    apontTO.setRealizApont(0L);
-                    apontTO.setStatusApont(0L);
-                    apontTO.insert();
-
-                    if(pbmContext.getVerTela() == 2){
-                        boletimTO.setDthrFinalBoletim(Tempo.getInstance().datahora());
-                        boletimTO.setStatusBoletim(2L);
-                        boletimTO.update();
-                    }
-
-                    Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
-                    startActivity(it);
-                    finish();
+                        Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
+                        startActivity(it);
+                        finish();
 
                     }
 
@@ -159,7 +114,7 @@ public class ListaParadaActivity extends ActivityGeneric {
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
-                ListaParadaActivity.this.adapter.getFilter().filter(cs);
+                ListaParadaActivity.this.stringArrayAdapter.getFilter().filter(cs);
             }
 
             @Override

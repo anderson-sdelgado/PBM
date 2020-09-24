@@ -53,8 +53,8 @@ public class DigFuncActivity extends ActivityGeneric {
                             progressBar.setMessage("Atualizando Colaborador...");
                             progressBar.show();
 
-                            VerifDadosServ.getInstance().verDados("", "Colab"
-                                    , DigFuncActivity.this, DigFuncActivity.class, progressBar);
+                            pbmContext.getMecanicoCTR().atualDadosColab(DigFuncActivity.this
+                                    , LeitorFuncActivity.class, progressBar);
 
                         } else {
 
@@ -95,64 +95,11 @@ public class DigFuncActivity extends ActivityGeneric {
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
-                    ColabBean colabBean = new ColabBean();
-                    List colabList = colabBean.get("matricColab", Long.parseLong(editTextPadrao.getText().toString()));
+                    if (pbmContext.getMecanicoCTR().verMatricColab(Long.parseLong(editTextPadrao.getText().toString()))) {
 
-                    if (colabList.size() > 0) {
+                        pbmContext.getMecanicoCTR().atualBoletimSApont();
+                        pbmContext.getMecanicoCTR().atualSalvarBoletim(pbmContext.getMecanicoCTR().getColab(Long.parseLong(editTextPadrao.getText().toString())));
 
-                        colabBean = (ColabBean) colabList.get(0);
-
-                        BoletimTO bolTO = new BoletimTO();
-                        List bolList = bolTO.all();
-                        for (int i = 0; i < bolList.size(); i++) {
-                            bolTO = (BoletimTO) bolList.get(i);
-                            bolTO.setAtualBoletim(0L);
-                            bolTO.update();
-                        }
-                        bolList.clear();
-
-                        ArrayList boletimPesqList = new ArrayList();
-                        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                        pesquisa.setCampo("idFuncBoletim");
-                        pesquisa.setValor(colabBean.getIdColab());
-                        boletimPesqList.add(pesquisa);
-
-                        EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                        pesquisa2.setCampo("statusBoletim");
-                        pesquisa2.setValor(1L);
-                        boletimPesqList.add(pesquisa2);
-
-                        BoletimTO boletimTO = new BoletimTO();
-                        List boletimList = boletimTO.get(boletimPesqList);
-                        if(boletimList.size() == 0){
-
-                            ConfiguracaoTO configuracaoTO = new ConfiguracaoTO();
-                            List configuracaoList = configuracaoTO.all();
-                            configuracaoTO = (ConfiguracaoTO) configuracaoList.get(0);
-
-                            EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                            List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
-                            escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                            boletimTO.setDthrInicialBoletim(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
-                            boletimTO.setEquipBoletim(configuracaoTO.getEquipConfig());
-                            boletimTO.setIdFuncBoletim(colabBean.getIdColab());
-                            boletimTO.setIdExtBoletim(0L);
-                            boletimTO.setStatusBoletim(1L);
-                            boletimTO.setAtualBoletim(1L);
-                            boletimTO.insert();
-
-                        }
-                        else{
-
-                            boletimTO = (BoletimTO) boletimList.get(0);
-                            boletimTO.setAtualBoletim(1L);
-                            boletimTO.update();
-
-                        }
-
-                        boletimList.clear();
-                        boletimPesqList.clear();
-                        colabList.clear();
                         Intent it = new Intent(DigFuncActivity.this, MenuFuncaoActivity.class);
                         startActivity(it);
                         finish();

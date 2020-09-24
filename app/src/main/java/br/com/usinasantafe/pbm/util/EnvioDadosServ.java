@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.usinasantafe.pbm.util.conWEB.ConHttpPostCadGenerico;
-import br.com.usinasantafe.pbm.util.conWEB.UrlsConexaoHttp;
+import br.com.usinasantafe.pbm.util.conHttp.PostCadGenerico;
+import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
 
 public class EnvioDadosServ {
@@ -85,7 +85,7 @@ public class EnvioDadosServ {
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
         parametrosPost.put("dado", dados);
 
-        ConHttpPostCadGenerico conHttpPostGenerico = new ConHttpPostCadGenerico();
+        PostCadGenerico conHttpPostGenerico = new PostCadGenerico();
         conHttpPostGenerico.setParametrosPost(parametrosPost);
         conHttpPostGenerico.execute(url);
 
@@ -136,7 +136,7 @@ public class EnvioDadosServ {
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
         parametrosPost.put("dado", dados);
 
-        ConHttpPostCadGenerico conHttpPostGenerico = new ConHttpPostCadGenerico();
+        PostCadGenerico conHttpPostGenerico = new PostCadGenerico();
         conHttpPostGenerico.setParametrosPost(parametrosPost);
         conHttpPostGenerico.execute(url);
 
@@ -166,9 +166,9 @@ public class EnvioDadosServ {
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
         parametrosPost.put("dado", dados);
 
-        ConHttpPostCadGenerico conHttpPostCadGenerico = new ConHttpPostCadGenerico();
-        conHttpPostCadGenerico.setParametrosPost(parametrosPost);
-        conHttpPostCadGenerico.execute(url);
+        PostCadGenerico postCadGenerico = new PostCadGenerico();
+        postCadGenerico.setParametrosPost(parametrosPost);
+        postCadGenerico.execute(url);
 
     }
 
@@ -226,7 +226,7 @@ public class EnvioDadosServ {
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
         parametrosPost.put("dado", dados);
 
-        ConHttpPostCadGenerico conHttpPostGenerico = new ConHttpPostCadGenerico();
+        PostCadGenerico conHttpPostGenerico = new PostCadGenerico();
         conHttpPostGenerico.setParametrosPost(parametrosPost);
         conHttpPostGenerico.execute(url);
 

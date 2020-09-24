@@ -25,7 +25,7 @@ public class BoletimBean extends Entidade {
     @DatabaseField
     private Long statusBoletim; // 1 - Aberto; 2 - Fechado
     @DatabaseField
-    private Long atualBoletim; //0 - Não esta sendo apontado; 1 - Esta sendo Apontado
+    private Long apontBoletim; //0 - Não esta sendo apontado; 1 - Esta sendo Apontado
 
     public BoletimBean() {
     }
@@ -78,12 +78,12 @@ public class BoletimBean extends Entidade {
         this.statusBoletim = statusBoletim;
     }
 
-    public Long getAtualBoletim() {
-        return atualBoletim;
+    public Long getApontBoletim() {
+        return apontBoletim;
     }
 
-    public void setAtualBoletim(Long atualBoletim) {
-        this.atualBoletim = atualBoletim;
+    public void setApontBoletim(Long apontBoletim) {
+        this.apontBoletim = apontBoletim;
     }
 
     public Long getEquipBoletim() {

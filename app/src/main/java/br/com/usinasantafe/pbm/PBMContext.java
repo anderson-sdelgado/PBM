@@ -5,10 +5,6 @@ import android.app.Application;
 import br.com.usinasantafe.pbm.control.ConfigCTR;
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
 import br.com.usinasantafe.pbm.control.PneuCTR;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ItemManutPneuBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ItemMedPneuBean;
 
 public class PBMContext extends Application {
 

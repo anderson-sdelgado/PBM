@@ -1,4 +1,4 @@
-package br.com.usinasantafe.pbm.util.conWEB;
+package br.com.usinasantafe.pbm.util.conHttp;
 
 public class UrlsConexaoHttp {
 

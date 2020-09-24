@@ -6,14 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
-
 public class ListaHistoricoActivity extends ActivityGeneric {
+
+    private PBMContext pbmContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,26 +17,10 @@ public class ListaHistoricoActivity extends ActivityGeneric {
 
         Button buttonRetHistorico = (Button) findViewById(R.id.buttonRetHistorico);
 
-        ArrayList boletimPesqList = new ArrayList();
-        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("atualBoletim");
-        pesquisa.setValor(1L);
-        boletimPesqList.add(pesquisa);
-
-        EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-        pesquisa2.setCampo("statusBoletim");
-        pesquisa2.setValor(1L);
-        boletimPesqList.add(pesquisa2);
-
-        BoletimTO boletimTO = new BoletimTO();
-        List boletimList = boletimTO.get(boletimPesqList);
-        boletimTO = (BoletimTO) boletimList.get(0);
-
-        ApontTO apontaTO = new ApontTO();
-        List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
+        pbmContext = (PBMContext) getApplication();
 
         ListView listaHistorico = (ListView) findViewById(R.id.listaHistorico);
-        AdapterListHistorico adapterListHistorico = new AdapterListHistorico(this, apontList);
+        AdapterListHistorico adapterListHistorico = new AdapterListHistorico(this, pbmContext.getMecanicoCTR().apontList());
         listaHistorico.setAdapter(adapterListHistorico);
 
         buttonRetHistorico.setOnClickListener(new View.OnClickListener() {

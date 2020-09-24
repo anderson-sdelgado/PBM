@@ -26,23 +26,16 @@ public class DescrOSActivity extends ActivityGeneric {
 
         pbmContext = (PBMContext) getApplication();
 
-        OSTO osto = new OSTO();
-        List osList = osto.get("nroOS", pbmContext.getApontTO().getOsApont());
-        osto = (OSTO) osList.get(0);
-        osList.clear();
-
-        textViewCodEquip.setText(String.valueOf(osto.getEquipOS()));
-        textViewDescEquip.setText(osto.getDescrEquipOS());
+        textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getOS().getEquipOS()));
+        textViewDescEquip.setText(pbmContext.getMecanicoCTR().getOS().getDescrEquipOS());
 
         buttonOkDescrOS.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
                 Intent it = new Intent(DescrOSActivity.this, ItemOSListaActivity.class);
                 startActivity(it);
                 finish();
-
             }
         });
 

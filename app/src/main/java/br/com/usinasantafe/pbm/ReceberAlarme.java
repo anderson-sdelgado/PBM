@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import java.util.List;
-
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
 import br.com.usinasantafe.pbm.util.Tempo;
 import br.com.usinasantafe.pbm.model.pst.DatabaseHelper;
@@ -20,7 +18,7 @@ public class ReceberAlarme extends BroadcastReceiver {
 			new DatabaseHelper(context);
 		}
 
-		Log.i("PMM", "DATA HORA = " + Tempo.getInstance().datahora());
+		Log.i("PMM", "DATA HORA = " + Tempo.getInstance().dataHora());
 		if(EnvioDadosServ.getInstance().verifDadosEnvio()){
 			Log.i("PMM", "ENVIANDO");
 			EnvioDadosServ.getInstance().envioDados(context);

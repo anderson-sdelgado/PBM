@@ -148,7 +148,7 @@ public class PneuColActivity extends ActivityGeneric {
         colabList.clear();
 
         BoletimPneuTO boletimPneuTO = pbmContext.getBoletimPneuTO();
-        boletimPneuTO.setDthrBolPneu(Tempo.getInstance().datahora());
+        boletimPneuTO.setDthrBolPneu(Tempo.getInstance().dataHora());
         boletimPneuTO.setFuncBolPneu(colabBean.getMatricColab());
         boletimPneuTO.setStatusBolPneu(1L);
         boletimPneuTO.insert();
@@ -158,7 +158,7 @@ public class PneuColActivity extends ActivityGeneric {
 
         ItemManutPneuTO itemManutPneuTO = pbmContext.getItemManutPneuTO();
         itemManutPneuTO.setIdBolItemManutPneu(boletimPneuTO.getIdBolPneu());
-        itemManutPneuTO.setDthrItemManutPneu(Tempo.getInstance().datahora());
+        itemManutPneuTO.setDthrItemManutPneu(Tempo.getInstance().dataHora());
         itemManutPneuTO.insert();
 
         boletimPneuTO.setStatusBolPneu(2L);

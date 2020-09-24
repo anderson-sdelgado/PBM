@@ -12,8 +12,6 @@ import java.util.List;
 
 import br.com.usinasantafe.pbm.util.Tempo;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
 
 public class OpcaoInterFinalActivity extends ActivityGeneric {
 
@@ -67,7 +65,7 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                 if (text.equals("FINALIZAR")) {
 
                     apontaTO = (ApontTO) apontList.get(0);
-                    apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                    apontaTO.setDthrFinalApont(Tempo.getInstance().dataHora());
                     apontaTO.setRealizApont(1L);
                     apontaTO.setStatusApont(0L);
                     apontaTO.update();
@@ -79,7 +77,7 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                 } else if (text.equals("INTERROPER")) {
 
                     apontaTO = (ApontTO) apontList.get(0);
-                    apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
+                    apontaTO.setDthrFinalApont(Tempo.getInstance().dataHora());
                     apontaTO.setStatusApont(0L);
                     apontaTO.update();
 

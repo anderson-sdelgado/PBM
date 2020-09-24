@@ -13,8 +13,6 @@ import java.util.List;
 import br.com.usinasantafe.pbm.util.Tempo;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
 
 public class ItemOSDigActivity extends ActivityGeneric {
 
@@ -38,58 +36,10 @@ public class ItemOSDigActivity extends ActivityGeneric {
 
                     if(Long.parseLong(editTextPadrao.getText().toString()) < 1000){
 
-                        pbmContext.getApontTO().setItemOSApont(Long.parseLong(editTextPadrao.getText().toString()));
-
-                        ArrayList boletimPesqList = new ArrayList();
-                        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                        pesquisa.setCampo("atualBoletim");
-                        pesquisa.setValor(1L);
-                        boletimPesqList.add(pesquisa);
-
-                        EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                        pesquisa2.setCampo("statusBoletim");
-                        pesquisa2.setValor(1L);
-                        boletimPesqList.add(pesquisa2);
-
-                        BoletimTO boletimTO = new BoletimTO();
-                        List boletimList = boletimTO.get(boletimPesqList);
-                        boletimTO = (BoletimTO) boletimList.get(0);
-
-                        ApontTO apontaTO = new ApontTO();
-                        List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
-
-                        ApontTO apontTO = new ApontTO();
-
-                        if(apontList.size() > 0) {
-                            apontaTO = (ApontTO) apontList.get(0);
-                            apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
-                            apontaTO.setStatusApont(0L);
-                            apontaTO.update();
-
-                            apontTO.setDthrInicialApont(Tempo.getInstance().datahora());
-
-                        }else{
-                            ColabBean colabBean = new ColabBean();
-                            List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
-                            colabBean = (ColabBean) colabList.get(0);
-                            EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                            List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
-                            escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                            apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
-                        }
-
-                        apontTO.setDthrFinalApont("");
-                        apontTO.setIdBolApont(boletimTO.getIdBoletim());
-                        apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
-                        apontTO.setOsApont(pbmContext.getApontTO().getOsApont());
-                        apontTO.setItemOSApont(pbmContext.getApontTO().getItemOSApont());
-                        apontTO.setParadaApont(0L);
-                        apontTO.setRealizApont(0L);
-                        apontTO.setStatusApont(0L);
-                        apontTO.insert();
+                        pbmContext.getMecanicoCTR().getApontBean().setItemOSApont(Long.parseLong(editTextPadrao.getText().toString()));
+                        pbmContext.getMecanicoCTR().salvarApont();
 
                         Intent it = new Intent(ItemOSDigActivity.this, MenuInicialActivity.class);
-//                        Intent it = new Intent(ItemOSDigActivity.this, MenuFuncaoActivity.class);
                         startActivity(it);
                         finish();
 

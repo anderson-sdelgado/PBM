@@ -12,6 +12,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
 import br.com.usinasantafe.pbm.util.ConexaoWeb;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
@@ -38,43 +39,12 @@ public class OSActivity extends ActivityGeneric {
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
-                    pbmContext.getApontTO().setOsApont(Long.parseLong(editTextPadrao.getText().toString()));
+                    pbmContext.getMecanicoCTR().setApontBean(new ApontBean());
+                    pbmContext.getMecanicoCTR().getApontBean().setOsApont(Long.parseLong(editTextPadrao.getText().toString()));
 
                     try {
 
-                        ArrayList boletimPesqList = new ArrayList();
-                        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                        pesquisa.setCampo("atualBoletim");
-                        pesquisa.setValor(1L);
-                        boletimPesqList.add(pesquisa);
-
-                        EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                        pesquisa2.setCampo("statusBoletim");
-                        pesquisa2.setValor(1L);
-                        boletimPesqList.add(pesquisa2);
-
-                        BoletimTO boletimTO = new BoletimTO();
-                        List boletimList = boletimTO.get(boletimPesqList);
-                        boletimTO = (BoletimTO) boletimList.get(0);
-
-                        ArrayList apontPesqList = new ArrayList();
-                        EspecificaPesquisa pesquisa3 = new EspecificaPesquisa();
-                        pesquisa3.setCampo("idBolApont");
-                        pesquisa3.setValor(boletimTO.getIdBoletim());
-                        apontPesqList.add(pesquisa3);
-
-                        EspecificaPesquisa pesquisa4 = new EspecificaPesquisa();
-                        pesquisa4.setCampo("osApont");
-                        pesquisa4.setValor(pbmContext.getApontTO().getOsApont());
-                        apontPesqList.add(pesquisa4);
-
-                        ApontTO apontTO = new ApontTO();
-                        List apontList = apontTO.get(apontPesqList);
-
-                        OSTO osto = new OSTO();
-                        List osList = osto.get("nroOS", pbmContext.getApontTO().getOsApont());
-
-                        if((apontList.size() > 0) && (osList.size() > 0)) {
+                        if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {
 
                             Intent it = new Intent(OSActivity.this, ItemOSListaActivity.class);
                             startActivity(it);
@@ -91,13 +61,9 @@ public class OSActivity extends ActivityGeneric {
                                 progressBar.setMessage("Pequisando a OS...");
                                 progressBar.show();
 
-                                osto.deleteAll();
-                                ItemOSTO itemOSTO = new ItemOSTO();
-                                itemOSTO.deleteAll();
-
                                 customHandler.postDelayed(updateTimerThread, 10000);
 
-                                VerifDadosServ.getInstance().verDados(editTextPadrao.getText().toString(), "OS"
+                                pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()
                                         , OSActivity.this, DescrOSActivity.class, progressBar);
 
                             } else {
@@ -108,9 +74,7 @@ public class OSActivity extends ActivityGeneric {
 
                             }
 
-
                         }
-
 
                     } catch (Exception e) {
 

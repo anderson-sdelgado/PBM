@@ -13,6 +13,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.model.bean.estaticas.ItemOSBean;
 import br.com.usinasantafe.pbm.util.ConexaoWeb;
 import br.com.usinasantafe.pbm.util.AtualDadosServ;
 import br.com.usinasantafe.pbm.util.Tempo;
@@ -21,8 +22,8 @@ import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class ItemOSListaActivity extends ActivityGeneric {
 
-    private ListView lista;
-    private List listItemOS;
+    private ListView itemOSListView;
+    private List<ItemOSBean> itemOSList;
     private PBMContext pbmContext;
     private ProgressDialog progressBar;
 
@@ -36,121 +37,16 @@ public class ItemOSListaActivity extends ActivityGeneric {
         Button buttonRetItemOS = (Button) findViewById(R.id.buttonRetItemOS);
         Button buttonAtualItemOS = (Button) findViewById(R.id.buttonAtualItemOS);
 
-        OSTO osto = new OSTO();
-        List osList = osto.get("nroOS", pbmContext.getApontTO().getOsApont());
-        osto = (OSTO) osList.get(0);
-        osList.clear();
-
-        ItemOSTO itemOSTO = new ItemOSTO();
-        listItemOS = itemOSTO.getAndOrderBy("idOS", osto.getIdOS(),"seqItemOS",true);
-
+        itemOSList = pbmContext.getMecanicoCTR().itemOSList();
         ArrayList<String> itens = new ArrayList<String>();
 
-        for(int i = 0; i < listItemOS.size(); i++){
-            itemOSTO = (ItemOSTO) listItemOS.get(i);
+        for(ItemOSBean itemOSBean : itemOSList){
 
-            ServicoTO servicoTO = new ServicoTO();
-            List servicoList = servicoTO.get("idServico", itemOSTO.getIdServItemOS());
-            if(servicoList.size() > 0){
-                servicoTO = (ServicoTO) servicoList.get(0);
-            }
-            else{
-                servicoTO.setDescrServico("SERVIÇO INEXISTENTE");
-            }
-            servicoList.clear();
-
-            ComponenteTO componenteTO = new ComponenteTO();
-            List componenteList = componenteTO.get("idComponente", itemOSTO.getIdCompItemOS());
-            if(componenteList.size() > 0){
-                componenteTO = (ComponenteTO) componenteList.get(0);
-            }
-            else{
-                componenteTO.setCodComponente("0");
-                componenteTO.setDescrComponente("COMPONENTE INEXISTENTE");
-            }
-            componenteList.clear();
-
-            itens.add(itemOSTO.getSeqItemOS() + " - " + servicoTO.getDescrServico() + " - "
-                    + componenteTO.getCodComponente() + " - " + componenteTO.getDescrComponente());
+            itens.add(itemOSBean.getSeqItemOS() + " - "
+                    + pbmContext.getMecanicoCTR().getServico(itemOSBean.getIdServItemOS()).getDescrServico() + " - "
+                    + pbmContext.getMecanicoCTR().getComponente(itemOSBean.getIdCompItemOS()).getCodComponente() + " - "
+                    + pbmContext.getMecanicoCTR().getComponente(itemOSBean.getIdCompItemOS()).getDescrComponente());
         }
-
-        AdapterList adapterList = new AdapterList(this, itens);
-        lista = (ListView) findViewById(R.id.listItemOS);
-        lista.setAdapter(adapterList);
-
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
-
-                ItemOSTO itemOSTO = (ItemOSTO) listItemOS.get(position);
-                pbmContext.getApontTO().setItemOSApont(itemOSTO.getSeqItemOS());
-
-                ArrayList boletimPesqList = new ArrayList();
-                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("atualBoletim");
-                pesquisa.setValor(1L);
-                boletimPesqList.add(pesquisa);
-
-                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                pesquisa2.setCampo("statusBoletim");
-                pesquisa2.setValor(1L);
-                boletimPesqList.add(pesquisa2);
-
-                BoletimTO boletimTO = new BoletimTO();
-                List boletimList = boletimTO.get(boletimPesqList);
-                boletimTO = (BoletimTO) boletimList.get(0);
-
-                ApontTO apontaTO = new ApontTO();
-                List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
-
-                ApontTO apontTO = new ApontTO();
-
-                if(apontList.size() > 0) {
-                    apontaTO = (ApontTO) apontList.get(0);
-                    apontaTO.setDthrFinalApont(Tempo.getInstance().datahora());
-                    apontaTO.setStatusApont(0L);
-                    apontaTO.update();
-
-                    apontTO.setDthrInicialApont(Tempo.getInstance().datahora());
-
-                }else{
-                    ColabBean colabBean = new ColabBean();
-                    List colabList = colabBean.get("idColab", boletimTO.getIdFuncBoletim());
-                    colabBean = (ColabBean) colabList.get(0);
-                    EscalaTrabTO escalaTrabTO = new EscalaTrabTO();
-                    List escalaTrabList = escalaTrabTO.get("idEscalaTrab", colabBean.getIdEscalaTrabColab());
-                    escalaTrabTO = (EscalaTrabTO) escalaTrabList.get(0);
-                    apontTO.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + escalaTrabTO.getHorarioEntEscalaTrab()));
-                }
-
-                apontTO.setDthrFinalApont("");
-                apontTO.setIdBolApont(boletimTO.getIdBoletim());
-                apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
-                apontTO.setOsApont(pbmContext.getApontTO().getOsApont());
-                apontTO.setItemOSApont(pbmContext.getApontTO().getItemOSApont());
-                apontTO.setParadaApont(0L);
-                apontTO.setRealizApont(0L);
-                apontTO.setStatusApont(0L);
-                apontTO.insert();
-
-                Intent it = new Intent(ItemOSListaActivity.this, MenuInicialActivity.class);
-//                Intent it = new Intent(ItemOSListaActivity.this, MenuFuncaoActivity.class);
-                startActivity(it);
-                finish();
-
-            }
-
-        });
-
-        buttonRetItemOS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(ItemOSListaActivity.this, OSActivity.class);
-                startActivity(it);
-            }
-        });
 
         buttonAtualItemOS.setOnClickListener(new View.OnClickListener() {
 
@@ -160,6 +56,7 @@ public class ItemOSListaActivity extends ActivityGeneric {
                 ConexaoWeb conexaoWeb = new ConexaoWeb();
 
                 if (conexaoWeb.verificaConexao(ItemOSListaActivity.this)) {
+
                     progressBar = new ProgressDialog(ItemOSListaActivity.this);
                     progressBar.setCancelable(true);
                     progressBar.setMessage("ATUALIZANDO ...");
@@ -167,9 +64,11 @@ public class ItemOSListaActivity extends ActivityGeneric {
                     progressBar.setProgress(0);
                     progressBar.setMax(100);
                     progressBar.show();
-                    AtualDadosServ.getInstance().setContext(ItemOSListaActivity.this);
-                    AtualDadosServ.getInstance().atualItemOSBD(progressBar);
+
+                    pbmContext.getMecanicoCTR().atualDadosItemOS(ItemOSListaActivity.this, ItemOSListaActivity.class, progressBar);
+
                 } else {
+
                     AlertDialog.Builder alerta = new AlertDialog.Builder(ItemOSListaActivity.this);
                     alerta.setTitle("ATENÇÃO");
                     alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
@@ -182,6 +81,41 @@ public class ItemOSListaActivity extends ActivityGeneric {
 
                     alerta.show();
                 }
+            }
+        });
+
+        AdapterList adapterList = new AdapterList(this, itens);
+        itemOSListView = (ListView) findViewById(R.id.listItemOS);
+        itemOSListView.setAdapter(adapterList);
+
+        itemOSListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> l, View v, int position,
+                                    long id) {
+
+                ItemOSBean itemOSBean = itemOSList.get(position);
+                pbmContext.getMecanicoCTR().getApontBean().setItemOSApont(itemOSBean.getSeqItemOS());
+                pbmContext.getMecanicoCTR().getApontBean().setParadaApont(0L);
+                pbmContext.getMecanicoCTR().getApontBean().setRealizApont(0L);
+                pbmContext.getMecanicoCTR().salvarApont();
+
+                Intent it = new Intent(ItemOSListaActivity.this, MenuInicialActivity.class);
+                startActivity(it);
+                finish();
+
+            }
+
+        });
+
+        buttonRetItemOS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent it = new Intent(ItemOSListaActivity.this, OSActivity.class);
+                startActivity(it);
+                finish();
+
             }
         });
 

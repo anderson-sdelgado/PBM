@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import br.com.usinasantafe.pbm.control.MecanicoCTR;
 import br.com.usinasantafe.pbm.util.Tempo;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ParadaBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
@@ -51,21 +52,22 @@ public class AdapterListHistorico extends BaseAdapter {
         TextView textViewHistHrInicial = (TextView) view.findViewById(R.id.textViewHistHrInicial);
         TextView textViewHistHrFinal = (TextView) view.findViewById(R.id.textViewHistHrFinal);
 
-        ApontTO apontTO = (ApontTO) itens.get(position);
-        if(apontTO.getParadaApont() == 0) {
-            textViewHistApont.setText("TRABALHANDO: OS " + apontTO.getOsApont() + " - ITEM " + apontTO.getItemOSApont());
+        ApontBean apontBean = (ApontBean) itens.get(position);
+
+        textViewHistHrInicial.setText("HORÁRIO INICIAL: " + Tempo.getInstance().manipDHComTZ(apontBean.getDthrInicialApont()));
+        textViewHistHrFinal.setText("HORÁRIO FINAL: " + Tempo.getInstance().manipDHComTZ(apontBean.getDthrFinalApont()));
+
+        if(apontBean.getParadaApont() == 0) {
+            textViewHistApont.setText("TRABALHANDO: OS " + apontBean.getOsApont() + " - ITEM " + apontBean.getItemOSApont());
             textViewHistApont.setTextColor(Color.BLUE);
         }
         else{
-            ParadaTO paradaTO = new ParadaTO();
-            List paradaList = paradaTO.get("idParada", apontTO.getParadaApont());
-            paradaTO = (ParadaTO) paradaList.get(0);
-            textViewHistApont.setText("PARADA: " + paradaTO.getCodParada() + " - " + paradaTO.getDescrParada());
+
+            MecanicoCTR mecanicoCTR = new MecanicoCTR();
+            ParadaBean paradaBean = mecanicoCTR.getParadaId(apontBean.getParadaApont());
+            textViewHistApont.setText("PARADA: " + paradaBean.getCodParada() + " - " + paradaBean.getDescrParada());
             textViewHistApont.setTextColor(Color.RED);
         }
-
-        textViewHistHrInicial.setText("HORÁRIO INICIAL: " + Tempo.getInstance().manipDHComTZ(apontTO.getDthrInicialApont()));
-        textViewHistHrFinal.setText("HORÁRIO FINAL: " + Tempo.getInstance().manipDHComTZ(apontTO.getDthrFinalApont()));
 
         return view;
     }
