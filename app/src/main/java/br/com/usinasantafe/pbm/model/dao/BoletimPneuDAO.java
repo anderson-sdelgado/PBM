@@ -25,6 +25,12 @@ public class BoletimPneuDAO {
 
     }
 
+    public void fecharBoletimPneu(){
+        BoletimPneuBean boletimPneuBean = getBoletimPneuAberto();
+        boletimPneuBean.setStatusBolPneu(2L);
+        boletimPneuBean.update();
+    }
+
     public boolean verBoletimPneuAberto(){
         List<BoletimPneuBean> boletimPneuList = boletimPneuAbertoList();
         boolean ret = (boletimPneuList.size() > 0);

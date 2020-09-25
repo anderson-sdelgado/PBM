@@ -157,7 +157,6 @@ public class MenuInicialActivity extends ActivityGeneric {
 
         }
 
-
         if(progressBar.isShowing()){
             progressBar.dismiss();
         }

@@ -39,7 +39,7 @@ public class PneuCalibActivity extends ActivityGeneric {
 
                     pbmContext.getPneuCTR().getItemCalibPneuBean().setNroPneuItemCalibPneu(editTextPadrao.getText().toString());
 
-                    if(pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())){
+                    if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){
 
                         ConexaoWeb conexaoWeb = new ConexaoWeb();
 
@@ -53,7 +53,7 @@ public class PneuCalibActivity extends ActivityGeneric {
                             customHandler.postDelayed(updateTimerThread, 10000);
 
                             pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()
-                                    , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar);
+                                    , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar, false);
 
                         }
                         else{

@@ -55,7 +55,6 @@
             tools:ignore="LockedOrientationActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -72,10 +71,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <receiver android:name=".ReceberAlarme">
-        </receiver>
-
+        <receiver android:name=".ReceberAlarme"></receiver>
         <activity
             android:name=".ConfigActivity"
             android:screenOrientation="portrait"

@@ -12,18 +12,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.lang.invoke.MutableCallSite;
 import java.util.HashMap;
 import java.util.Map;
 
 import br.com.usinasantafe.pbm.MenuInicialActivity;
-import br.com.usinasantafe.pbm.PneuColActivity;
 import br.com.usinasantafe.pbm.control.ConfigCTR;
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
-import br.com.usinasantafe.pbm.model.dao.OSDAO;
+import br.com.usinasantafe.pbm.control.PneuCTR;
 import br.com.usinasantafe.pbm.model.pst.GenericRecordable;
 import br.com.usinasantafe.pbm.util.conHttp.PostVerGenerico;
 import br.com.usinasantafe.pbm.model.bean.AtualAplicBean;
@@ -44,7 +39,6 @@ public class VerifDadosServ {
     private String tipo;
     private AtualAplicBean atualAplicBean;
     private MenuInicialActivity menuInicialActivity;
-    private PneuColActivity pneuColActivity;
     private PostVerGenerico postVerGenerico;
     private boolean verTerm;
     private int tipoTela;
@@ -109,21 +103,6 @@ public class VerifDadosServ {
         this.dado = dado;
         this.tipo = tipo;
         this.tipoTela = 1;
-
-        envioDados();
-
-    }
-
-    public void verDadosPneuFinal(String dado, String tipo, PneuColActivity pneuRetActivity, Class telaProx, ProgressDialog progressDialog) {
-
-        verTerm = false;
-        urlsConexaoHttp = new UrlsConexaoHttp();
-        this.pneuColActivity = pneuRetActivity;
-        this.telaProx = telaProx;
-        this.progressDialog = progressDialog;
-        this.dado = dado;
-        this.tipo = tipo;
-        this.tipoTela = 2;
 
         envioDados();
 
@@ -218,17 +197,13 @@ public class VerifDadosServ {
 
             }
             else if(this.tipo.equals("OS")) {
-
                 MecanicoCTR mecanicoCTR = new MecanicoCTR();
                 mecanicoCTR.recDadosOS(result);
-
             }
             else if(this.tipo.equals("Pneu")) {
-
-                recDadosPneu(result);
-
+                PneuCTR pneuCTR = new PneuCTR();
+                pneuCTR.recDadosPneu(result);
             }
-
 
         } catch (Exception e) {
             Log.i("PMM", "Erro Manip atualizar = " + e);

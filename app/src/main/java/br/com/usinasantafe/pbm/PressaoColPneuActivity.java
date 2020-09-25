@@ -40,40 +40,19 @@ public class PressaoColPneuActivity extends ActivityGeneric {
                         pbmContext.getPneuCTR().getItemCalibPneuBean().setPressaoColItemCalibPneu(qtde);
                         pbmContext.getPneuCTR().salvarItemCalibPneu();
 
+                        if(pbmContext.getPneuCTR().verFinalBolCalib()){
 
-
-                        REquipPneuTO rEquipPneuTO = new REquipPneuTO();
-                        List rEquipPneuList = rEquipPneuTO.get("idEquip", boletimPneuTO.getEquipBolPneu());
-                        List itemMedPneuList = itemMedPneuTO.get("idBolItemMedPneu", boletimPneuTO.getIdBolPneu());
-                        int verCad = 0;
-                        for(int i = 0; i < rEquipPneuList.size(); i++){
-                            rEquipPneuTO = (REquipPneuTO) rEquipPneuList.get(i);
-                            for(int j = 0; j < itemMedPneuList.size(); j++) {
-                                itemMedPneuTO = (ItemMedPneuTO) itemMedPneuList.get(j);
-                                if(Objects.equals(rEquipPneuTO.getIdPosConfPneu(), itemMedPneuTO.getPosItemMedPneu())){
-                                    verCad++;
-                                }
-                            }
-                        }
-
-                        if(rEquipPneuList.size() == verCad){
-
-                            boletimPneuTO.setStatusBolPneu(2L);
-                            boletimPneuTO.update();
+                            pbmContext.getPneuCTR().fecharBoletim();
 
                             Intent it = new Intent(PressaoColPneuActivity.this, MenuInicialActivity.class);
                             startActivity(it);
                             finish();
-
                         }
                         else{
                             Intent it = new Intent(PressaoColPneuActivity.this, ListaPosPneuActivity.class);
                             startActivity(it);
                             finish();
                         }
-
-                        itemMedPneuList.clear();
-                        rEquipPneuList.clear();
 
                     } else {
 

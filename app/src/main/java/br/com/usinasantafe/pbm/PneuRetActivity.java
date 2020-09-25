@@ -35,12 +35,9 @@ public class PneuRetActivity extends ActivityGeneric {
 
                 if (!editTextPadrao.getText().toString().equals("")) {
 
-                    pbmContext.getItemManutPneuTO().setNroPneuRetItemManutPneu(editTextPadrao.getText().toString());
+                    pbmContext.getPneuCTR().getItemManutPneuBean().setNroPneuRetItemManutPneu(editTextPadrao.getText().toString());
 
-                    PneuTO pneuTO = new PneuTO();
-                    List pneuList = pneuTO.get("codPneu", editTextPadrao.getText().toString());
-
-                    if(pneuList.size() == 0){
+                    if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){
 
                         ConexaoWeb conexaoWeb = new ConexaoWeb();
 
@@ -53,8 +50,8 @@ public class PneuRetActivity extends ActivityGeneric {
 
                             customHandler.postDelayed(updateTimerThread, 10000);
 
-                            VerifDadosServ.getInstance().verDadosPneu(editTextPadrao.getText().toString(), "Pneu"
-                                    , PneuRetActivity.this, PneuColActivity.class, progressBar);
+                            pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()
+                                    , PneuRetActivity.this, PneuColActivity.class, progressBar, false);
 
                         }
                         else{

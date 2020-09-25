@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import br.com.usinasantafe.pbm.model.bean.estaticas.ParametroBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.PneuBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
@@ -20,6 +21,7 @@ import br.com.usinasantafe.pbm.model.bean.variaveis.ItemManutPneuBean;
 import br.com.usinasantafe.pbm.model.dao.BoletimPneuDAO;
 import br.com.usinasantafe.pbm.model.dao.ItemManutPneuDAO;
 import br.com.usinasantafe.pbm.model.dao.ItemCalibPneuDAO;
+import br.com.usinasantafe.pbm.model.dao.ParametroDAO;
 import br.com.usinasantafe.pbm.model.dao.PneuDAO;
 import br.com.usinasantafe.pbm.model.dao.REquipPneuDAO;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
@@ -45,9 +47,35 @@ public class PneuCTR {
         return itemCalibPneuDAO.verPneuItemCalib(boletimPneuDAO.getBoletimPneuAberto().getIdBolPneu(), nroPneu);
     }
 
+    public boolean verFinalBolCalib(){
+        boolean ret;
+        BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
+        ItemCalibPneuDAO itemCalibPneuDAO = new ItemCalibPneuDAO();
+        REquipPneuDAO rEquipPneuDAO = new REquipPneuDAO();
+        List<ItemCalibPneuBean> itemCalibPneuList = itemCalibPneuDAO.itemCalibPneuList(boletimPneuDAO.getBoletimPneuAberto().getIdBolPneu());
+        List<REquipPneuBean> rEquipPneuList = rEquipPneuDAO.rEquipPneuList(boletimPneuDAO.getBoletimPneuAberto().getEquipBolPneu());
+        int qtde = 0;
+        for(REquipPneuBean rEquipPneuBean : rEquipPneuList){
+            for(ItemCalibPneuBean itemCalibPneuBean : itemCalibPneuList) {
+                if(Objects.equals(rEquipPneuBean.getIdPosConfPneu(), itemCalibPneuBean.getPosItemCalibPneu())){
+                    qtde++;
+                }
+            }
+        }
+        if(rEquipPneuList.size() == qtde) {
+            ret = true;
+        }
+        else{
+            ret = false;
+        }
+        itemCalibPneuList.clear();
+        rEquipPneuList.clear();
+        return ret;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    ////////////////////////////////////// SET DADOS /////////////////////////////////////////////
+    ///////////////////////// INSERIR, ATUALIZAR E EXCLUIR DADOS /////////////////////////////////
 
     public void salvarItemCalibPneu(){
         BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
@@ -55,9 +83,11 @@ public class PneuCTR {
         itemCalibPneuDAO.insertItemCalibPneu(itemCalibPneuBean, boletimPneuDAO.getBoletimPneuAberto().getIdBolPneu());
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    ////////////////////////////////////// SET DADOS /////////////////////////////////////////////
+    public void salvarItemManutPneu(){
+        BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
+        ItemManutPneuDAO itemManutPneuDAO = new ItemManutPneuDAO();
+        itemManutPneuDAO.insertItemManutPneu(itemManutPneuBean, boletimPneuDAO.getBoletimPneuAberto().getIdBolPneu());
+    }
 
     public void salvarBoletim(Long idEquip){
         MecanicoCTR mecanicoCTR = new MecanicoCTR();
@@ -65,9 +95,10 @@ public class PneuCTR {
         boletimPneuDAO.salvarBoletimPneu(idEquip, mecanicoCTR.getColabApont().getMatricColab());
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    ////////////////////////////////// LIMPAR DADOS //////////////////////////////////////////////
+    public void fecharBoletim(){
+        BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
+        boletimPneuDAO.fecharBoletimPneu();
+    }
 
     public void clear(){
 
@@ -91,7 +122,7 @@ public class PneuCTR {
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    ////////////////////////////////////// SET DADOS /////////////////////////////////////////////
+    ////////////////////////////////////// GET DADOS /////////////////////////////////////////////
 
     public ArrayList<String> rEquipPneuCalibList(){
         ArrayList<String> rEquipPneuCalibList = new ArrayList<>();
@@ -99,11 +130,11 @@ public class PneuCTR {
         BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
         REquipPneuDAO rEquipPneuDAO = new REquipPneuDAO();
         if(boletimPneuDAO.verBoletimPneuAberto()){
-            List<ItemCalibPneuBean> itemMedPneuList = itemCalibPneuDAO.itemCalibPneuList(boletimPneuDAO.getBoletimPneuAberto().getIdBolPneu());
+            List<ItemCalibPneuBean> itemCalibPneuList = itemCalibPneuDAO.itemCalibPneuList(boletimPneuDAO.getBoletimPneuAberto().getIdBolPneu());
             List<REquipPneuBean> rEquipPneuList = rEquipPneuDAO.rEquipPneuList(boletimPneuDAO.getBoletimPneuAberto().getEquipBolPneu());
             for(REquipPneuBean rEquipPneuBean : rEquipPneuList){
                 boolean ver = true;
-                for(ItemCalibPneuBean itemCalibPneuBean : itemMedPneuList) {
+                for(ItemCalibPneuBean itemCalibPneuBean : itemCalibPneuList) {
                     if(Objects.equals(rEquipPneuBean.getIdPosConfPneu(), itemCalibPneuBean.getPosItemCalibPneu())){
                         ver = false;
                     }
@@ -149,6 +180,11 @@ public class PneuCTR {
         return rEquipPneuDAO.getREquipPneu(boletimPneuDAO.getBoletimPneuAberto().getEquipBolPneu(), posPneu);
     }
 
+    public ParametroBean getParametro(){
+        ParametroDAO parametroDAO = new ParametroDAO();
+        return parametroDAO.getParametro();
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////// SET DADOS /////////////////////////////////////////////
@@ -165,7 +201,7 @@ public class PneuCTR {
 
     //////////////////////// VERIFICAÇÃO E ATUALIZAÇÃO DE DADOS POR SERVIDOR /////////////////////
 
-    public void verPneu(String dado, Context telaAtual, Class telaProx, ProgressDialog progressDialog){
+    public void verPneu(String dado, Context telaAtual, Class telaProx, ProgressDialog progressDialog, boolean finalManutPneu){
         PneuDAO pneuDAO = new PneuDAO();
         pneuDAO.verPneu(dado, telaAtual, telaProx, progressDialog);
     }
@@ -174,7 +210,7 @@ public class PneuCTR {
 
     ///////////////////////////////// RECEBER DADOS SERVIDOR //////////////////////////////////////
 
-    public void recDadosPneu(String result){
+    public void recDadosPneu(String result, boolean finalManutPneu){
 
         try {
 
@@ -193,6 +229,11 @@ public class PneuCTR {
                         Gson gson = new Gson();
                         pneuDAO.insertPneu(gson.fromJson(objeto.toString(), PneuBean.class));
 
+                    }
+
+                    if(finalManutPneu){
+                        salvarItemManutPneu();
+                        fecharBoletim();
                     }
 
                     VerifDadosServ.getInstance().pulaTelaComTerm();
