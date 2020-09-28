@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.usinasantafe.pbm.control.MecanicoCTR;
+import br.com.usinasantafe.pbm.control.PneuCTR;
+import br.com.usinasantafe.pbm.model.dao.ApontDAO;
+import br.com.usinasantafe.pbm.model.dao.BoletimDAO;
+import br.com.usinasantafe.pbm.model.dao.BoletimPneuDAO;
 import br.com.usinasantafe.pbm.util.conHttp.PostCadGenerico;
 import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
@@ -41,47 +46,14 @@ public class EnvioDadosServ {
 
     public void enviarBolAberto() {
 
-        BoletimTO boletimTO = new BoletimTO();
-        List listBoletim = boletinsAbertoSemEnvio();
+        MecanicoCTR mecanicoCTR = new MecanicoCTR();
+        String dados = mecanicoCTR.dadosEnvioBolFechado();
 
-        JsonArray jsonArrayBoletim = new JsonArray();
-        JsonArray jsonArrayAponta = new JsonArray();
-
-        for (int i = 0; i < listBoletim.size(); i++) {
-
-            boletimTO = (BoletimTO) listBoletim.get(i);
-            Gson gsonCabec = new Gson();
-            jsonArrayBoletim.add(gsonCabec.toJsonTree(boletimTO, boletimTO.getClass()));
-
-            ApontTO apontTO = new ApontTO();
-            List apontaList = apontTO.get("idBolApont", boletimTO.getIdBoletim());
-
-            for (int j = 0; j < apontaList.size(); j++) {
-
-                apontTO = (ApontTO) apontaList.get(j);
-                if (apontTO.getStatusApont() == 0L) {
-                    Gson gsonItem = new Gson();
-                    jsonArrayAponta.add(gsonItem.toJsonTree(apontTO, apontTO.getClass()));
-
-                }
-
-            }
-
-        }
-
-        JsonObject jsonBoletim = new JsonObject();
-        jsonBoletim.add("boletim", jsonArrayBoletim);
-
-        JsonObject jsonAponta = new JsonObject();
-        jsonAponta.add("aponta", jsonArrayAponta);
-
-        String dados = jsonBoletim.toString() + "_" + jsonAponta.toString();
-
-        Log.i("PMM", "ABERTO = " + dados);
+        Log.i("PMM", "FECHADO = " + dados);
 
         UrlsConexaoHttp urlsConexaoHttp = new UrlsConexaoHttp();
 
-        String[] url = {urlsConexaoHttp.getsInsertBolAberto()};
+        String[] url = {urlsConexaoHttp.getsInsertBolFechado()};
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
         parametrosPost.put("dado", dados);
 
@@ -93,40 +65,8 @@ public class EnvioDadosServ {
 
     public void enviarBolFechado() {
 
-        BoletimTO boletimTO = new BoletimTO();
-        List listBoletim = boletinsFechado();
-
-        JsonArray jsonArrayBoletim = new JsonArray();
-        JsonArray jsonArrayAponta = new JsonArray();
-
-        for (int i = 0; i < listBoletim.size(); i++) {
-
-            boletimTO = (BoletimTO) listBoletim.get(i);
-            Gson gsonCabec = new Gson();
-            jsonArrayBoletim.add(gsonCabec.toJsonTree(boletimTO, boletimTO.getClass()));
-
-            ApontTO apontTO = new ApontTO();
-            List apontaList = apontTO.get("idBolApont", boletimTO.getIdBoletim());
-
-            for (int j = 0; j < apontaList.size(); j++) {
-
-                apontTO = (ApontTO) apontaList.get(j);
-                if (apontTO.getStatusApont() == 0L) {
-                    Gson gsonItem = new Gson();
-                    jsonArrayAponta.add(gsonItem.toJsonTree(apontTO, apontTO.getClass()));
-                }
-
-            }
-
-        }
-
-        JsonObject jsonBoletim = new JsonObject();
-        jsonBoletim.add("boletim", jsonArrayBoletim);
-
-        JsonObject jsonAponta = new JsonObject();
-        jsonAponta.add("aponta", jsonArrayAponta);
-
-        String dados = jsonBoletim.toString() + "_" + jsonAponta.toString();
+        MecanicoCTR mecanicoCTR = new MecanicoCTR();
+        String dados = mecanicoCTR.dadosEnvioBolFechado();
 
         Log.i("PMM", "FECHADO = " + dados);
 
@@ -351,76 +291,6 @@ public class EnvioDadosServ {
 
     }
 
-
-    //////////////////////////TRAZER DADOS////////////////////////////
-
-    public List boletinsPneu() {
-        BoletimPneuTO boletimPneuTO = new BoletimPneuTO();
-        return boletimPneuTO.get("statusBolPneu", 2L);
-    }
-
-    public List boletinsAbertoSemEnvio() {
-
-        BoletimTO boletimTO = new BoletimTO();
-        ArrayList listaPesq = new ArrayList();
-
-        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("statusBoletim");
-        pesquisa.setValor(1L);
-        listaPesq.add(pesquisa);
-
-        EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-        pesquisa2.setCampo("idExtBoletim");
-        pesquisa2.setValor(0L);
-        listaPesq.add(pesquisa2);
-
-        return boletimTO.get(listaPesq);
-
-    }
-
-    public List boletinsFechado() {
-        BoletimTO boletimMMTO = new BoletimTO();
-        return boletimMMTO.get("statusBoletim", 2L);
-    }
-
-    public List dadosApontamento() {
-        ApontTO apontTO = new ApontTO();
-        return apontTO.get("statusApont", 0L);
-    }
-
-
-    //////////////////////VERIFICAÇÃO DE DADOS///////////////////////////
-
-    public Boolean verifBolPneu() {
-        return boletinsPneu().size() > 0;
-    }
-
-    public Boolean verifBolAbertoSemEnvio() {
-        return boletinsAbertoSemEnvio().size() > 0;
-    }
-
-    public Boolean verifBolFechado() {
-        return boletinsFechado().size() > 0;
-    }
-
-    public Boolean verifAponta() {
-
-        List apontList = dadosApontamento();
-        for (int i = 0; i < apontList.size(); i++) {
-            ApontTO apontTO = (ApontTO) apontList.get(i);
-            if(apontTO.getIdExtBolApont() == 0){
-                BoletimTO boletimTO = new BoletimTO();
-                List boletimList = boletimTO.get("idBoletim", apontTO.getIdBolApont());
-                boletimTO = (BoletimTO) boletimList.get(0);
-                boletimList.clear();
-                apontTO.setIdExtBolApont(boletimTO.getIdExtBoletim());
-                apontTO.update();
-            }
-        }
-
-        return dadosApontamento().size() > 0;
-    }
-
     /////////////////////////MECANISMO DE ENVIO//////////////////////////////////
 
     public void envioDados(Context context) {
@@ -436,17 +306,19 @@ public class EnvioDadosServ {
     }
 
     public void envioDadosPrinc() {
-        if (verifBolFechado()) {
+        MecanicoCTR mecanicoCTR = new MecanicoCTR();
+        PneuCTR pneuCTR = new PneuCTR();
+        if (mecanicoCTR.verBoletimFechado()) {
             enviarBolFechado();
         } else {
-            if (verifBolAbertoSemEnvio()) {
+            if (mecanicoCTR.verBoletimSemEnvio()) {
                 enviarBolAberto();
             } else {
-                if (verifAponta()) {
+                if (mecanicoCTR.verApontSemEnvio()) {
                     envioApontamento();
                 }
                 else{
-                    if(verifBolPneu()){
+                    if(pneuCTR.verBoletimPneuFechado()){
                         enviarBolPneu();
                     }
                 }

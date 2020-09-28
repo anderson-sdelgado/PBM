@@ -38,6 +38,13 @@ public class BoletimPneuDAO {
         return ret;
     }
 
+    public boolean verBoletimPneuFechado(){
+        List<BoletimPneuBean> boletimPneuList = boletimPneuFechadoList();
+        boolean ret = (boletimPneuList.size() > 0);
+        boletimPneuList.clear();
+        return ret;
+    }
+
     public BoletimPneuBean getBoletimPneuAberto(){
         List<BoletimPneuBean> boletimPneuList = boletimPneuAbertoList();
         BoletimPneuBean boletimPneuBean = boletimPneuList.get(0);
@@ -48,6 +55,11 @@ public class BoletimPneuDAO {
     public List<BoletimPneuBean> boletimPneuAbertoList(){
         BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
         return boletimPneuBean.get("statusBolPneu", 1L);
+    }
+
+    public List<BoletimPneuBean> boletimPneuFechadoList(){
+        BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
+        return boletimPneuBean.get("statusBolPneu", 2L);
     }
 
     public ArrayList<Long> idBoletimPneuList(List<BoletimPneuBean> boletimPneuList){

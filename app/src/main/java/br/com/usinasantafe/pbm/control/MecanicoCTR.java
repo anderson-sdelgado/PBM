@@ -2,14 +2,19 @@ package br.com.usinasantafe.pbm.control;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ComponenteBean;
@@ -32,6 +37,8 @@ import br.com.usinasantafe.pbm.model.dao.ParametroDAO;
 import br.com.usinasantafe.pbm.model.dao.ServicoDAO;
 import br.com.usinasantafe.pbm.util.AtualDadosServ;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
+import br.com.usinasantafe.pbm.util.conHttp.PostCadGenerico;
+import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
 
 public class MecanicoCTR {
 
@@ -64,6 +71,21 @@ public class MecanicoCTR {
         ApontDAO apontDAO = new ApontDAO();
         OSDAO osDAO = new OSDAO();
         return (apontDAO.verOSApont(boletimDAO.getBoletimApont().getIdBoletim(), nroOS) && osDAO.verOS(nroOS));
+    }
+
+    public boolean verBoletimFechado(){
+        BoletimDAO boletimDAO = new BoletimDAO();
+        return boletimDAO.verBoletimFechado();
+    }
+
+    public boolean verBoletimSemEnvio(){
+        BoletimDAO boletimDAO = new BoletimDAO();
+        return boletimDAO.verBoletimSemEnvio();
+    }
+
+    public boolean verApontSemEnvio(){
+        ApontDAO apontDAO = new ApontDAO();
+        return apontDAO.verApontSemEnvio();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,6 +128,30 @@ public class MecanicoCTR {
         ApontDAO apontDAO = new ApontDAO();
         apontDAO.fecharApont(getUltApont());
     }
+
+    public void finalizarApont(){
+        BoletimDAO boletimDAO = new BoletimDAO();
+        ApontDAO apontDAO = new ApontDAO();
+        apontDAO.finalizarApont(apontDAO.apontList(boletimDAO.getBoletimApont().getIdBoletim()).get(0));
+    }
+
+    public void interroperApont(){
+        BoletimDAO boletimDAO = new BoletimDAO();
+        ApontDAO apontDAO = new ApontDAO();
+        apontDAO.interroperApont(apontDAO.apontList(boletimDAO.getBoletimApont().getIdBoletim()).get(0));
+    }
+
+    public void atualIdExtApont(){
+        BoletimDAO boletimDAO = new BoletimDAO();
+        ApontDAO apontDAO = new ApontDAO();
+        List<BoletimBean> boletimList = boletimDAO.boletimEnviadoList();
+        for(BoletimBean boletimBean : boletimList){
+            apontDAO.updApontIdExtBol(boletimBean.getIdBoletim(), boletimBean.getIdExtBoletim());
+        }
+        boletimList.clear();
+    }
+
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -272,6 +318,22 @@ public class MecanicoCTR {
         } catch (Exception e) {
             VerifDadosServ.getInstance().msgComTerm("FALHA DE PESQUISA DE OS! POR FAVOR, TENTAR NOVAMENTE COM UM SINAL MELHOR.");
         }
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////// RECEBER DADOS SERVIDOR ///////////////////////////////////////
+
+    public String dadosEnvioBolFechado() {
+
+        BoletimDAO boletimDAO = new BoletimDAO();
+        String dadosBoletim = boletimDAO.dadosEnvioBolFechado();
+
+        ApontDAO apontDAO = new ApontDAO();
+        String dadosApont = apontDAO.dadosEnvioApont(boletimDAO.idBolFechadoList());
+
+        return dadosBoletim + "_" + dadosApont;
 
     }
 

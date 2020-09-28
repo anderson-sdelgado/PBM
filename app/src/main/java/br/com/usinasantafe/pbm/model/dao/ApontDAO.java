@@ -1,5 +1,9 @@
 package br.com.usinasantafe.pbm.model.dao;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +49,58 @@ public class ApontDAO {
 
     }
 
-    public List<ApontBean> apontList(Long idBol){
+    public void updApontIdExtBol(Long idBol, Long idExtBol){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBol(idBol));
+
         ApontBean apontBean = new ApontBean();
-        return apontBean.getAndOrderBy("idBolApont", idBol, "idApont", false);
+        List<ApontBean> apontList = apontBean.get(pesqArrayList);
+
+        for(ApontBean apontBeanBD : apontList){
+            apontBeanBD.setIdExtBolApont(idExtBol);
+            apontBeanBD.update();
+        }
+
+    }
+
+    public boolean verApontSemEnvio(){
+        List<ApontBean> apontList = apontSemEnvioList();
+        boolean ret = (apontList.size() > 0);
+        apontList.clear();
+        return ret;
+    }
+
+    public List<ApontBean> apontList(Long idBol){
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBol(idBol));
+        ApontBean apontBean = new ApontBean();
+        return apontBean.getAndOrderBy(pesqArrayList, "idApont", false);
+    }
+
+    public List<ApontBean> apontList(ArrayList<Long> idBolArrayList){
+        ApontBean apontBean = new ApontBean();
+        return apontBean.in("idBolApont", idBolArrayList);
+    }
+
+    public List<ApontBean> apontSemEnvioList(){
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqSemEnvio());
+        ApontBean apontBean = new ApontBean();
+        return apontBean.get(pesqArrayList);
+    }
+
+    public void finalizarApont(ApontBean apontBean){
+        apontBean.setDthrFinalApont(Tempo.getInstance().dataHora());
+        apontBean.setRealizApont(1L);
+        apontBean.setStatusApont(0L);
+        apontBean.update();
+    }
+
+    public void interroperApont(ApontBean apontBean){
+        apontBean.setDthrFinalApont(Tempo.getInstance().dataHora());
+        apontBean.setStatusApont(0L);
+        apontBean.update();
     }
 
     public boolean verOSApont(Long idBol, Long nroOS){
@@ -74,6 +127,27 @@ public class ApontDAO {
         }
     }
 
+    public String dadosEnvioApont(ArrayList<Long> idBolArrayList){
+
+        List<ApontBean> apontList = apontList(idBolArrayList);
+        JsonArray jsonArrayApont = new JsonArray();
+
+        for (ApontBean apontBean : apontList) {
+
+            Gson gson = new Gson();
+            jsonArrayApont.add(gson.toJsonTree(apontBean, apontBean.getClass()));
+
+        }
+
+        apontList.clear();
+
+        JsonObject jsonApont = new JsonObject();
+        jsonApont.add("aponta", jsonArrayApont);
+
+        return jsonApont.toString();
+
+    }
+
     private EspecificaPesquisa getPesqIdBol(Long idBol){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idBolApont");
@@ -86,6 +160,14 @@ public class ApontDAO {
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("osApont");
         pesquisa.setValor(nroOS);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqSemEnvio(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusApont");
+        pesquisa.setValor(0L);
         pesquisa.setTipo(1);
         return pesquisa;
     }

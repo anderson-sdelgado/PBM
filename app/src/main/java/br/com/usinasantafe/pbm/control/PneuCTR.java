@@ -73,6 +73,11 @@ public class PneuCTR {
         return ret;
     }
 
+    public boolean verBoletimPneuFechado(){
+        BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
+        return boletimPneuDAO.verBoletimPneuFechado();
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     ///////////////////////// INSERIR, ATUALIZAR E EXCLUIR DADOS /////////////////////////////////
@@ -203,7 +208,7 @@ public class PneuCTR {
 
     public void verPneu(String dado, Context telaAtual, Class telaProx, ProgressDialog progressDialog, boolean finalManutPneu){
         PneuDAO pneuDAO = new PneuDAO();
-        pneuDAO.verPneu(dado, telaAtual, telaProx, progressDialog);
+        pneuDAO.verPneu(dado, telaAtual, telaProx, progressDialog, finalManutPneu);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////

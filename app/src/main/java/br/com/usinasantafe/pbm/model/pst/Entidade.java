@@ -17,7 +17,6 @@ public abstract class Entidade implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Dao dao;
 
-	public String teste;
 	private Dao daoImpl(){
 		
 		try {
@@ -105,11 +104,21 @@ public abstract class Entidade implements Serializable {
 					this.daoImpl().queryBuilder();
 			Where<String, Object> where = queryBuilder.where();
 			EspecificaPesquisa pesquisa = pesquisaArrayList.get(0);
-			where.eq(pesquisa.getCampo(), pesquisa.getValor());
+			if(pesquisa.getTipo() == 1) {
+				where.eq(pesquisa.getCampo(), pesquisa.getValor());
+			}
+			else{
+				where.ne(pesquisa.getCampo(), pesquisa.getValor());
+			}
 			for(int i = 1; i < pesquisaArrayList.size(); i++){
 				pesquisa = pesquisaArrayList.get(i);
 				where.and();
-				where.eq(pesquisa.getCampo(), pesquisa.getValor());
+				if(pesquisa.getTipo() == 1) {
+					where.eq(pesquisa.getCampo(), pesquisa.getValor());
+				}
+				else{
+					where.ne(pesquisa.getCampo(), pesquisa.getValor());
+				}
 			}
 			PreparedQuery preparedQuery = queryBuilder.prepare();
 			return this.daoImpl().query(preparedQuery);
@@ -138,13 +147,22 @@ public abstract class Entidade implements Serializable {
 					this.daoImpl().queryBuilder();
 			Where<String, Object> where = queryBuilder.where();
 			EspecificaPesquisa pesquisa = pesquisaArrayList.get(0);
-			where.eq(pesquisa.getCampo(), pesquisa.getValor());
+			if(pesquisa.getTipo() == 1) {
+				where.eq(pesquisa.getCampo(), pesquisa.getValor());
+			}
+			else{
+				where.ne(pesquisa.getCampo(), pesquisa.getValor());
+			}
 			for(int i = 1; i < pesquisaArrayList.size(); i++){
 				pesquisa = pesquisaArrayList.get(i);
 				where.and();
-				where.eq(pesquisa.getCampo(), pesquisa.getValor());
+				if(pesquisa.getTipo() == 1) {
+					where.eq(pesquisa.getCampo(), pesquisa.getValor());
+				}
+				else{
+					where.ne(pesquisa.getCampo(), pesquisa.getValor());
+				}
 			}
-			
 			queryBuilder.orderBy(campo, order);
 			PreparedQuery preparedQuery = queryBuilder.prepare();
 			return this.daoImpl().query(preparedQuery);

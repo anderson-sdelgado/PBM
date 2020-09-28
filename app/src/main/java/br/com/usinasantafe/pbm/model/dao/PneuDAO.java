@@ -41,8 +41,8 @@ public class PneuDAO {
         return pneuBean.get("codPneu", codPneu);
     }
 
-    public void verPneu(String dado, Context telaAtual, Class telaProx, ProgressDialog progressDialog){
-        VerifDadosServ.getInstance().verDados(dado, "Pneu", telaAtual, telaProx, progressDialog);
+    public void verPneu(String dado, Context telaAtual, Class telaProx, ProgressDialog progressDialog, boolean finalManutPneu){
+        VerifDadosServ.getInstance().verDadosPneu(dado, "Pneu", telaAtual, telaProx, progressDialog, finalManutPneu);
     }
 
     public void insertPneu(PneuBean pneuBean){

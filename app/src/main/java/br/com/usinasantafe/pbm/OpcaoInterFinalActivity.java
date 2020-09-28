@@ -44,31 +44,9 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
                 TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 String text = textView.getText().toString();
 
-                ArrayList boletimPesqList = new ArrayList();
-                EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-                pesquisa.setCampo("atualBoletim");
-                pesquisa.setValor(1L);
-                boletimPesqList.add(pesquisa);
-
-                EspecificaPesquisa pesquisa2 = new EspecificaPesquisa();
-                pesquisa2.setCampo("statusBoletim");
-                pesquisa2.setValor(1L);
-                boletimPesqList.add(pesquisa2);
-
-                BoletimTO boletimTO = new BoletimTO();
-                List boletimList = boletimTO.get(boletimPesqList);
-                boletimTO = (BoletimTO) boletimList.get(0);
-
-                ApontTO apontaTO = new ApontTO();
-                List apontList = apontaTO.getAndOrderBy("idBolApont", boletimTO.getIdBoletim(), "idApont", false);
-
                 if (text.equals("FINALIZAR")) {
 
-                    apontaTO = (ApontTO) apontList.get(0);
-                    apontaTO.setDthrFinalApont(Tempo.getInstance().dataHora());
-                    apontaTO.setRealizApont(1L);
-                    apontaTO.setStatusApont(0L);
-                    apontaTO.update();
+                    pbmContext.getMecanicoCTR().finalizarApont();
 
                     Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
                     startActivity(it);
@@ -76,10 +54,7 @@ public class OpcaoInterFinalActivity extends ActivityGeneric {
 
                 } else if (text.equals("INTERROPER")) {
 
-                    apontaTO = (ApontTO) apontList.get(0);
-                    apontaTO.setDthrFinalApont(Tempo.getInstance().dataHora());
-                    apontaTO.setStatusApont(0L);
-                    apontaTO.update();
+                    pbmContext.getMecanicoCTR().interroperApont();
 
                     Intent it = new Intent(OpcaoInterFinalActivity.this, MenuInicialActivity.class);
                     startActivity(it);

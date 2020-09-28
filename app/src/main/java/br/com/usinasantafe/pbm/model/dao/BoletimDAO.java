@@ -1,9 +1,12 @@
 package br.com.usinasantafe.pbm.model.dao;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.util.Tempo;
@@ -52,6 +55,51 @@ public class BoletimDAO {
         boletimBean.update();
     }
 
+    public boolean verBoletimFechado(){
+        List<BoletimBean> boletimList = boletimFechadoList();
+        boolean ret = (boletimList.size() > 0);
+        boletimList.clear();
+        return ret;
+    }
+
+    public boolean verBoletimSemEnvio(){
+        List<BoletimBean> boletimList = boletimSemEnvioList();
+        boolean ret = (boletimList.size() > 0);
+        boletimList.clear();
+        return ret;
+    }
+
+    public List<BoletimBean> boletimSemEnvioList(){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqStatusAberto());
+        pesqArrayList.add(getPesqStatusSemEnvio());
+
+        BoletimBean boletimBean = new BoletimBean();
+        return boletimBean.get(pesqArrayList);
+
+    }
+
+    public List<BoletimBean> boletimFechadoList(){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqStatusFechado());
+
+        BoletimBean boletimBean = new BoletimBean();
+        return boletimBean.get(pesqArrayList);
+
+    }
+
+    public List<BoletimBean> boletimEnviadoList(){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqStatusEnviado());
+
+        BoletimBean boletimBean = new BoletimBean();
+        return boletimBean.get(pesqArrayList);
+
+    }
+
     public List<BoletimBean> boletimList(Long idFunc){
 
         ArrayList pesqArrayList = new ArrayList();
@@ -80,6 +128,39 @@ public class BoletimDAO {
 
     }
 
+    public ArrayList<Long> idBolFechadoList(){
+
+        List<BoletimBean> bolFechadoList = boletimFechadoList();
+        ArrayList<Long> idBolFechadoList = new ArrayList<>();
+        for (BoletimBean boletimBean : bolFechadoList) {
+            idBolFechadoList.add(boletimBean.getIdBoletim());
+        }
+        bolFechadoList.clear();
+        return idBolFechadoList;
+
+    }
+
+    public String dadosEnvioBolFechado(){
+
+        List<BoletimBean> bolFechadoList = boletimFechadoList();
+        JsonArray jsonArrayBolFechado = new JsonArray();
+
+        for (BoletimBean boletimBean : bolFechadoList) {
+
+            Gson gson = new Gson();
+            jsonArrayBolFechado.add(gson.toJsonTree(boletimBean, boletimBean.getClass()));
+
+        }
+
+        bolFechadoList.clear();
+
+        JsonObject jsonBolFechado = new JsonObject();
+        jsonBolFechado.add("boletim", jsonArrayBolFechado);
+
+        return jsonBolFechado.toString();
+
+    }
+
     private EspecificaPesquisa getPesqIdFunc(Long idFunc){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idFuncBoletim");
@@ -93,6 +174,30 @@ public class BoletimDAO {
         pesquisa.setCampo("statusBoletim");
         pesquisa.setValor(1L);
         pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqStatusFechado(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusBoletim");
+        pesquisa.setValor(2L);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqStatusSemEnvio(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("idExtBoletim");
+        pesquisa.setValor(0L);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqStatusEnviado(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("idExtBoletim");
+        pesquisa.setValor(0L);
+        pesquisa.setTipo(2);
         return pesquisa;
     }
 

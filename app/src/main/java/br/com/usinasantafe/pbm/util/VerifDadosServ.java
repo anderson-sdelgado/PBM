@@ -41,7 +41,7 @@ public class VerifDadosServ {
     private MenuInicialActivity menuInicialActivity;
     private PostVerGenerico postVerGenerico;
     private boolean verTerm;
-    private int tipoTela;
+    private boolean finalManutPneu;
 
     public VerifDadosServ() {
     }
@@ -93,7 +93,7 @@ public class VerifDadosServ {
 
     }
 
-    public void verDadosPneu(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog) {
+    public void verDadosPneu(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog, boolean finalManutPneu) {
 
         verTerm = false;
         urlsConexaoHttp = new UrlsConexaoHttp();
@@ -102,7 +102,7 @@ public class VerifDadosServ {
         this.progressDialog = progressDialog;
         this.dado = dado;
         this.tipo = tipo;
-        this.tipoTela = 1;
+        this.finalManutPneu = finalManutPneu;
 
         envioDados();
 
@@ -202,7 +202,7 @@ public class VerifDadosServ {
             }
             else if(this.tipo.equals("Pneu")) {
                 PneuCTR pneuCTR = new PneuCTR();
-                pneuCTR.recDadosPneu(result);
+                pneuCTR.recDadosPneu(result, finalManutPneu);
             }
 
         } catch (Exception e) {
