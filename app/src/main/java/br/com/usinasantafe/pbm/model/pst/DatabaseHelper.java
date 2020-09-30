@@ -6,6 +6,25 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
+
+import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ComponenteBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.EquipBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.EscalaTrabBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ItemOSBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.OSBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ParadaBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ParametroBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.PneuBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ServicoBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ConfigBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ItemCalibPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ItemManutPneuBean;
 
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
@@ -38,26 +57,25 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	public void onCreate(SQLiteDatabase db, ConnectionSource cs) {
 
 		try{
-//
-//			TableUtils.createTable(cs, ColabTO.class);
-//			TableUtils.createTable(cs, ParadaTO.class);
-//			TableUtils.createTable(cs, ComponenteTO.class);
-//			TableUtils.createTable(cs, ServicoTO.class);
-//			TableUtils.createTable(cs, OSTO.class);
-//			TableUtils.createTable(cs, ItemOSTO.class);
-//			TableUtils.createTable(cs, EscalaTrabTO.class);
-//			TableUtils.createTable(cs, EquipTO.class);
-//			TableUtils.createTable(cs, ParametroTO.class);
-//			TableUtils.createTable(cs, PneuTO.class);
-//			TableUtils.createTable(cs, REquipPneuTO.class);
-//
-//			TableUtils.createTable(cs, ConfiguracaoTO.class);
-//			TableUtils.createTable(cs, VerApontaFuncTO.class);
-//			TableUtils.createTable(cs, BoletimTO.class);
-//			TableUtils.createTable(cs, ApontTO.class);
-//			TableUtils.createTable(cs, BoletimPneuTO.class);
-//			TableUtils.createTable(cs, ItemMedPneuTO.class);
-//			TableUtils.createTable(cs, ItemManutPneuTO.class);
+
+			TableUtils.createTable(cs, ColabBean.class);
+			TableUtils.createTable(cs, ComponenteBean.class);
+			TableUtils.createTable(cs, EquipBean.class);
+			TableUtils.createTable(cs, EscalaTrabBean.class);
+			TableUtils.createTable(cs, ItemOSBean.class);
+			TableUtils.createTable(cs, OSBean.class);
+			TableUtils.createTable(cs, ParadaBean.class);
+			TableUtils.createTable(cs, ParametroBean.class);
+			TableUtils.createTable(cs, PneuBean.class);
+			TableUtils.createTable(cs, REquipPneuBean.class);
+			TableUtils.createTable(cs, ServicoBean.class);
+
+			TableUtils.createTable(cs, ApontBean.class);
+			TableUtils.createTable(cs, BoletimBean.class);
+			TableUtils.createTable(cs, BoletimPneuBean.class);
+			TableUtils.createTable(cs, ConfigBean.class);
+			TableUtils.createTable(cs, ItemCalibPneuBean.class);
+			TableUtils.createTable(cs, ItemManutPneuBean.class);
 
 		}
 		catch(Exception e){

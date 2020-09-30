@@ -49,7 +49,22 @@ public class ApontDAO {
 
     }
 
-    public void updApontIdExtBol(Long idBol, Long idExtBol){
+    public void updApont(ApontBean apontBean){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdApont(apontBean.getIdApont()));
+
+        List<ApontBean> apontList = apontBean.get(pesqArrayList);
+
+        ApontBean apontBeanBD = apontList.get(0);
+        apontBeanBD.setStatusApont(1L);
+        apontBeanBD.update();
+
+        apontList.clear();
+
+    }
+
+    public void updApontIdExtBoletim(Long idBol, Long idExtBol){
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdBol(idBol));
@@ -61,6 +76,24 @@ public class ApontDAO {
             apontBeanBD.setIdExtBolApont(idExtBol);
             apontBeanBD.update();
         }
+
+        apontList.clear();
+
+    }
+
+    public void delApont(Long idBol){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBol(idBol));
+
+        ApontBean apontBean = new ApontBean();
+        List<ApontBean> apontList = apontBean.get(pesqArrayList);
+
+        for(ApontBean apontBeanBD : apontList){
+            apontBeanBD.delete();
+        }
+
+        apontList.clear();
 
     }
 
@@ -80,12 +113,15 @@ public class ApontDAO {
 
     public List<ApontBean> apontList(ArrayList<Long> idBolArrayList){
         ApontBean apontBean = new ApontBean();
-        return apontBean.in("idBolApont", idBolArrayList);
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqSemEnvio());
+        return apontBean.inAndGet("idBolApont", idBolArrayList, pesqArrayList);
     }
 
     public List<ApontBean> apontSemEnvioList(){
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqSemEnvio());
+        pesqArrayList.add(getPesqStatusComBolExt());
         ApontBean apontBean = new ApontBean();
         return apontBean.get(pesqArrayList);
     }
@@ -118,7 +154,6 @@ public class ApontDAO {
 
     }
 
-
     public void fecharApont(ApontBean apontBean){
         if(apontBean.getParadaApont() == 0L){
             apontBean.setDthrFinalApont(Tempo.getInstance().dataHora());
@@ -148,6 +183,35 @@ public class ApontDAO {
 
     }
 
+    public String dadosEnvioApont(){
+
+        List<ApontBean> apontList = apontSemEnvioList();
+        JsonArray jsonArrayApont = new JsonArray();
+
+        for (ApontBean apontBean : apontList) {
+
+            Gson gson = new Gson();
+            jsonArrayApont.add(gson.toJsonTree(apontBean, apontBean.getClass()));
+
+        }
+
+        apontList.clear();
+
+        JsonObject jsonApont = new JsonObject();
+        jsonApont.add("aponta", jsonArrayApont);
+
+        return jsonApont.toString();
+
+    }
+
+    private EspecificaPesquisa getPesqIdApont(Long idApont){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("idApont");
+        pesquisa.setValor(idApont);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
     private EspecificaPesquisa getPesqIdBol(Long idBol){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idBolApont");
@@ -169,6 +233,14 @@ public class ApontDAO {
         pesquisa.setCampo("statusApont");
         pesquisa.setValor(0L);
         pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqStatusComBolExt(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("idExtBolApont");
+        pesquisa.setValor(0L);
+        pesquisa.setTipo(2);
         return pesquisa;
     }
 

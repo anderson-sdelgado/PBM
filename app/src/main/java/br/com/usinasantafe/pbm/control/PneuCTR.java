@@ -24,6 +24,7 @@ import br.com.usinasantafe.pbm.model.dao.ItemCalibPneuDAO;
 import br.com.usinasantafe.pbm.model.dao.ParametroDAO;
 import br.com.usinasantafe.pbm.model.dao.PneuDAO;
 import br.com.usinasantafe.pbm.model.dao.REquipPneuDAO;
+import br.com.usinasantafe.pbm.util.Tempo;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
 
 public class PneuCTR {
@@ -113,7 +114,7 @@ public class PneuCTR {
         ArrayList<Long> idBolPneuLongs = boletimPneuDAO.idBoletimPneuList(boletimPneuList);
 
         ItemManutPneuDAO itemManutPneuDAO = new ItemManutPneuDAO();
-        itemManutPneuDAO.delete(idBolPneuLongs);
+        itemManutPneuDAO.deleteItemManutPneu(idBolPneuLongs);
 
         ItemCalibPneuDAO itemCalibPneuDAO = new ItemCalibPneuDAO();
         itemCalibPneuDAO.deleteItemCalibPneu(idBolPneuLongs);
@@ -256,6 +257,63 @@ public class PneuCTR {
         } catch (Exception e) {
             VerifDadosServ.getInstance().msgComTerm("FALHA DE PESQUISA DE PNEU! POR FAVOR, TENTAR NOVAMENTE COM UM SINAL MELHOR.");
         }
+
+    }
+
+    public void delBolPneu(String retorno) {
+
+        try {
+
+            int pos1 = retorno.indexOf("#") + 1;
+            String dados = retorno.substring(pos1);
+
+            JSONObject jObj = new JSONObject(dados);
+            JSONArray jsonArray = jObj.getJSONArray("dados");
+
+            if (jsonArray.length() > 0) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    JSONObject objeto = jsonArray.getJSONObject(i);
+                    Gson gson = new Gson();
+
+                    BoletimPneuBean boletimPneuBean = gson.fromJson(objeto.toString(), BoletimPneuBean.class);
+
+                    ItemCalibPneuDAO itemCalibPneuDAO = new ItemCalibPneuDAO();
+                    itemCalibPneuDAO.deleteItemCalibPneu(boletimPneuBean.getIdBolPneu());
+
+                    ItemManutPneuDAO itemManutPneuDAO = new ItemManutPneuDAO();
+                    itemManutPneuDAO.deleteItemManutPneu(boletimPneuBean.getIdBolPneu());
+
+                    BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
+                    boletimPneuDAO.deleteBoletimPneu(boletimPneuBean.getIdBolPneu());
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            Tempo.getInstance().setEnvioDado(true);
+        }
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////// SALVAR DADOS SERVIDOR //////////////////////////////////////
+
+    public String dadosEnvioBolPneuFechado() {
+
+        BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
+        String dadosBolPneu = boletimPneuDAO.dadosBolPneuFechado();
+
+        ItemCalibPneuDAO itemCalibPneuDAO = new ItemCalibPneuDAO();
+        String dadosItemCalibPneu = itemCalibPneuDAO.dadosItemCalibPneu(boletimPneuDAO.idBolPneuFechado());
+
+        ItemManutPneuDAO itemManutPneuDAO = new ItemManutPneuDAO();
+        String dadosItemManutPneu = itemManutPneuDAO.dadosItemManutPneu(boletimPneuDAO.idBolPneuFechado());
+
+        return dadosBolPneu + "_" + dadosItemCalibPneu + "#" + dadosItemManutPneu;
 
     }
 

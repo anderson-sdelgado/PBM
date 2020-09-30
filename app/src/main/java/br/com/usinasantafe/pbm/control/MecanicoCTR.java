@@ -2,19 +2,14 @@ package br.com.usinasantafe.pbm.control;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ComponenteBean;
@@ -36,9 +31,8 @@ import br.com.usinasantafe.pbm.model.dao.ParadaDAO;
 import br.com.usinasantafe.pbm.model.dao.ParametroDAO;
 import br.com.usinasantafe.pbm.model.dao.ServicoDAO;
 import br.com.usinasantafe.pbm.util.AtualDadosServ;
+import br.com.usinasantafe.pbm.util.Tempo;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
-import br.com.usinasantafe.pbm.util.conHttp.PostCadGenerico;
-import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
 
 public class MecanicoCTR {
 
@@ -140,18 +134,6 @@ public class MecanicoCTR {
         ApontDAO apontDAO = new ApontDAO();
         apontDAO.interroperApont(apontDAO.apontList(boletimDAO.getBoletimApont().getIdBoletim()).get(0));
     }
-
-    public void atualIdExtApont(){
-        BoletimDAO boletimDAO = new BoletimDAO();
-        ApontDAO apontDAO = new ApontDAO();
-        List<BoletimBean> boletimList = boletimDAO.boletimEnviadoList();
-        for(BoletimBean boletimBean : boletimList){
-            apontDAO.updApontIdExtBol(boletimBean.getIdBoletim(), boletimBean.getIdExtBoletim());
-        }
-        boletimList.clear();
-    }
-
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -321,19 +303,138 @@ public class MecanicoCTR {
 
     }
 
+    public void atualBolAberto(String retorno) {
+
+        try {
+
+            int pos1 = retorno.indexOf("#") + 1;
+            String dados = retorno.substring(pos1);
+
+            JSONObject jObj = new JSONObject(dados);
+            JSONArray jsonArray = jObj.getJSONArray("dados");
+
+            if (jsonArray.length() > 0) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    JSONObject objeto = jsonArray.getJSONObject(i);
+                    Gson gson = new Gson();
+
+                    BoletimBean boletimBean = gson.fromJson(objeto.toString(), BoletimBean.class);
+
+                    BoletimDAO boletimDAO = new BoletimDAO();
+                    boletimDAO.atualIdExtBol(boletimBean);
+
+                    ApontDAO apontDAO = new ApontDAO();
+                    apontDAO.updApontIdExtBoletim(boletimBean.getIdBoletim(), boletimBean.getIdExtBoletim());
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            Tempo.getInstance().setEnvioDado(true);
+        }
+
+    }
+
+    public void delBolFechado(String retorno) {
+
+        try {
+
+            int pos1 = retorno.indexOf("#") + 1;
+            String dados = retorno.substring(pos1);
+
+            JSONObject jObj = new JSONObject(dados);
+            JSONArray jsonArray = jObj.getJSONArray("dados");
+
+            if (jsonArray.length() > 0) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    JSONObject objeto = jsonArray.getJSONObject(i);
+                    Gson gson = new Gson();
+
+                    BoletimBean boletimBean = gson.fromJson(objeto.toString(), BoletimBean.class);
+
+                    BoletimDAO boletimDAO = new BoletimDAO();
+                    boletimDAO.delBoletim(boletimBean);
+
+                    ApontDAO apontDAO = new ApontDAO();
+                    apontDAO.delApont(boletimBean.getIdBoletim());
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            Tempo.getInstance().setEnvioDado(true);
+        }
+
+    }
+
+    public void atualApont(String retorno) {
+
+        try {
+
+            int pos1 = retorno.indexOf("#") + 1;
+            String dados = retorno.substring(pos1);
+
+            JSONObject jObj = new JSONObject(dados);
+            JSONArray jsonArray = jObj.getJSONArray("dados");
+
+            if (jsonArray.length() > 0) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    JSONObject objeto = jsonArray.getJSONObject(i);
+                    Gson gson = new Gson();
+
+                    ApontDAO apontDAO = new ApontDAO();
+                    apontDAO.updApont(gson.fromJson(objeto.toString(), ApontBean.class));
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            Tempo.getInstance().setEnvioDado(true);
+        }
+
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////// RECEBER DADOS SERVIDOR ///////////////////////////////////////
+    ///////////////////////////////// ENVIO DADOS SERVIDOR ///////////////////////////////////////
 
     public String dadosEnvioBolFechado() {
 
         BoletimDAO boletimDAO = new BoletimDAO();
-        String dadosBoletim = boletimDAO.dadosEnvioBolFechado();
+        String dadosBoletim = boletimDAO.dadosBolFechado();
 
         ApontDAO apontDAO = new ApontDAO();
         String dadosApont = apontDAO.dadosEnvioApont(boletimDAO.idBolFechadoList());
 
         return dadosBoletim + "_" + dadosApont;
+
+    }
+
+    public String dadosEnvioBolSemEnvio() {
+
+        BoletimDAO boletimDAO = new BoletimDAO();
+        String dadosBoletim = boletimDAO.dadosBolAbertoSemEnvio();
+
+        ApontDAO apontDAO = new ApontDAO();
+        String dadosApont = apontDAO.dadosEnvioApont(boletimDAO.idBolAbertoSemEnvioList());
+
+        return dadosBoletim + "_" + dadosApont;
+
+    }
+
+    public String dadosEnvioApont(){
+
+        ApontDAO apontDAO = new ApontDAO();
+        return apontDAO.dadosEnvioApont();
 
     }
 

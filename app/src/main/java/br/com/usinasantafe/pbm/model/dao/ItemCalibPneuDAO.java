@@ -1,8 +1,13 @@
 package br.com.usinasantafe.pbm.model.dao;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemCalibPneuBean;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.util.Tempo;
@@ -20,19 +25,32 @@ public class ItemCalibPneuDAO {
 
     public void deleteItemCalibPneu(ArrayList<Long> idBolPneuList){
 
-        ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
-        List itemMedPneuList = itemCalibPneuBean.in("idBolItemCalibPneu", idBolPneuList);
-
-        for (int i = 0; i < itemMedPneuList.size(); i++) {
-            itemCalibPneuBean = (ItemCalibPneuBean) itemMedPneuList.get(i);
+        List<ItemCalibPneuBean> itemCalibPneuList = itemCalibPneuList(idBolPneuList);
+        for (ItemCalibPneuBean itemCalibPneuBean : itemCalibPneuList) {
             itemCalibPneuBean.delete();
         }
+        itemCalibPneuList.clear();
+
+    }
+
+    public void deleteItemCalibPneu(Long idBolPneu){
+
+        List<ItemCalibPneuBean> itemCalibPneuList = itemCalibPneuList(idBolPneu);
+        for (ItemCalibPneuBean itemCalibPneuBean : itemCalibPneuList) {
+            itemCalibPneuBean.delete();
+        }
+        itemCalibPneuList.clear();
 
     }
 
     public List<ItemCalibPneuBean> itemCalibPneuList(Long idBolPneu){
         ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
         return itemCalibPneuBean.get("idBolItemCalibPneu", idBolPneu);
+    }
+
+    public List<ItemCalibPneuBean> itemCalibPneuList(ArrayList<Long> idBolPneuArrayList){
+        ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
+        return itemCalibPneuBean.in("idBolItemCalibPneu", idBolPneuArrayList);
     }
 
     public boolean verPneuItemCalib(Long idBol, String nroPneu){
@@ -47,6 +65,25 @@ public class ItemCalibPneuDAO {
         itemCalibPneuList.clear();
 
         return ret;
+
+    }
+
+    public String dadosItemCalibPneu(ArrayList<Long> idBolArrayList){
+
+        List<ItemCalibPneuBean> itemCalibPneuList = itemCalibPneuList(idBolArrayList);
+        JsonArray jsonArrayApont = new JsonArray();
+
+        for (ItemCalibPneuBean itemCalibPneuBean : itemCalibPneuList) {
+            Gson gson = new Gson();
+            jsonArrayApont.add(gson.toJsonTree(itemCalibPneuBean, itemCalibPneuBean.getClass()));
+        }
+
+        itemCalibPneuList.clear();
+
+        JsonObject jsonItemCalibPneu = new JsonObject();
+        jsonItemCalibPneu.add("itemcalibpneu", jsonArrayApont);
+
+        return jsonItemCalibPneu.toString();
 
     }
 

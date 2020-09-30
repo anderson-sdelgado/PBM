@@ -13,7 +13,7 @@ public class EquipBean extends Entidade {
     @DatabaseField(id=true)
     private Long idEquip;
     @DatabaseField
-    private Long numEquip;
+    private Long nroEquip;
 
     public EquipBean() {
     }
@@ -26,11 +26,11 @@ public class EquipBean extends Entidade {
         this.idEquip = idEquip;
     }
 
-    public Long getNumEquip() {
-        return numEquip;
+    public Long getNroEquip() {
+        return nroEquip;
     }
 
-    public void setNumEquip(Long numEquip) {
-        this.numEquip = numEquip;
+    public void setNroEquip(Long nroEquip) {
+        this.nroEquip = nroEquip;
     }
 }

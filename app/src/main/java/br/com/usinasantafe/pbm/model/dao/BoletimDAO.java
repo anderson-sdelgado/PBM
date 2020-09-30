@@ -49,6 +49,33 @@ public class BoletimDAO {
 
     }
 
+    public void atualIdExtBol(BoletimBean boletimBean){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBoletim(boletimBean.getIdBoletim()));
+
+        BoletimBean boletimBeanBD = new BoletimBean();
+        List<BoletimBean> boletimList = boletimBeanBD.get(pesqArrayList);
+
+        boletimBeanBD = boletimList.get(0);
+        boletimBeanBD.setIdExtBoletim(boletimBean.getIdExtBoletim());
+        boletimBeanBD.update();
+
+    }
+
+    public void delBoletim(BoletimBean boletimBean){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBoletim(boletimBean.getIdBoletim()));
+
+        BoletimBean boletimBeanBD = new BoletimBean();
+        List<BoletimBean> boletimList = boletimBeanBD.get(pesqArrayList);
+
+        boletimBeanBD = boletimList.get(0);
+        boletimBeanBD.delete();
+
+    }
+
     public void fecharBoletim(BoletimBean boletimBean){
         boletimBean.setDthrFinalBoletim(Tempo.getInstance().dataHora());
         boletimBean.setStatusBoletim(2L);
@@ -140,7 +167,19 @@ public class BoletimDAO {
 
     }
 
-    public String dadosEnvioBolFechado(){
+    public ArrayList<Long> idBolAbertoSemEnvioList(){
+
+        List<BoletimBean> bolAbertoSemEnvioList = boletimSemEnvioList();
+        ArrayList<Long> idBolAbertoSemEnvioList = new ArrayList<>();
+        for (BoletimBean boletimBean : bolAbertoSemEnvioList) {
+            idBolAbertoSemEnvioList.add(boletimBean.getIdBoletim());
+        }
+        bolAbertoSemEnvioList.clear();
+        return idBolAbertoSemEnvioList;
+
+    }
+
+    public String dadosBolFechado(){
 
         List<BoletimBean> bolFechadoList = boletimFechadoList();
         JsonArray jsonArrayBolFechado = new JsonArray();
@@ -159,6 +198,35 @@ public class BoletimDAO {
 
         return jsonBolFechado.toString();
 
+    }
+
+    public String dadosBolAbertoSemEnvio(){
+
+        List<BoletimBean> bolFechadoList = boletimSemEnvioList();
+        JsonArray jsonArrayBolFechado = new JsonArray();
+
+        for (BoletimBean boletimBean : bolFechadoList) {
+
+            Gson gson = new Gson();
+            jsonArrayBolFechado.add(gson.toJsonTree(boletimBean, boletimBean.getClass()));
+
+        }
+
+        bolFechadoList.clear();
+
+        JsonObject jsonBolFechado = new JsonObject();
+        jsonBolFechado.add("boletim", jsonArrayBolFechado);
+
+        return jsonBolFechado.toString();
+
+    }
+
+    private EspecificaPesquisa getPesqIdBoletim(Long idBoletim){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("idBoletim");
+        pesquisa.setValor(idBoletim);
+        pesquisa.setTipo(1);
+        return pesquisa;
     }
 
     private EspecificaPesquisa getPesqIdFunc(Long idFunc){

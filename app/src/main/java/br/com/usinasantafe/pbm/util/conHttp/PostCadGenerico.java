@@ -11,6 +11,8 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
+import br.com.usinasantafe.pbm.control.MecanicoCTR;
+import br.com.usinasantafe.pbm.control.PneuCTR;
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
 import br.com.usinasantafe.pbm.util.Tempo;
 
@@ -98,26 +100,24 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String result) {
 
 		try {
-
 			EnvioDadosServ.getInstance().setEnviando(false);
 			Log.i("ECM", "VALOR RECEBIDO --> " + result);
-			if(result.trim().equals("GRAVOUFECHADO")){
-				EnvioDadosServ.getInstance().delBolFechado();
+			MecanicoCTR mecanicoCTR = new MecanicoCTR();
+			PneuCTR pneuCTR = new PneuCTR();
+			if(result.trim().startsWith("BOLFECHADO")){
+				mecanicoCTR.delBolFechado(result);
 			}
-			else if(result.trim().equals("GRAVOUAPONTA")){
-				EnvioDadosServ.getInstance().atualApont();
+			else if(result.trim().startsWith("BOLABERTO")){
+				mecanicoCTR.atualBolAberto(result);
 			}
-			else if(result.trim().equals("GRAVOUPNEU")){
-				EnvioDadosServ.getInstance().delBolPneu();
+			else if(result.trim().startsWith("APONT")){
+				mecanicoCTR.atualApont(result);
 			}
-			else{
-				if(result.trim().contains("ABERTO")){
-					EnvioDadosServ.getInstance().atualDadosBolAberto(result);
-				}
+			else if(result.trim().startsWith("BOLPNEU")){
+				pneuCTR.delBolPneu(result);
 			}
-
 		} catch (Exception e) {
-			Log.i("PMM", "Erro2 = " + e);
+			EnvioDadosServ.getInstance().setEnviando(true);
 		}
 		
     }

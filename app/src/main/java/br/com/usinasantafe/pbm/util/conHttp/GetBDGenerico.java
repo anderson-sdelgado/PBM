@@ -68,11 +68,12 @@ public class GetBDGenerico extends AsyncTask<String, Void, String> {
 			connection.disconnect();
             
 		} catch (Exception e) {
+			Log.i("PBM", "ERRO HTTP 1 = " + e);
 			if(bufferedReader != null){
 				try {
 					bufferedReader.close();
 				} catch (Exception erro) {
-					
+					Log.i("PBM", "ERRO HTTP 2 = " + erro);
 				}
 			}
 		}
@@ -82,7 +83,7 @@ public class GetBDGenerico extends AsyncTask<String, Void, String> {
 				try {
 					bufferedReader.close();
 				} catch (Exception e) {
-					
+					Log.i("PBM", "ERRO HTTP 3 = " + e);
 				}
 			}
 			

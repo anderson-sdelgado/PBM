@@ -33,7 +33,7 @@ public class ConfigActivity extends ActivityGeneric {
         editTextSenhaConfig = (EditText) findViewById(R.id.editTextSenhaConfig);
 
         if (pbmContext.getConfigCTR().hasElements()) {
-            editTextEquipConfig.setText(String.valueOf(pbmContext.getConfigCTR().getEquip().getNumEquip()));
+            editTextEquipConfig.setText(String.valueOf(pbmContext.getConfigCTR().getEquip().getNroEquip()));
             editTextSenhaConfig.setText(pbmContext.getConfigCTR().getConfig().getSenhaConfig());
         }
 

@@ -99,7 +99,7 @@ public class AtualDadosServ {
 	        for (Field field : retClasse.getDeclaredFields()) {
 	            String campo = field.getName();
 	            Log.i("PBM", "Campo = " + campo);
-	            if(campo.contains("TO")){
+	            if(campo.contains("Bean")){
 	            	tabAtualArrayList.add(campo);
 	            }
 	            
@@ -167,7 +167,7 @@ public class AtualDadosServ {
 			for (Field field : retClasse.getDeclaredFields()) {
 				String campo = field.getName();
 				Log.i("PBM", "Campo = " + campo);
-				if (campo.equals("ServicoTO") || campo.equals("ComponenteTO")) {
+				if (campo.equals("ServicoBean") || campo.equals("ComponenteBean")) {
 					tabAtualArrayList.add(campo);
 				}
 
@@ -199,7 +199,7 @@ public class AtualDadosServ {
 			for (Field field : retClasse.getDeclaredFields()) {
 				String campo = field.getName();
 				Log.i("PMM", "Campo = " + campo);
-				if (campo.contains("TO")) {
+				if (campo.contains("Bean")) {
 					tabAtualArrayList.add(campo);
 				}
 
@@ -303,7 +303,7 @@ public class AtualDadosServ {
 
 
 	public String manipLocalClasse(String classe){
-	    if(classe.contains("TO")){
+	    if(classe.contains("Bean")){
 	    	classe = urlsConexaoHttp.localPSTEstatica + classe;
 	    }
 		return classe;
