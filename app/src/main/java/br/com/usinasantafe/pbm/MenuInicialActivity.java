@@ -20,16 +20,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import br.com.usinasantafe.pbm.util.ConexaoWeb;
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
-import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class MenuInicialActivity extends ActivityGeneric {
 
-    private ListView lista;
+    private ListView listaMenuInicial;
     private ProgressDialog progressBar;
     private PBMContext pbmContext;
 
@@ -90,10 +88,10 @@ public class MenuInicialActivity extends ActivityGeneric {
         itens.add("SAIR");
 
         AdapterList adapterList = new AdapterList(this, itens);
-        lista = (ListView) findViewById(R.id.listaMenuInicial);
-        lista.setAdapter(adapterList);
+        listaMenuInicial = (ListView) findViewById(R.id.listaMenuInicial);
+        listaMenuInicial.setAdapter(adapterList);
 
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listaMenuInicial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position,

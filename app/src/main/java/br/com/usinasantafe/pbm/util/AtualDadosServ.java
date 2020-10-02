@@ -33,8 +33,6 @@ public class AtualDadosServ {
 	private Class telaProx;
 	private int tipoReceb;
 	private UrlsConexaoHttp urlsConexaoHttp;
-	private String versao;
-	private MenuInicialActivity menuInicialActivity;
 	
 	public AtualDadosServ() {
 		genericRecordable = new GenericRecordable();
@@ -151,39 +149,6 @@ public class AtualDadosServ {
 
 		} catch (Exception e) {
 			Log.i("PMM", "ERRO = " + e);
-		}
-
-	}
-
-	public void atualItemOSBD(ProgressDialog progressDialog){
-
-		try {
-
-			this.tipoReceb = 3;
-			this.progressDialog = progressDialog;
-			tabAtualArrayList = new ArrayList();
-			Class<?> retClasse = Class.forName(urlsConexaoHttp.localUrl);
-
-			for (Field field : retClasse.getDeclaredFields()) {
-				String campo = field.getName();
-				Log.i("PBM", "Campo = " + campo);
-				if (campo.equals("ServicoBean") || campo.equals("ComponenteBean")) {
-					tabAtualArrayList.add(campo);
-				}
-
-			}
-
-			classe = (String) tabAtualArrayList.get(contAtualBD);
-
-			String[] url = {classe};
-
-			contAtualBD++;
-
-			GetBDGenerico getBDGenerico = new GetBDGenerico();
-			getBDGenerico.execute(url);
-
-		} catch (Exception e) {
-			Log.i("PMM", "ERRO Manip2 = " + e);
 		}
 
 	}

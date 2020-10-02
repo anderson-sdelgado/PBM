@@ -60,25 +60,6 @@ public class VerifDadosServ {
 
     }
 
-    public String manipLocalClasse(String classe) {
-        if (classe.contains("TO")) {
-            classe = urlsConexaoHttp.localPSTEstatica + classe;
-        }
-        return classe;
-    }
-
-    public void verAtualizacao(AtualAplicBean atualAplicBean, MenuInicialActivity menuInicialActivity, ProgressDialog progressDialog) {
-
-        urlsConexaoHttp = new UrlsConexaoHttp();
-        this.atualAplicBean = atualAplicBean;
-        this.progressDialog = progressDialog;
-        this.tipo = "Atualiza";
-        this.menuInicialActivity = menuInicialActivity;
-
-        envioAtualizacao();
-
-    }
-
     public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog) {
 
         verTerm = false;

@@ -1,20 +1,11 @@
 package br.com.usinasantafe.pbm.model.dao;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.util.Log;
-
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
-import br.com.usinasantafe.pbm.model.bean.estaticas.ItemOSBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.OSBean;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
 

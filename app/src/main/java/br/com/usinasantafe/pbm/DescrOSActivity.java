@@ -2,6 +2,7 @@ package br.com.usinasantafe.pbm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,8 +27,20 @@ public class DescrOSActivity extends ActivityGeneric {
 
         pbmContext = (PBMContext) getApplication();
 
-        textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getOS().getEquipOS()));
-        textViewDescEquip.setText(pbmContext.getMecanicoCTR().getOS().getDescrEquipOS());
+        Log.i("PBM", "OS");
+
+        OSBean osBean = new OSBean();
+        List<OSBean> osList = osBean.all();
+
+        for(OSBean osBeanBD : osList){
+            Log.i("PBM", "idOS = " + osBeanBD.getIdOS());
+            Log.i("PBM", "nroOS = " + osBeanBD.getNroOS());
+        }
+
+//        Log.i("PBM", "OS DIGITADA = " + pbmContext.getMecanicoCTR().getApontBean().getOsApont());
+//
+//        textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getOS().getEquipOS()));
+//        textViewDescEquip.setText(pbmContext.getMecanicoCTR().getOS().getDescrEquipOS());
 
         buttonOkDescrOS.setOnClickListener(new View.OnClickListener() {
 

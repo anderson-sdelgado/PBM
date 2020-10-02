@@ -89,38 +89,15 @@ public class BoletimDAO {
         return ret;
     }
 
-    public boolean verBoletimSemEnvio(){
-        List<BoletimBean> boletimList = boletimSemEnvioList();
-        boolean ret = (boletimList.size() > 0);
-        boletimList.clear();
-        return ret;
-    }
-
-    public List<BoletimBean> boletimSemEnvioList(){
-
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqStatusAberto());
-        pesqArrayList.add(getPesqStatusSemEnvio());
-
+    public List<BoletimBean> boletimSemEnvioList(ArrayList<Long> idBolAbertoList){
         BoletimBean boletimBean = new BoletimBean();
-        return boletimBean.get(pesqArrayList);
-
+        return boletimBean.in("idBoletim", idBolAbertoList);
     }
 
     public List<BoletimBean> boletimFechadoList(){
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqStatusFechado());
-
-        BoletimBean boletimBean = new BoletimBean();
-        return boletimBean.get(pesqArrayList);
-
-    }
-
-    public List<BoletimBean> boletimEnviadoList(){
-
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqStatusEnviado());
 
         BoletimBean boletimBean = new BoletimBean();
         return boletimBean.get(pesqArrayList);
@@ -167,18 +144,6 @@ public class BoletimDAO {
 
     }
 
-    public ArrayList<Long> idBolAbertoSemEnvioList(){
-
-        List<BoletimBean> bolAbertoSemEnvioList = boletimSemEnvioList();
-        ArrayList<Long> idBolAbertoSemEnvioList = new ArrayList<>();
-        for (BoletimBean boletimBean : bolAbertoSemEnvioList) {
-            idBolAbertoSemEnvioList.add(boletimBean.getIdBoletim());
-        }
-        bolAbertoSemEnvioList.clear();
-        return idBolAbertoSemEnvioList;
-
-    }
-
     public String dadosBolFechado(){
 
         List<BoletimBean> bolFechadoList = boletimFechadoList();
@@ -200,9 +165,9 @@ public class BoletimDAO {
 
     }
 
-    public String dadosBolAbertoSemEnvio(){
+    public String dadosBolAbertoSemEnvio(ArrayList<Long> idBolAbertoList){
 
-        List<BoletimBean> bolFechadoList = boletimSemEnvioList();
+        List<BoletimBean> bolFechadoList = boletimSemEnvioList(idBolAbertoList);
         JsonArray jsonArrayBolFechado = new JsonArray();
 
         for (BoletimBean boletimBean : bolFechadoList) {
@@ -250,22 +215,6 @@ public class BoletimDAO {
         pesquisa.setCampo("statusBoletim");
         pesquisa.setValor(2L);
         pesquisa.setTipo(1);
-        return pesquisa;
-    }
-
-    private EspecificaPesquisa getPesqStatusSemEnvio(){
-        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("idExtBoletim");
-        pesquisa.setValor(0L);
-        pesquisa.setTipo(1);
-        return pesquisa;
-    }
-
-    private EspecificaPesquisa getPesqStatusEnviado(){
-        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("idExtBoletim");
-        pesquisa.setValor(0L);
-        pesquisa.setTipo(2);
         return pesquisa;
     }
 

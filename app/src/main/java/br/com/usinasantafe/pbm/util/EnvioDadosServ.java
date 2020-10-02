@@ -38,11 +38,11 @@ public class EnvioDadosServ {
         MecanicoCTR mecanicoCTR = new MecanicoCTR();
         String dados = mecanicoCTR.dadosEnvioBolSemEnvio();
 
-        Log.i("PMM", "FECHADO = " + dados);
+        Log.i("PMM", "ABERTO = " + dados);
 
         UrlsConexaoHttp urlsConexaoHttp = new UrlsConexaoHttp();
 
-        String[] url = {urlsConexaoHttp.getsInsertBolFechado()};
+        String[] url = {urlsConexaoHttp.getsInsertBolAberto()};
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
         parametrosPost.put("dado", dados);
 
@@ -68,23 +68,6 @@ public class EnvioDadosServ {
         PostCadGenerico conHttpPostGenerico = new PostCadGenerico();
         conHttpPostGenerico.setParametrosPost(parametrosPost);
         conHttpPostGenerico.execute(url);
-
-    }
-
-    public void envioApont() {
-
-        MecanicoCTR mecanicoCTR = new MecanicoCTR();
-        String dados = mecanicoCTR.dadosEnvioApont();
-
-        Log.i("PMM", "APONTAMENTO = " + dados);
-
-        String[] url = {urlsConexaoHttp.getsInsertApont()};
-        Map<String, Object> parametrosPost = new HashMap<String, Object>();
-        parametrosPost.put("dado", dados);
-
-        PostCadGenerico postCadGenerico = new PostCadGenerico();
-        postCadGenerico.setParametrosPost(parametrosPost);
-        postCadGenerico.execute(url);
 
     }
 
@@ -127,16 +110,12 @@ public class EnvioDadosServ {
         if (mecanicoCTR.verBoletimFechado()) {
             enviarBolFechado();
         } else {
-            if (mecanicoCTR.verBoletimSemEnvio()) {
+            if (mecanicoCTR.verApontSemEnvio()) {
                 enviarBolAberto();
-            } else {
-                if (mecanicoCTR.verApontSemEnvio()) {
-                    envioApont();
-                }
-                else{
-                    if(pneuCTR.verBoletimPneuFechado()){
-                        enviarPneu();
-                    }
+            }
+            else{
+                if(pneuCTR.verBoletimPneuFechado()){
+                    enviarPneu();
                 }
             }
         }
@@ -146,7 +125,6 @@ public class EnvioDadosServ {
         MecanicoCTR mecanicoCTR = new MecanicoCTR();
         PneuCTR pneuCTR = new PneuCTR();
         if ((!mecanicoCTR.verBoletimFechado())
-                && (!mecanicoCTR.verBoletimSemEnvio())
                 && (!mecanicoCTR.verApontSemEnvio())
                 && (!pneuCTR.verBoletimPneuFechado())) {
             enviando = false;

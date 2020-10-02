@@ -2,6 +2,7 @@ package br.com.usinasantafe.pbm.control;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -70,11 +71,6 @@ public class MecanicoCTR {
     public boolean verBoletimFechado(){
         BoletimDAO boletimDAO = new BoletimDAO();
         return boletimDAO.verBoletimFechado();
-    }
-
-    public boolean verBoletimSemEnvio(){
-        BoletimDAO boletimDAO = new BoletimDAO();
-        return boletimDAO.verBoletimSemEnvio();
     }
 
     public boolean verApontSemEnvio(){
@@ -308,16 +304,21 @@ public class MecanicoCTR {
         try {
 
             int pos1 = retorno.indexOf("#") + 1;
-            String dados = retorno.substring(pos1);
+            int pos2 = retorno.indexOf("_") + 1;
+            String objPrinc = retorno.substring(pos1, pos2);
+            String objSeg = retorno.substring(pos2);
 
-            JSONObject jObj = new JSONObject(dados);
-            JSONArray jsonArray = jObj.getJSONArray("dados");
+            JSONObject boletimJsonObject = new JSONObject(objPrinc);
+            JSONArray boletimJsonArray = boletimJsonObject.getJSONArray("boletim");
 
-            if (jsonArray.length() > 0) {
+            JSONObject apontJsonObject = new JSONObject(objPrinc);
+            JSONArray apontJsonArray = apontJsonObject.getJSONArray("boletim");
 
-                for (int i = 0; i < jsonArray.length(); i++) {
+            if (boletimJsonArray.length() > 0) {
 
-                    JSONObject objeto = jsonArray.getJSONObject(i);
+                for (int i = 0; i < boletimJsonArray.length(); i++) {
+
+                    JSONObject objeto = boletimJsonArray.getJSONObject(i);
                     Gson gson = new Gson();
 
                     BoletimBean boletimBean = gson.fromJson(objeto.toString(), BoletimBean.class);
@@ -330,7 +331,21 @@ public class MecanicoCTR {
 
                 }
 
+                for (int i = 0; i < boletimJsonArray.length(); i++) {
+
+                    JSONObject objeto = boletimJsonArray.getJSONObject(i);
+                    Gson gson = new Gson();
+
+                    ApontBean apontBean = gson.fromJson(objeto.toString(), ApontBean.class);
+
+                    ApontDAO apontDAO = new ApontDAO();
+                    apontDAO.updApontEnviado(apontBean.getIdApont(), apontBean.getIdBolApont());
+
+                }
+
             }
+
+
 
         } catch (Exception e) {
             Tempo.getInstance().setEnvioDado(true);
@@ -346,7 +361,7 @@ public class MecanicoCTR {
             String dados = retorno.substring(pos1);
 
             JSONObject jObj = new JSONObject(dados);
-            JSONArray jsonArray = jObj.getJSONArray("dados");
+            JSONArray jsonArray = jObj.getJSONArray("boletim");
 
             if (jsonArray.length() > 0) {
 
@@ -381,7 +396,7 @@ public class MecanicoCTR {
             String dados = retorno.substring(pos1);
 
             JSONObject jObj = new JSONObject(dados);
-            JSONArray jsonArray = jObj.getJSONArray("dados");
+            JSONArray jsonArray = jObj.getJSONArray("boletim");
 
             if (jsonArray.length() > 0) {
 
@@ -422,19 +437,12 @@ public class MecanicoCTR {
     public String dadosEnvioBolSemEnvio() {
 
         BoletimDAO boletimDAO = new BoletimDAO();
-        String dadosBoletim = boletimDAO.dadosBolAbertoSemEnvio();
-
         ApontDAO apontDAO = new ApontDAO();
-        String dadosApont = apontDAO.dadosEnvioApont(boletimDAO.idBolAbertoSemEnvioList());
+
+        String dadosBoletim = boletimDAO.dadosBolAbertoSemEnvio(apontDAO.idBolAbertoList());
+        String dadosApont = apontDAO.dadosEnvioApont(apontDAO.idBolAbertoList());
 
         return dadosBoletim + "_" + dadosApont;
-
-    }
-
-    public String dadosEnvioApont(){
-
-        ApontDAO apontDAO = new ApontDAO();
-        return apontDAO.dadosEnvioApont();
 
     }
 

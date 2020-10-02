@@ -104,13 +104,13 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 			Log.i("ECM", "VALOR RECEBIDO --> " + result);
 			MecanicoCTR mecanicoCTR = new MecanicoCTR();
 			PneuCTR pneuCTR = new PneuCTR();
-			if(result.trim().startsWith("BOLFECHADO")){
+			if(result.trim().startsWith("BOLFECHADOMEC")){
 				mecanicoCTR.delBolFechado(result);
 			}
-			else if(result.trim().startsWith("BOLABERTO")){
+			else if(result.trim().startsWith("BOLABERTOMEC")){
 				mecanicoCTR.atualBolAberto(result);
 			}
-			else if(result.trim().startsWith("APONT")){
+			else if(result.trim().startsWith("APONTMEC")){
 				mecanicoCTR.atualApont(result);
 			}
 			else if(result.trim().startsWith("BOLPNEU")){
