@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
 import br.com.usinasantafe.pbm.util.Tempo;
@@ -64,7 +63,7 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                     Intent it;
 
                     if (!pbmContext.getMecanicoCTR().verApont()) {
-                        if (Tempo.getInstance().verifDataHora(Tempo.getInstance().dataSHoraComTZ() + " " + pbmContext.getMecanicoCTR().getEscalaTrab(pbmContext.getMecanicoCTR().getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab())) {
+                        if (Tempo.getInstance().verifDataHoraParada(Tempo.getInstance().dataSHoraComTZ() + " " + pbmContext.getMecanicoCTR().getEscalaTrab(pbmContext.getMecanicoCTR().getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab())) {
                             it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                             startActivity(it);
                             finish();
@@ -76,27 +75,52 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         }
                     } else {
 
-                        if (pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApont().equals(Tempo.getInstance().dataHora())) {
-                            Toast.makeText(MenuFuncaoActivity.this, "POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.",
-                                    Toast.LENGTH_LONG).show();
-                        } else {
+                        if(Tempo.getInstance().verifDataHoraFechBoletim(pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApont())) {
 
-                            if (pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont().equals("")) {
-                                it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
-                                startActivity(it);
-                                finish();
+                            if (pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApont().equals(Tempo.getInstance().dataHora())) {
+                                Toast.makeText(MenuFuncaoActivity.this, "POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.",
+                                        Toast.LENGTH_LONG).show();
                             } else {
-                                if (Tempo.getInstance().verifDataHora(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont())) {
+
+                                if (pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont().equals("")) {
                                     it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                                     startActivity(it);
                                     finish();
                                 } else {
-                                    pbmContext.setVerTela(1);
-                                    it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
+                                    if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont())) {
+                                        it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
+                                        startActivity(it);
+                                        finish();
+                                    } else {
+                                        pbmContext.setVerTela(1);
+                                        it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
+                                        startActivity(it);
+                                        finish();
+                                    }
+                                }
+
+                            }
+
+                        }
+                        else{
+
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
+                            alerta.setTitle("ATENÇÃO");
+                            alerta.setMessage("O BOLETIM SERÁ ENCERRADO POR FALTA DE ENCERRAMENTO DO TURNO ANTERIOR!");
+                            alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    pbmContext.getMecanicoCTR().forcarFechBoletim();
+
+                                    Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
                                     startActivity(it);
                                     finish();
+
                                 }
-                            }
+                            });
+
+                            alerta.show();
 
                         }
 
@@ -105,23 +129,50 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                 } else if (text.equals("FINALIZAR/INTERROPER")) {
 
                     if (pbmContext.getMecanicoCTR().verApont()) {
-                        if (pbmContext.getMecanicoCTR().getUltApont().getParadaApont() == 0L) {
-                            Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterFinalActivity.class);
-                            startActivity(it);
-                            finish();
-                        } else {
+
+                        if(Tempo.getInstance().verifDataHoraFechBoletim(pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApont())) {
+
+                            if (pbmContext.getMecanicoCTR().getUltApont().getParadaApont() == 0L) {
+                                Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterFinalActivity.class);
+                                startActivity(it);
+                                finish();
+                            } else {
+                                AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
+                                alerta.setTitle("ATENÇÃO");
+                                alerta.setMessage("NÃO EXISTE APONTAMENTO PARA FINALIZAR/INTERROMPER.");
+                                alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+
+                                alerta.show();
+                            }
+
+                        }
+                        else{
+
                             AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
                             alerta.setTitle("ATENÇÃO");
-                            alerta.setMessage("NÃO EXISTE APONTAMENTO PARA FINALIZAR/INTERROMPER.");
+                            alerta.setMessage("O BOLETIM SERÁ ENCERRADO POR FALTA DE ENCERRAMENTO DO TURNO ANTERIOR!");
                             alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+
+                                    pbmContext.getMecanicoCTR().forcarFechBoletim();
+
+                                    Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
+                                    startActivity(it);
+                                    finish();
 
                                 }
                             });
 
                             alerta.show();
+
                         }
+
 
                     } else {
                         AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
@@ -145,7 +196,6 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                     String label = "DESEJA REALMENTE FINALIZAR O TURNO?";
 
                     alerta.setMessage(label);
-
                     alerta.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -156,7 +206,6 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                             if (pbmContext.getMecanicoCTR().getUltApont().getParadaApont() == 0L) {
 
-                                pbmContext.getMecanicoCTR().fecharApont();
                                 pbmContext.getMecanicoCTR().fecharBoletim();
 
                                 it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
@@ -165,9 +214,8 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                             } else {
 
-                                if (Tempo.getInstance().verifDataHora(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont())) {
+                                if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApont())) {
 
-                                    pbmContext.getMecanicoCTR().fecharApont();
                                     pbmContext.getMecanicoCTR().fecharBoletim();
 
                                     it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
@@ -203,7 +251,6 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                     alerta.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                         }
 
                     });

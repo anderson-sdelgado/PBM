@@ -148,10 +148,9 @@ public class MenuInicialActivity extends ActivityGeneric {
         if(!retorno.equals("OFF")){
 
             int pos1 = retorno.indexOf("=") + 1;
-            int pos2 = retorno.indexOf("_") + 1;
-            String minutos = retorno.substring(pos1, (pos2 - 1));
+            String parametros = retorno.substring(pos1);
 
-            pbmContext.getMecanicoCTR().insertParametro(Long.parseLong(minutos));
+            pbmContext.getMecanicoCTR().insertParametro(parametros);
 
         }
 

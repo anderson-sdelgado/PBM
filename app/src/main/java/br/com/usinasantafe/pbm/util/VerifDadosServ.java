@@ -54,8 +54,36 @@ public class VerifDadosServ {
 
     public void manipularDadosHttp(String result) {
 
-        if (!result.equals("")) {
-            retornoVerifNormal(result);
+        try {
+
+            if (!result.equals("")) {
+
+                if (this.tipo.equals("Atualiza")) {
+
+                    String verAtual = result.trim();
+
+                    if (verAtual.equals("SIM")) {
+                        AtualizarAplicativo atualizarAplicativo = new AtualizarAplicativo();
+                        atualizarAplicativo.setContext(this.menuInicialActivity);
+                        atualizarAplicativo.execute();
+                    } else {
+                        this.menuInicialActivity.startTimer(verAtual);
+                    }
+
+                }
+                else if(this.tipo.equals("OS")) {
+                    MecanicoCTR mecanicoCTR = new MecanicoCTR();
+                    mecanicoCTR.recDadosOS(result);
+                }
+                else if(this.tipo.equals("Pneu")) {
+                    PneuCTR pneuCTR = new PneuCTR();
+                    pneuCTR.recDadosPneu(result, finalManutPneu);
+                }
+
+            }
+
+        } catch (Exception e) {
+            Log.i("PMM", "Erro Manip atualizar = " + e);
         }
 
     }
@@ -159,38 +187,6 @@ public class VerifDadosServ {
 
     }
 
-
-    public void retornoVerifNormal(String result) {
-
-        try {
-
-            if (this.tipo.equals("Atualiza")) {
-
-                String verAtual = result.trim();
-
-                if (verAtual.equals("SIM")) {
-                    AtualizarAplicativo atualizarAplicativo = new AtualizarAplicativo();
-                    atualizarAplicativo.setContext(this.menuInicialActivity);
-                    atualizarAplicativo.execute();
-                } else {
-                    this.menuInicialActivity.startTimer(verAtual);
-                }
-
-            }
-            else if(this.tipo.equals("OS")) {
-                MecanicoCTR mecanicoCTR = new MecanicoCTR();
-                mecanicoCTR.recDadosOS(result);
-            }
-            else if(this.tipo.equals("Pneu")) {
-                PneuCTR pneuCTR = new PneuCTR();
-                pneuCTR.recDadosPneu(result, finalManutPneu);
-            }
-
-        } catch (Exception e) {
-            Log.i("PMM", "Erro Manip atualizar = " + e);
-        }
-
-    }
 
     public void cancelVer() {
         verTerm = true;

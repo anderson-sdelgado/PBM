@@ -186,11 +186,6 @@ public class PneuCTR {
         return rEquipPneuDAO.getREquipPneu(boletimPneuDAO.getBoletimPneuAberto().getEquipBolPneu(), posPneu);
     }
 
-    public ParametroBean getParametro(){
-        ParametroDAO parametroDAO = new ParametroDAO();
-        return parametroDAO.getParametro();
-    }
-
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////// SET DADOS /////////////////////////////////////////////

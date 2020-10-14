@@ -15,10 +15,6 @@ import java.util.List;
 
 import br.com.usinasantafe.pbm.model.bean.estaticas.ItemOSBean;
 import br.com.usinasantafe.pbm.util.ConexaoWeb;
-import br.com.usinasantafe.pbm.util.AtualDadosServ;
-import br.com.usinasantafe.pbm.util.Tempo;
-import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
-import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 
 public class ItemOSListaActivity extends ActivityGeneric {
 

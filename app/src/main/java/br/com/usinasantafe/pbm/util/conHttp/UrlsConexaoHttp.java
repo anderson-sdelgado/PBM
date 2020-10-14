@@ -6,8 +6,8 @@ public class UrlsConexaoHttp {
 
     private int tipoEnvio = 1;
 
-    public static String urlPrincipal = "http://www.usinasantafe.com.br/pbmdev/view/";
-    public static String urlPrincEnvio = "http://www.usinasantafe.com.br/pbmdev/view/";
+    public static String urlPrincipal = "http://www.usinasantafe.com.br/pbmqa/view/";
+    public static String urlPrincEnvio = "http://www.usinasantafe.com.br/pbmqa/view/";
 
     public static String localPSTEstatica = "br.com.usinasantafe.pbm.model.bean.estaticas.";
     public static String localUrl = "br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp";

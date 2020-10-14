@@ -10,17 +10,37 @@ public class ParametroBean extends Entidade {
 
     private static final long serialVersionUID = 1L;
 
-    @DatabaseField(id=true)
-    private Long minParametro;
+    @DatabaseField(generatedId=true)
+    private Long idParametro;
+    @DatabaseField
+    private Long minutosParada;
+    @DatabaseField
+    private Long horaFechBoletim;
 
     public ParametroBean() {
     }
 
-    public Long getMinParametro() {
-        return minParametro;
+    public Long getIdParametro() {
+        return idParametro;
     }
 
-    public void setMinParametro(Long minParametro) {
-        this.minParametro = minParametro;
+    public void setIdParametro(Long idParametro) {
+        this.idParametro = idParametro;
+    }
+
+    public Long getMinutosParada() {
+        return minutosParada;
+    }
+
+    public void setMinutosParada(Long minutosParada) {
+        this.minutosParada = minutosParada;
+    }
+
+    public Long getHoraFechBoletim() {
+        return horaFechBoletim;
+    }
+
+    public void setHoraFechBoletim(Long horaFechBoletim) {
+        this.horaFechBoletim = horaFechBoletim;
     }
 }

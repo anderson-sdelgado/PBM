@@ -113,7 +113,7 @@ public class ListaParadaActivity extends ActivityGeneric {
 
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                // When user changed the Text
+
                 ListaParadaActivity.this.stringArrayAdapter.getFilter().filter(cs);
             }
 

@@ -45,4 +45,5 @@ public class ConfigCTR {
         configDAO.insert(idEquip, senha);
     }
 
+
 }

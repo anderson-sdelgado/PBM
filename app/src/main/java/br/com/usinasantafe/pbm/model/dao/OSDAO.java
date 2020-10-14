@@ -2,7 +2,6 @@ package br.com.usinasantafe.pbm.model.dao;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
 

@@ -3,7 +3,6 @@ package br.com.usinasantafe.pbm.model.dao;
 import java.util.List;
 
 import br.com.usinasantafe.pbm.model.bean.estaticas.ItemOSBean;
-import br.com.usinasantafe.pbm.model.bean.estaticas.OSBean;
 
 public class ItemOSDAO {
 
@@ -16,8 +15,8 @@ public class ItemOSDAO {
     }
 
     public void deleteAllItemOS(){
-        OSBean osBean = new OSBean();
-        osBean.deleteAll();
+        ItemOSBean itemOSBean = new ItemOSBean();
+        itemOSBean.deleteAll();
     }
 
     public void insertItemOS(ItemOSBean itemOSBean){

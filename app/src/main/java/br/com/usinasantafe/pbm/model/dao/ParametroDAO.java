@@ -9,9 +9,7 @@ public class ParametroDAO {
     public ParametroDAO() {
     }
 
-    public void insert(Long minutos){
-        ParametroBean parametroBean = new ParametroBean();
-        parametroBean.setMinParametro(minutos);
+    public void insert(ParametroBean parametroBean){
         parametroBean.deleteAll();
         parametroBean.insert();
     }

@@ -2,7 +2,6 @@ package br.com.usinasantafe.pbm.control;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -18,6 +17,7 @@ import br.com.usinasantafe.pbm.model.bean.estaticas.EscalaTrabBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ItemOSBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.OSBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ParadaBean;
+import br.com.usinasantafe.pbm.model.bean.estaticas.ParametroBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ServicoBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
@@ -82,9 +82,26 @@ public class MecanicoCTR {
 
     //////////////////////////////// SALVAR/ATUALIZAR DADOS //////////////////////////////////////
 
-    public void insertParametro(Long minutos){
-        ParametroDAO parametroDAO = new ParametroDAO();
-        parametroDAO.insert(minutos);
+    public void insertParametro(String parametros){
+
+        try {
+
+            JSONObject jObj = new JSONObject(parametros);
+            JSONArray jsonArray = jObj.getJSONArray("parametro");
+
+            if (jsonArray.length() > 0) {
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject objeto = jsonArray.getJSONObject(i);
+                    Gson gson = new Gson();
+                    ParametroDAO parametroDAO = new ParametroDAO();
+                    parametroDAO.insert(gson.fromJson(objeto.toString(), ParametroBean.class));
+                }
+
+            }
+
+        } catch (Exception e) {
+        }
     }
 
     public void atualSalvarBoletim(ColabBean colabBean){
@@ -102,21 +119,25 @@ public class MecanicoCTR {
     }
 
     public void salvarApont(){
-
         BoletimDAO boletimDAO = new BoletimDAO();
         ApontDAO apontDAO = new ApontDAO();
-        apontDAO.salvarApontTrab(apontBean, getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab(), boletimDAO.getBoletimApont());
+        apontDAO.salvarApont(apontBean, getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab(), boletimDAO.getBoletimApont());
 
     }
 
     public void fecharBoletim(){
         BoletimDAO boletimDAO = new BoletimDAO();
         boletimDAO.fecharBoletim(boletimDAO.getBoletimApont());
-    }
-
-    public void fecharApont(){
         ApontDAO apontDAO = new ApontDAO();
         apontDAO.fecharApont(getUltApont());
+    }
+
+    public void forcarFechBoletim(){
+        BoletimDAO boletimDAO = new BoletimDAO();
+        ApontDAO apontDAO = new ApontDAO();
+        String dthrFinal = Tempo.getInstance().dataFinalizarBol(boletimDAO.getBoletimApont().getDthrInicialBoletim(), getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioSaiEscalaTrab());
+        boletimDAO.fecharBoletim(boletimDAO.getBoletimApont(), dthrFinal);
+        apontDAO.fecharApont(getUltApont(), dthrFinal);
     }
 
     public void finalizarApont(){
@@ -209,6 +230,11 @@ public class MecanicoCTR {
     public ParadaBean getParadaId(Long idParada){
         ParadaDAO paradaDAO = new ParadaDAO();
         return paradaDAO.getParadaId(idParada);
+    }
+
+    public ParametroBean getParametro(){
+        ParametroDAO parametroDAO = new ParametroDAO();
+        return parametroDAO.getParametro();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -311,8 +337,8 @@ public class MecanicoCTR {
             JSONObject boletimJsonObject = new JSONObject(objPrinc);
             JSONArray boletimJsonArray = boletimJsonObject.getJSONArray("boletim");
 
-            JSONObject apontJsonObject = new JSONObject(objPrinc);
-            JSONArray apontJsonArray = apontJsonObject.getJSONArray("boletim");
+            JSONObject apontJsonObject = new JSONObject(objSeg);
+            JSONArray apontJsonArray = apontJsonObject.getJSONArray("apont");
 
             if (boletimJsonArray.length() > 0) {
 
@@ -331,9 +357,9 @@ public class MecanicoCTR {
 
                 }
 
-                for (int i = 0; i < boletimJsonArray.length(); i++) {
+                for (int i = 0; i < apontJsonArray.length(); i++) {
 
-                    JSONObject objeto = boletimJsonArray.getJSONObject(i);
+                    JSONObject objeto = apontJsonArray.getJSONObject(i);
                     Gson gson = new Gson();
 
                     ApontBean apontBean = gson.fromJson(objeto.toString(), ApontBean.class);

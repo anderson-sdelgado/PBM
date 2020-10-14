@@ -23,6 +23,8 @@ public class BoletimBean extends Entidade {
     @DatabaseField
     private String dthrFinalBoletim;
     @DatabaseField
+    private Long statusFechBoletim; // 0 - Automaticamente; 1 - Normal
+    @DatabaseField
     private Long statusBoletim; // 1 - Aberto; 2 - Fechado
     @DatabaseField
     private Long apontBoletim; //0 - Não esta sendo apontado; 1 - Esta sendo Apontado
@@ -92,5 +94,13 @@ public class BoletimBean extends Entidade {
 
     public void setEquipBoletim(Long equipBoletim) {
         this.equipBoletim = equipBoletim;
+    }
+
+    public Long getStatusFechBoletim() {
+        return statusFechBoletim;
+    }
+
+    public void setStatusFechBoletim(Long statusFechBoletim) {
+        this.statusFechBoletim = statusFechBoletim;
     }
 }

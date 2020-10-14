@@ -1,5 +1,7 @@
 package br.com.usinasantafe.pbm.model.dao;
 
+import android.provider.ContactsContract;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -79,6 +81,14 @@ public class BoletimDAO {
     public void fecharBoletim(BoletimBean boletimBean){
         boletimBean.setDthrFinalBoletim(Tempo.getInstance().dataHora());
         boletimBean.setStatusBoletim(2L);
+        boletimBean.setStatusFechBoletim(1L);
+        boletimBean.update();
+    }
+
+    public void fecharBoletim(BoletimBean boletimBean, String dthrFinal){
+        boletimBean.setDthrFinalBoletim(dthrFinal);
+        boletimBean.setStatusBoletim(2L);
+        boletimBean.setStatusFechBoletim(0L);
         boletimBean.update();
     }
 

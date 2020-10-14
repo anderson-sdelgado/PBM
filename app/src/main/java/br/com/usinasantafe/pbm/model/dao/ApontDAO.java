@@ -17,31 +17,46 @@ public class ApontDAO {
     public ApontDAO() {
     }
 
-    public void salvarApontTrab(ApontBean apontBean, String horarioEnt, BoletimBean boletimBean){
+    public void salvarApont(ApontBean apontBean, String horarioEnt, BoletimBean boletimBean){
 
         List<ApontBean> apontList = apontList(boletimBean.getIdBoletim());
 
-        if(apontList.size() > 0) {
+        if(apontBean.getParadaApont() > 0) {
 
-            ApontBean apontBD = (ApontBean) apontList.get(0);
-            if(apontBean.getParadaApont() == 0){
-                apontBD.setDthrFinalApont(Tempo.getInstance().dataHora());
-                apontBD.setStatusApont(0L);
-                apontBD.update();
-                apontBean.setDthrInicialApont(Tempo.getInstance().dataHora());
+            if(apontList.size() > 0) {
+                ApontBean apontBeanBD = apontList.get(0);
+                apontBean.setDthrInicialApont(apontBeanBD.getDthrFinalApont());
             }
             else{
-                apontBean.setDthrInicialApont(apontBD.getDthrFinalApont());
+                apontBean.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + horarioEnt));
             }
 
-        }
-        else{
-
-            apontBean.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + horarioEnt));
+            apontBean.setDthrFinalApont(Tempo.getInstance().dataHora());
 
         }
+        else {
 
-        apontBean.setDthrFinalApont("");
+            if(apontList.size() > 0) {
+
+                ApontBean apontBeanBD = apontList.get(0);
+                apontBeanBD.setDthrFinalApont(Tempo.getInstance().dataHora());
+                apontBeanBD.setStatusApont(0L);
+                apontBeanBD.update();
+
+                apontBean.setDthrInicialApont(Tempo.getInstance().dataHora());
+
+            }
+            else{
+
+                apontBean.setDthrInicialApont(Tempo.getInstance().manipDHSemTZ(Tempo.getInstance().dataSHoraSemTZ() + " " + horarioEnt));
+
+            }
+
+            apontBean.setDthrFinalApont("");
+
+        }
+
+        apontList.clear();
         apontBean.setIdBolApont(boletimBean.getIdBoletim());
         apontBean.setIdExtBolApont(boletimBean.getIdExtBoletim());
         apontBean.setStatusApont(0L);
@@ -186,6 +201,14 @@ public class ApontDAO {
     public void fecharApont(ApontBean apontBean){
         if(apontBean.getParadaApont() == 0L){
             apontBean.setDthrFinalApont(Tempo.getInstance().dataHora());
+            apontBean.setStatusApont(0L);
+            apontBean.update();
+        }
+    }
+
+    public void fecharApont(ApontBean apontBean, String dthrFinal){
+        if(apontBean.getParadaApont() == 0L){
+            apontBean.setDthrFinalApont(dthrFinal);
             apontBean.setStatusApont(0L);
             apontBean.update();
         }
