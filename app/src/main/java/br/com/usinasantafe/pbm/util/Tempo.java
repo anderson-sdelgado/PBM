@@ -5,18 +5,18 @@ import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
+import br.com.usinasantafe.pbm.control.ConfigCTR;
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ConfigBean;
+import br.com.usinasantafe.pbm.model.dao.LogErroDAO;
 
 
 public class Tempo {
 
     private static Tempo instance = null;
-    private boolean envioDado;
-	private Context context;
-    
-	private int conBoletim;
 	
 	public Tempo() {
 	}
@@ -27,16 +27,112 @@ public class Tempo {
         return instance;
     }
 
-    public String dataHora(){
-
-        String dataCerta = "";
-
-        TimeZone tz = TimeZone.getDefault();
+    public Long dtHr(){
         Date dataHora = new Date();
-        Date d = new Date();
+        return dataHora.getTime() + dif();
+    }
+
+    public String dthr(){
+        return dthrLongToString(dtHr());
+    }
+
+    public String dt(){
+        return dtLongToString(dtHr());
+    }
+
+    public Long dthrAddMinutoLong(Long dthrLong, int minuto){
+        dthrLong = dthrLong + (minuto * 60 * 1000);
+        return dthrLong;
+    }
+
+    public boolean verDthrServ(String dthrServ){
+
+        Date dataHoraServ = dthrStringToCalendar(dthrServ).getTime();
+        Long longDtServ =  dataHoraServ.getTime();
+
+        Date dataHoraCel = new Date();
+        Long longDtCel =  dataHoraCel.getTime();
+
+        Long dthrDif =  longDtServ - longDtCel;
+        Long diaDif = dthrDif/24/60/60/1000;
+
+        if((diaDif >= 0) && (diaDif <= 15)){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+    public Long difDthr(int dia, int mes, int ano, int hora, int minuto){
+
+        String diaStr;
+        if(dia < 10){
+            diaStr = "0" + dia;
+        }
+        else{
+            diaStr = String.valueOf(dia);
+        }
+
+        String mesStr;
+        if(mes < 10){
+            mesStr = "0" + mes;
+        }
+        else{
+            mesStr = String.valueOf(mes);
+        }
+
+        String anoStr = String.valueOf(ano);
+
+        String horaStr = "";
+        if(hora < 10){
+            horaStr = "0" + hora;
+        }
+        else{
+            horaStr = String.valueOf(hora);
+        }
+
+        String minutoStr = "";
+        if(minuto < 10){
+            minutoStr = "0" + minuto;
+        }
+        else{
+            minutoStr = String.valueOf(minuto);
+        }
+
         Calendar cal = Calendar.getInstance();
-        Long dt =  dataHora.getTime() - tz.getOffset(d.getTime());
-        cal.setTimeInMillis(dt);
+        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(diaStr));
+        cal.set(Calendar.MONTH, Integer.parseInt(mesStr) - 1);
+        cal.set(Calendar.YEAR, Integer.parseInt(anoStr));
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaStr));
+        cal.set(Calendar.MINUTE, Integer.parseInt(minutoStr));
+
+        Date dataHoraDig = cal.getTime();
+        Long longDtDig =  dataHoraDig.getTime();
+        Date dataHora = new Date();
+        Long dif = longDtDig - dataHora.getTime();
+
+        return dif;
+
+    }
+
+    public Long dif(){
+        ConfigBean configBean = new ConfigBean();
+        List<ConfigBean> configList = configBean.all();
+        Long dif = 0L;
+        if(configList.size() > 0){
+            configBean = configList.get(0);
+            dif = configBean.getDifDthrConfig();
+        }
+        configList.clear();
+        return dif;
+    }
+
+    public String dthrLongToString(Long dthrLong){
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(dthrLong);
 
         int mes = cal.get(Calendar.MONTH);
         int dia = cal.get(Calendar.DAY_OF_MONTH);
@@ -77,22 +173,14 @@ public class Tempo {
             minutosStr = String.valueOf(minutos);
         }
 
-        dataCerta = ""+diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr;
-
-        return dataCerta;
+        return ""+diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr;
 
     }
 
-    public String dataSHoraSemTZ(){
+    public String dtLongToString(Long dthrLong){
 
-        String dataCerta = "";
-
-        TimeZone tz = TimeZone.getDefault();
-        Date dataHora = new Date();
-        Date d = new Date();
         Calendar cal = Calendar.getInstance();
-        Long dt =  dataHora.getTime() + tz.getOffset(d.getTime());
-        cal.setTimeInMillis(dt);
+        cal.setTimeInMillis(dthrLong);
 
         int mes = cal.get(Calendar.MONTH);
         int dia = cal.get(Calendar.DAY_OF_MONTH);
@@ -115,56 +203,55 @@ public class Tempo {
             diaStr = String.valueOf(dia);
         }
 
-        dataCerta = ""+diaStr+"/"+mesStr+"/"+ano;
-
-        return dataCerta;
+        return ""+diaStr+"/"+mesStr+"/"+ano;
 
     }
 
-    public String dataSHoraComTZ(){
+    public Long dthrLongDiaMenos(int dia){
+        return Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthr()) - (dia*24*60*60*1000);
+    }
 
-        String dataCerta = "";
+    public Long dthrStringToLong(String dthrString){
+        return dthrStringToCalendar(dthrString).getTimeInMillis();
+    }
 
-        Date dataHora = new Date();
-        Calendar cal = Calendar.getInstance();
-        Long dt =  dataHora.getTime();
-        cal.setTimeInMillis(dt);
+    public Calendar dthrStringToCalendar(String dthrString){
 
-        int mes = cal.get(Calendar.MONTH);
-        int dia = cal.get(Calendar.DAY_OF_MONTH);
-        int ano = cal.get(Calendar.YEAR);
-        mes = mes + 1;
+        Calendar calendar = Calendar.getInstance();
 
-        String mesStr = "";
-        if(mes < 10){
-            mesStr = "0" + mes;
+        try {
+
+            String diaStr = dthrString.substring(0, 2);
+            String mesStr = dthrString.substring(3, 5);
+            String anoStr = dthrString.substring(6, 10);
+            String horaStr = dthrString.substring(11, 13);
+            String minutoStr = dthrString.substring(14, 16);
+
+            calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(diaStr));
+            calendar.set(Calendar.MONTH, Integer.parseInt(mesStr) - 1);
+            calendar.set(Calendar.YEAR, Integer.parseInt(anoStr));
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaStr));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(minutoStr));
+            calendar.set(Calendar.SECOND, 59);
+            calendar.set(Calendar.MILLISECOND, 9999);
+
         }
-        else{
-            mesStr = String.valueOf(mes);
+        catch (Exception e) {
+            LogErroDAO.getInstance().insertLogErro(e);
         }
 
-        String diaStr = "";
-        if(dia < 10){
-            diaStr = "0" + dia;
-        }
-        else{
-            diaStr = String.valueOf(dia);
-        }
-
-        dataCerta = ""+diaStr+"/"+mesStr+"/"+ano;
-
-        return dataCerta;
+        return calendar;
 
     }
 
-
-	public boolean isEnvioDado() {
-		return envioDado;
-	}
-
-	public void setEnvioDado(boolean envioDado) {
-		this.envioDado = envioDado;
-	}
+    public void zerarDifTempo(){
+        ConfigCTR configCTR = new ConfigCTR();
+        if (configCTR.hasElemConfig()) {
+            if (verDthrServ(configCTR.getConfig().getDtServConfig())) {
+                configCTR.setDifDthrConfig(0L);
+            }
+        }
+    }
 
 	public boolean verifDataHoraParada(String dthrInicio){
 
@@ -279,7 +366,6 @@ public class Tempo {
         int minutos = calendar.get(Calendar.MINUTE);
         mes = mes + 1;
 
-        mesStr = "";
         if(mes < 10){
             mesStr = "0" + mes;
         }
@@ -287,7 +373,6 @@ public class Tempo {
             mesStr = String.valueOf(mes);
         }
 
-        diaStr = "";
         if(dia < 10){
             diaStr = "0" + dia;
         }
@@ -323,140 +408,6 @@ public class Tempo {
             Log.i("PBM", "ANTES");
             return true;
         }
-
-    }
-
-    public String manipDHSemTZ(String dthr){
-
-        String diaStr = dthr.substring(0, 2);
-        String mesStr = dthr.substring(3, 5);
-        String anoStr = dthr.substring(6, 10);
-        String horaStr= dthr.substring(11, 13);
-        String minutoStr= dthr.substring(14, 16);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(diaStr));
-        cal.set(Calendar.MONTH, Integer.parseInt(mesStr) - 1);
-        cal.set(Calendar.YEAR, Integer.parseInt(anoStr));
-        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaStr));
-        cal.set(Calendar.MINUTE, Integer.parseInt(minutoStr));
-
-        Date dataHoraInicio = cal.getTime();
-        TimeZone tz = TimeZone.getDefault();
-        Date d = new Date();
-        Calendar calendar = Calendar.getInstance();
-        Long dt =  dataHoraInicio.getTime() - tz.getOffset(d.getTime());
-        calendar.setTimeInMillis(dt);
-
-        int mes = calendar.get(Calendar.MONTH);
-        int dia = calendar.get(Calendar.DAY_OF_MONTH);
-        int ano = calendar.get(Calendar.YEAR);
-        int horas = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutos = calendar.get(Calendar.MINUTE);
-        mes = mes + 1;
-
-        mesStr = "";
-        if(mes < 10){
-            mesStr = "0" + mes;
-        }
-        else{
-            mesStr = String.valueOf(mes);
-        }
-
-        diaStr = "";
-        if(dia < 10){
-            diaStr = "0" + dia;
-        }
-        else{
-            diaStr = String.valueOf(dia);
-        }
-
-        String horasStr = "";
-        if(horas < 10){
-            horasStr = "0" + horas;
-        }
-        else{
-            horasStr = String.valueOf(horas);
-        }
-
-        String minutosStr = "";
-        if(minutos < 10){
-            minutosStr = "0" + minutos;
-        }
-        else{
-            minutosStr = String.valueOf(minutos);
-        }
-
-        Log.i("PBM", "DATA HORA DE INICIO  = " +diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr);
-
-        return diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr;
-
-    }
-
-    public String manipDHComTZ(String dthr){
-
-        String diaStr = dthr.substring(0, 2);
-        String mesStr = dthr.substring(3, 5);
-        String anoStr = dthr.substring(6, 10);
-        String horaStr= dthr.substring(11, 13);
-        String minutoStr= dthr.substring(14, 16);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(diaStr));
-        cal.set(Calendar.MONTH, Integer.parseInt(mesStr) - 1);
-        cal.set(Calendar.YEAR, Integer.parseInt(anoStr));
-        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(horaStr));
-        cal.set(Calendar.MINUTE, Integer.parseInt(minutoStr));
-
-        Date dataHoraInicio = cal.getTime();
-        TimeZone tz = TimeZone.getDefault();
-        Date d = new Date();
-        Calendar calendar = Calendar.getInstance();
-        Long dt =  dataHoraInicio.getTime() + tz.getOffset(d.getTime());
-        calendar.setTimeInMillis(dt);
-
-        int mes = calendar.get(Calendar.MONTH);
-        int dia = calendar.get(Calendar.DAY_OF_MONTH);
-        int ano = calendar.get(Calendar.YEAR);
-        int horas = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutos = calendar.get(Calendar.MINUTE);
-        mes = mes + 1;
-
-        mesStr = "";
-        if(mes < 10){
-            mesStr = "0" + mes;
-        }
-        else{
-            mesStr = String.valueOf(mes);
-        }
-
-        diaStr = "";
-        if(dia < 10){
-            diaStr = "0" + dia;
-        }
-        else{
-            diaStr = String.valueOf(dia);
-        }
-
-        String horasStr = "";
-        if(horas < 10){
-            horasStr = "0" + horas;
-        }
-        else{
-            horasStr = String.valueOf(horas);
-        }
-
-        String minutosStr = "";
-        if(minutos < 10){
-            minutosStr = "0" + minutos;
-        }
-        else{
-            minutosStr = String.valueOf(minutos);
-        }
-
-        Log.i("PBM", "DATA HORA DE INICIO  = " +diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr);
-
-        return diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr;
 
     }
 
@@ -547,7 +498,6 @@ public class Tempo {
         }
 
         Log.i("PBM", "DATA HORA DE FINAL  = " +diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr);
-
         return diaStr+"/"+mesStr+"/"+ano+" "+horasStr+":"+minutosStr;
 
     }

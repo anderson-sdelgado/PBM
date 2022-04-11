@@ -19,8 +19,8 @@ import br.com.usinasantafe.pbm.model.bean.estaticas.ParametroBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.PneuBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ServicoBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
-import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.ApontMecanBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimMecanBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ConfigBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemCalibPneuBean;
@@ -70,8 +70,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(cs, REquipPneuBean.class);
 			TableUtils.createTable(cs, ServicoBean.class);
 
-			TableUtils.createTable(cs, ApontBean.class);
-			TableUtils.createTable(cs, BoletimBean.class);
+			TableUtils.createTable(cs, ApontMecanBean.class);
+			TableUtils.createTable(cs, BoletimMecanBean.class);
 			TableUtils.createTable(cs, BoletimPneuBean.class);
 			TableUtils.createTable(cs, ConfigBean.class);
 			TableUtils.createTable(cs, ItemCalibPneuBean.class);
@@ -88,9 +88,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db,
-			ConnectionSource cs,
-			int oldVersion,
-			int newVersion) {
+                          ConnectionSource cs,
+                          int oldVersion,
+                          int newVersion) {
 		
 		try {
 			

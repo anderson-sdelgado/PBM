@@ -10,13 +10,14 @@ import br.com.usinasantafe.pbm.control.MecanicoCTR;
 import br.com.usinasantafe.pbm.control.PneuCTR;
 import br.com.usinasantafe.pbm.util.conHttp.PostCadGenerico;
 import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
+import br.com.usinasantafe.pbm.view.ActivityGeneric;
 
 public class EnvioDadosServ {
 
     private static EnvioDadosServ instance = null;
     private UrlsConexaoHttp urlsConexaoHttp;
-    private int statusEnvio; //1 - Enviando; 2 - Existe Dados para Enviar; 3 - Todos os Dados Enviados
     private boolean enviando = false;
+    public static int status; //1 - Existe Dados para Enviar; 2 - Enviado; 3 - Todos os Dados Foram Enviados;
 
     public EnvioDadosServ() {
         urlsConexaoHttp = new UrlsConexaoHttp();
@@ -90,16 +91,15 @@ public class EnvioDadosServ {
 
     /////////////////////////MECANISMO DE ENVIO//////////////////////////////////
 
-    public void envioDados(Context context) {
-        enviando = true;
-        ConexaoWeb conexaoWeb = new ConexaoWeb();
-        if (conexaoWeb.verificaConexao(context)) {
+    public void envioDados(String activity) {
+        status = 1;
+        if(ActivityGeneric.connectNetwork) {
+            status = 2;
             envioDadosPrinc();
         }
         else{
-            enviando = false;
+            status = 3;
         }
-
     }
 
     public void envioDadosPrinc() {
@@ -134,15 +134,15 @@ public class EnvioDadosServ {
 
     public int getStatusEnvio() {
         if (enviando) {
-            statusEnvio = 1;
+            status = 1;
         } else {
             if (!verifDadosEnvio()) {
-                statusEnvio = 3;
+                status = 3;
             } else {
-                statusEnvio = 2;
+                status = 2;
             }
         }
-        return statusEnvio;
+        return status;
     }
 
     public void setEnviando(boolean enviando) {

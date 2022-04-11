@@ -37,7 +37,7 @@ public class ItemManutPneuDAO {
 
     public void insertItemManutPneu(ItemManutPneuBean itemManutPneuBean, Long idBolPneu){
         itemManutPneuBean.setIdBolItemManutPneu(idBolPneu);
-        itemManutPneuBean.setDthrItemManutPneu(Tempo.getInstance().dataHora());
+        itemManutPneuBean.setDthrItemManutPneu(Tempo.getInstance().dthr());
         itemManutPneuBean.insert();
     }
 

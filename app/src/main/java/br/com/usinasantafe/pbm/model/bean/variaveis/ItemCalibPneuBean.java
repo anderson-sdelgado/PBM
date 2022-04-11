@@ -15,7 +15,7 @@ public class ItemCalibPneuBean extends Entidade {
     @DatabaseField
     private Long idBolItemCalibPneu;
     @DatabaseField
-    private Long posItemCalibPneu;
+    private Long idPosItemCalibPneu;
     @DatabaseField
     private String nroPneuItemCalibPneu;
     @DatabaseField
@@ -36,12 +36,12 @@ public class ItemCalibPneuBean extends Entidade {
         this.idItemCalibPneu = idItemCalibPneu;
     }
 
-    public Long getPosItemCalibPneu() {
-        return posItemCalibPneu;
+    public Long getIdPosItemCalibPneu() {
+        return idPosItemCalibPneu;
     }
 
-    public void setPosItemCalibPneu(Long posItemCalibPneu) {
-        this.posItemCalibPneu = posItemCalibPneu;
+    public void setIdPosItemCalibPneu(Long idPosItemCalibPneu) {
+        this.idPosItemCalibPneu = idPosItemCalibPneu;
     }
 
     public String getNroPneuItemCalibPneu() {

@@ -15,13 +15,14 @@ import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.usinasantafe.pbm.MenuInicialActivity;
+import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
+import br.com.usinasantafe.pbm.view.MenuInicialActivity;
 import br.com.usinasantafe.pbm.control.ConfigCTR;
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
 import br.com.usinasantafe.pbm.control.PneuCTR;
+import br.com.usinasantafe.pbm.model.bean.AtualAplicBean;
 import br.com.usinasantafe.pbm.model.pst.GenericRecordable;
 import br.com.usinasantafe.pbm.util.conHttp.PostVerGenerico;
-import br.com.usinasantafe.pbm.model.bean.AtualAplicBean;
 import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
 
 /**
@@ -35,13 +36,14 @@ public class VerifDadosServ {
     private Context telaAtual;
     private Class telaProx;
     private ProgressDialog progressDialog;
-    private String dado;
+    private String dados;
     private String tipo;
     private AtualAplicBean atualAplicBean;
     private MenuInicialActivity menuInicialActivity;
     private PostVerGenerico postVerGenerico;
     private boolean verTerm;
     private boolean finalManutPneu;
+    public static int status;
 
     public VerifDadosServ() {
     }
@@ -50,6 +52,14 @@ public class VerifDadosServ {
         if (instance == null)
             instance = new VerifDadosServ();
         return instance;
+    }
+
+    public void reenvioVerif(String activity){
+        LogProcessoDAO.getInstance().insertLogProcesso("statusRetVerif()", activity);
+        if(statusRetVerif()){
+            LogProcessoDAO.getInstance().insertLogProcesso("envioVerif()", activity);
+            envioVerif(activity);
+        }
     }
 
     public void manipularDadosHttp(String result) {
@@ -95,7 +105,7 @@ public class VerifDadosServ {
         this.telaAtual = telaAtual;
         this.telaProx = telaProx;
         this.progressDialog = progressDialog;
-        this.dado = dado;
+        this.dados = dado;
         this.tipo = tipo;
 
         envioDados();
@@ -109,7 +119,7 @@ public class VerifDadosServ {
         this.telaAtual = telaAtual;
         this.telaProx = telaProx;
         this.progressDialog = progressDialog;
-        this.dado = dado;
+        this.dados = dado;
         this.tipo = tipo;
         this.finalManutPneu = finalManutPneu;
 
@@ -151,6 +161,22 @@ public class VerifDadosServ {
 
     }
 
+    public void envioVerif(String activity) {
+
+        status = 2;
+        this.urlsConexaoHttp = new UrlsConexaoHttp();
+        String[] url = {urlsConexaoHttp.urlVerifica(tipo), activity};
+        Map<String, Object> parametrosPost = new HashMap<String, Object>();
+        parametrosPost.put("dado", this.dados);
+
+        Log.i("PMM", "postVerGenerico.execute('" + urlsConexaoHttp.urlVerifica(tipo) + "'); - Dados de Envio = " + this.dados);
+        LogProcessoDAO.getInstance().insertLogProcesso("postVerGenerico.execute('" + urlsConexaoHttp.urlVerifica(tipo) + "'); - Dados de Envio = " + this.dados, activity);
+        postVerGenerico = new PostVerGenerico();
+        postVerGenerico.setParametrosPost(parametrosPost);
+        postVerGenerico.execute(url);
+
+    }
+
     public void envioAtualizacao() {
 
         JsonArray jsonArray = new JsonArray();
@@ -177,9 +203,9 @@ public class VerifDadosServ {
 
         String[] url = {urlsConexaoHttp.urlVerifica(tipo)};
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
-        parametrosPost.put("dado", String.valueOf(dado));
+        parametrosPost.put("dado", String.valueOf(dados));
 
-        Log.i("PMM", "VERIFICA = " + String.valueOf(dado));
+        Log.i("PMM", "VERIFICA = " + String.valueOf(dados));
 
         postVerGenerico = new PostVerGenerico();
         postVerGenerico.setParametrosPost(parametrosPost);
@@ -222,6 +248,17 @@ public class VerifDadosServ {
             });
             alerta.show();
         }
+    }
+
+    public Boolean statusRetVerif() {
+        boolean ret = false;
+        ConfigCTR configCTR = new ConfigCTR();
+        if(configCTR.hasElemConfig()){
+            if(configCTR.getStatusRetVerif() == 1){
+                ret = true;
+            }
+        }
+        return ret;
     }
 
 }

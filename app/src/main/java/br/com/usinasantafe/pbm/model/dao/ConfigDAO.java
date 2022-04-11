@@ -37,4 +37,15 @@ public class ConfigDAO {
         return ret;
     }
 
+    public void setDifDthrConfig(Long difDthr){
+        ConfigBean configBean = getConfig();
+        configBean.setDifDthrConfig(difDthr);
+        configBean.update();
+    }
+
+    public Long getStatusRetVerif(){
+        ConfigBean configBean = getConfig();
+        return configBean.getStatusRetVerif();
+    }
+
 }

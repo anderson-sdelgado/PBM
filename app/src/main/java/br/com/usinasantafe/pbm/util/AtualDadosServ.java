@@ -15,10 +15,9 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import br.com.usinasantafe.pbm.MenuInicialActivity;
+import br.com.usinasantafe.pbm.model.pst.GenericRecordable;
 import br.com.usinasantafe.pbm.util.conHttp.GetBDGenerico;
 import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
-import br.com.usinasantafe.pbm.model.pst.GenericRecordable;
 
 public class AtualDadosServ {
 

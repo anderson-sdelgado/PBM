@@ -13,15 +13,15 @@ public class BoletimPneuBean extends Entidade {
     @DatabaseField(generatedId=true)
     private Long idBolPneu;
     @DatabaseField
-    private Long idApontBolPneu;
+    private Long idFuncBolPneu;
     @DatabaseField
-    private Long funcBolPneu;
-    @DatabaseField
-    private Long equipBolPneu;
+    private Long idEquipBolPneu;
     @DatabaseField
     private String dthrBolPneu;
     @DatabaseField
-    private Long statusBolPneu;  //1 - Aberto; 2 - Encerrado
+    private Long dthrLongBolPneu;
+    @DatabaseField
+    private Long statusBolPneu;  //1 - Aberto; 2 - Fechado; 3 - Enviado
 
     public BoletimPneuBean() {
     }
@@ -34,20 +34,20 @@ public class BoletimPneuBean extends Entidade {
         this.idBolPneu = idBolPneu;
     }
 
-    public Long getFuncBolPneu() {
-        return funcBolPneu;
+    public Long getIdFuncBolPneu() {
+        return idFuncBolPneu;
     }
 
-    public void setFuncBolPneu(Long funcBolPneu) {
-        this.funcBolPneu = funcBolPneu;
+    public void setIdFuncBolPneu(Long idFuncBolPneu) {
+        this.idFuncBolPneu = idFuncBolPneu;
     }
 
-    public Long getEquipBolPneu() {
-        return equipBolPneu;
+    public Long getIdEquipBolPneu() {
+        return idEquipBolPneu;
     }
 
-    public void setEquipBolPneu(Long equipBolPneu) {
-        this.equipBolPneu = equipBolPneu;
+    public void setIdEquipBolPneu(Long idEquipBolPneu) {
+        this.idEquipBolPneu = idEquipBolPneu;
     }
 
     public String getDthrBolPneu() {
@@ -58,19 +58,19 @@ public class BoletimPneuBean extends Entidade {
         this.dthrBolPneu = dthrBolPneu;
     }
 
+    public Long getDthrLongBolPneu() {
+        return dthrLongBolPneu;
+    }
+
+    public void setDthrLongBolPneu(Long dthrLongBolPneu) {
+        this.dthrLongBolPneu = dthrLongBolPneu;
+    }
+
     public Long getStatusBolPneu() {
         return statusBolPneu;
     }
 
     public void setStatusBolPneu(Long statusBolPneu) {
         this.statusBolPneu = statusBolPneu;
-    }
-
-    public Long getIdApontBolPneu() {
-        return idApontBolPneu;
-    }
-
-    public void setIdApontBolPneu(Long idApontBolPneu) {
-        this.idApontBolPneu = idApontBolPneu;
     }
 }

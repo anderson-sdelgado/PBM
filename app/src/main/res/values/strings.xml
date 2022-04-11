@@ -173,4 +173,5 @@
     <string name="texto_pneu_ret">PNEU RETIRADO:</string>
     <string name="texto_pressao_enc">PRESSÃO ENCONTRADA:</string>
     <string name="texto_pressao_col">PRESSÃO COLOCADA:</string>
+    <string name="texto_inicio">INICIANDO O APLICATIVO...</string>
 </resources>

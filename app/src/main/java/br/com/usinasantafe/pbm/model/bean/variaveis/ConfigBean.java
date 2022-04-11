@@ -16,6 +16,14 @@ public class ConfigBean extends Entidade {
     private Long equipConfig;
     @DatabaseField
     private String senhaConfig;
+    @DatabaseField
+    private Long flagLogErro;
+    @DatabaseField
+    private String dtServConfig;
+    @DatabaseField
+    private Long difDthrConfig;
+    @DatabaseField
+    private Long statusRetVerif; // 0 - Não Verificando; 1 - Verificando
 
     public ConfigBean() {
     }
@@ -42,5 +50,37 @@ public class ConfigBean extends Entidade {
 
     public void setSenhaConfig(String senhaConfig) {
         this.senhaConfig = senhaConfig;
+    }
+
+    public Long getFlagLogErro() {
+        return flagLogErro;
+    }
+
+    public void setFlagLogErro(Long flagLogErro) {
+        this.flagLogErro = flagLogErro;
+    }
+
+    public Long getDifDthrConfig() {
+        return difDthrConfig;
+    }
+
+    public void setDifDthrConfig(Long difDthrConfig) {
+        this.difDthrConfig = difDthrConfig;
+    }
+
+    public String getDtServConfig() {
+        return dtServConfig;
+    }
+
+    public void setDtServConfig(String dtServConfig) {
+        this.dtServConfig = dtServConfig;
+    }
+
+    public Long getStatusRetVerif() {
+        return statusRetVerif;
+    }
+
+    public void setStatusRetVerif(Long statusRetVerif) {
+        this.statusRetVerif = statusRetVerif;
     }
 }

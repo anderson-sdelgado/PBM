@@ -10,7 +10,7 @@ public class ConfigCTR {
     public ConfigCTR() {
     }
 
-    public boolean hasElements(){
+    public boolean hasElemConfig(){
         ConfigDAO configDAO = new ConfigDAO();
         return configDAO.hasElements();
     }
@@ -45,5 +45,14 @@ public class ConfigCTR {
         configDAO.insert(idEquip, senha);
     }
 
+    public void setDifDthrConfig(Long difDthr){
+        ConfigDAO configDAO = new ConfigDAO();
+        configDAO.setDifDthrConfig(difDthr);
+    }
+
+    public Long getStatusRetVerif(){
+        ConfigDAO configDAO = new ConfigDAO();
+        return configDAO.getStatusRetVerif();
+    }
 
 }

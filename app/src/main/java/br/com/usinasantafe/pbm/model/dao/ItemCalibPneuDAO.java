@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.usinasantafe.pbm.model.bean.variaveis.ApontBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemCalibPneuBean;
 import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.util.Tempo;
@@ -19,7 +18,7 @@ public class ItemCalibPneuDAO {
 
     public void insertItemCalibPneu(ItemCalibPneuBean itemCalibPneuBean, Long idBolPneu){
         itemCalibPneuBean.setIdBolItemCalibPneu(idBolPneu);
-        itemCalibPneuBean.setDthrItemCalibPneu(Tempo.getInstance().dataHora());
+        itemCalibPneuBean.setDthrItemCalibPneu(Tempo.getInstance().dthr());
         itemCalibPneuBean.insert();
     }
 

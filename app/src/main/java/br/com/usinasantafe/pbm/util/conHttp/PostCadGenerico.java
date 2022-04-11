@@ -71,7 +71,6 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 		} catch (Exception e) {
 			Log.i("PMM", "Erro = " + e);
 			EnvioDadosServ.getInstance().setEnviando(false);
-			Tempo.getInstance().setEnvioDado(true);
 			if(bufferedReader != null){
 				try {
 					bufferedReader.close();
@@ -105,13 +104,10 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 			MecanicoCTR mecanicoCTR = new MecanicoCTR();
 			PneuCTR pneuCTR = new PneuCTR();
 			if(result.trim().startsWith("BOLFECHADOMEC")){
-				mecanicoCTR.delBolFechado(result);
+				mecanicoCTR.updateBolFechado(result);
 			}
 			else if(result.trim().startsWith("BOLABERTOMEC")){
-				mecanicoCTR.atualBolAberto(result);
-			}
-			else if(result.trim().startsWith("APONTMEC")){
-				mecanicoCTR.atualApont(result);
+				mecanicoCTR.updateBolAberto(result);
 			}
 			else if(result.trim().startsWith("BOLPNEU")){
 				pneuCTR.delBolPneu(result);

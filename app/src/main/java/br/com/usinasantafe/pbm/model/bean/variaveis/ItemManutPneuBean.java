@@ -15,7 +15,7 @@ public class ItemManutPneuBean extends Entidade {
     @DatabaseField
     private Long idBolItemManutPneu;
     @DatabaseField
-    private Long posItemManutPneu;
+    private Long idPosItemManutPneu;
     @DatabaseField
     private String nroPneuRetItemManutPneu;
     @DatabaseField
@@ -42,12 +42,12 @@ public class ItemManutPneuBean extends Entidade {
         this.idBolItemManutPneu = idBolItemManutPneu;
     }
 
-    public Long getPosItemManutPneu() {
-        return posItemManutPneu;
+    public Long getIdPosItemManutPneu() {
+        return idPosItemManutPneu;
     }
 
-    public void setPosItemManutPneu(Long posItemManutPneu) {
-        this.posItemManutPneu = posItemManutPneu;
+    public void setIdPosItemManutPneu(Long idPosItemManutPneu) {
+        this.idPosItemManutPneu = idPosItemManutPneu;
     }
 
     public String getNroPneuRetItemManutPneu() {

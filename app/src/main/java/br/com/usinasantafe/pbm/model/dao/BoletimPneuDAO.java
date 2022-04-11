@@ -19,10 +19,11 @@ public class BoletimPneuDAO {
 
         if(!verBoletimPneuAberto()){
             BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
-            boletimPneuBean.setIdApontBolPneu(0L);
-            boletimPneuBean.setEquipBolPneu(idEquip);
-            boletimPneuBean.setFuncBolPneu(matricColab);
-            boletimPneuBean.setDthrBolPneu(Tempo.getInstance().dataHora());
+            boletimPneuBean.setIdEquipBolPneu(idEquip);
+            boletimPneuBean.setIdFuncBolPneu(matricColab);
+            String dthr = Tempo.getInstance().dthr();
+            boletimPneuBean.setDthrBolPneu(dthr);
+            boletimPneuBean.setDthrLongBolPneu(Tempo.getInstance().dthrStringToLong(dthr));
             boletimPneuBean.setStatusBolPneu(1L);
             boletimPneuBean.insert();
         }
@@ -79,18 +80,13 @@ public class BoletimPneuDAO {
         return idBolPneuList;
     }
 
-    public void deleteBoletimPneu(Long idbolPneu){
+    public void updateEnviadoBoletimPneu(Long idbolPneu){
         List<BoletimPneuBean> boletimPneuList = boletimPneuIdList(idbolPneu);
         for (BoletimPneuBean boletimPneuBean : boletimPneuList) {
-            boletimPneuBean.delete();
+            boletimPneuBean.setStatusBolPneu(3L);
+            boletimPneuBean.update();
         }
         boletimPneuList.clear();
-    }
-
-    public void deleteBoletimPneu(List<BoletimPneuBean> boletimPneuList){
-        for (BoletimPneuBean boletimPneuBean : boletimPneuList) {
-            boletimPneuBean.delete();
-        }
     }
 
     public ArrayList<Long> idBolPneuFechado(){

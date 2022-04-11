@@ -7,9 +7,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,7 +22,7 @@ import java.net.URL;
  * Created by anderson on 24/07/2017.
  */
 
-public class AtualizarAplicativo extends AsyncTask<String ,Integer ,Boolean> {
+public class AtualizarAplicativo extends AsyncTask<String, Integer, Boolean> {
 
     private ProgressDialog bar;
     private Context context;
@@ -88,7 +89,7 @@ public class AtualizarAplicativo extends AsyncTask<String ,Integer ,Boolean> {
 
         try {
 
-            URL url = new URL(URL);
+            java.net.URL url = new URL(URL);
 
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             c.setRequestMethod("GET");
