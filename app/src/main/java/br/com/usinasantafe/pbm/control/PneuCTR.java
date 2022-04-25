@@ -14,9 +14,12 @@ import java.util.Objects;
 
 import br.com.usinasantafe.pbm.model.bean.estaticas.PneuBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimMecanBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemCalibPneuBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemManutPneuBean;
+import br.com.usinasantafe.pbm.model.dao.ApontMecanDAO;
+import br.com.usinasantafe.pbm.model.dao.BoletimMecanDAO;
 import br.com.usinasantafe.pbm.model.dao.BoletimPneuDAO;
 import br.com.usinasantafe.pbm.model.dao.ItemCalibPneuDAO;
 import br.com.usinasantafe.pbm.model.dao.ItemManutPneuDAO;
@@ -103,6 +106,27 @@ public class PneuCTR {
     public void fecharBoletim(){
         BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
         boletimPneuDAO.fecharBoletimPneu();
+    }
+
+    public void deleteBoletimEnviado(){
+
+        BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
+        ArrayList<BoletimPneuBean> boletimPneuArrayList = boletimPneuDAO.boletimExcluirArrayList();
+
+        for (BoletimPneuBean boletimPneuBean : boletimPneuArrayList) {
+
+            ItemCalibPneuDAO itemCalibPneuDAO = new ItemCalibPneuDAO();
+            ArrayList<Long> idItemCalibPneuArrayList = itemCalibPneuDAO.idItemCalibPneuArrayList(itemCalibPneuDAO.itemCalibPneuList(boletimPneuBean.getIdBolPneu()));
+            itemCalibPneuDAO.deleteItemCalibPneu(idItemCalibPneuArrayList);
+
+            ItemManutPneuDAO itemManutPneuDAO = new ItemManutPneuDAO();
+            ArrayList<Long> idItemManutPneuArrayList = itemManutPneuDAO.idItemManutPneuArrayList(itemManutPneuDAO.itemManutPneuList(boletimPneuBean.getIdBolPneu()));
+            itemManutPneuDAO.deleteItemManutPneu(idItemManutPneuArrayList);
+
+            boletimPneuDAO.deleteBoletimMecan(boletimPneuBean.getIdBolPneu());
+
+        }
+
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,15 +258,14 @@ public class PneuCTR {
 
     }
 
-    public void delBolPneu(String retorno) {
+    public void updateBolEnviado(String result) {
 
         try {
 
-            int pos1 = retorno.indexOf("#") + 1;
-            String dados = retorno.substring(pos1);
+            String[] retorno = result.split("_");
 
-            JSONObject jObj = new JSONObject(dados);
-            JSONArray jsonArray = jObj.getJSONArray("dados");
+            JSONObject jObj = new JSONObject(retorno[1]);
+            JSONArray jsonArray = jObj.getJSONArray("boletimpneu");
 
             if (jsonArray.length() > 0) {
 
@@ -252,12 +275,6 @@ public class PneuCTR {
                     Gson gson = new Gson();
 
                     BoletimPneuBean boletimPneuBean = gson.fromJson(objeto.toString(), BoletimPneuBean.class);
-
-                    ItemCalibPneuDAO itemCalibPneuDAO = new ItemCalibPneuDAO();
-                    itemCalibPneuDAO.deleteItemCalibPneu(boletimPneuBean.getIdBolPneu());
-
-                    ItemManutPneuDAO itemManutPneuDAO = new ItemManutPneuDAO();
-                    itemManutPneuDAO.deleteItemManutPneu(boletimPneuBean.getIdBolPneu());
 
                     BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
                     boletimPneuDAO.updateEnviadoBoletimPneu(boletimPneuBean.getIdBolPneu());

@@ -32,19 +32,21 @@ public class ItemCalibPneuDAO {
 
     }
 
-    public void deleteItemCalibPneu(Long idBolPneu){
-
-        List<ItemCalibPneuBean> itemCalibPneuList = itemCalibPneuList(idBolPneu);
+    public ArrayList<Long> idItemCalibPneuArrayList(List<ItemCalibPneuBean> itemCalibPneuList) {
+        ArrayList<Long> idItemCalibPneuList = new ArrayList<Long>();
         for (ItemCalibPneuBean itemCalibPneuBean : itemCalibPneuList) {
-            itemCalibPneuBean.delete();
+            idItemCalibPneuList.add(itemCalibPneuBean.getIdItemCalibPneu());
         }
-        itemCalibPneuList.clear();
-
+        return idItemCalibPneuList;
     }
 
     public List<ItemCalibPneuBean> itemCalibPneuList(Long idBolPneu){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBol(idBolPneu));
+
         ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
-        return itemCalibPneuBean.get("idBolItemCalibPneu", idBolPneu);
+        return itemCalibPneuBean.get(pesqArrayList);
     }
 
     public List<ItemCalibPneuBean> itemCalibPneuList(ArrayList<Long> idBolPneuArrayList){
@@ -84,6 +86,22 @@ public class ItemCalibPneuDAO {
 
         return jsonItemCalibPneu.toString();
 
+    }
+
+    public ArrayList<String> itemCalibPneuAllArrayList(ArrayList<String> dadosArrayList){
+        dadosArrayList.add("ITEM CALIB PNEU");
+        ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
+        List<ItemCalibPneuBean> itemCalibPneuList = itemCalibPneuBean.orderBy("idItemCalibPneu", true);
+        for (ItemCalibPneuBean itemCalibPneuBeanBD : itemCalibPneuList) {
+            dadosArrayList.add(dadosItemCalibPneu(itemCalibPneuBeanBD));
+        }
+        itemCalibPneuList.clear();
+        return dadosArrayList;
+    }
+
+    private String dadosItemCalibPneu(ItemCalibPneuBean itemCalibPneuBean){
+        Gson gsonCabec = new Gson();
+        return gsonCabec.toJsonTree(itemCalibPneuBean, itemCalibPneuBean.getClass()).toString();
     }
 
     private EspecificaPesquisa getPesqIdBol(Long idBol){

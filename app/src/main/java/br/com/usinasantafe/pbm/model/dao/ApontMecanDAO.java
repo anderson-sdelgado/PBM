@@ -231,6 +231,22 @@ public class ApontMecanDAO {
 
     }
 
+    public ArrayList<String> apontMecanAllArrayList(ArrayList<String> dadosArrayList){
+        dadosArrayList.add("APONTAMENTO MECANICO");
+        ApontMecanBean apontMecanBean = new ApontMecanBean();
+        List<ApontMecanBean> apontMecanList = apontMecanBean.orderBy("idApontMecan", true);
+        for (ApontMecanBean apontMecanBeanBD : apontMecanList) {
+            dadosArrayList.add(dadosApontMecan(apontMecanBeanBD));
+        }
+        apontMecanList.clear();
+        return dadosArrayList;
+    }
+
+    private String dadosApontMecan(ApontMecanBean apontMecanBean){
+        Gson gsonCabec = new Gson();
+        return gsonCabec.toJsonTree(apontMecanBean, apontMecanBean.getClass()).toString();
+    }
+
     private EspecificaPesquisa getPesqIdApontMecan(Long idApont){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idApontMecan");

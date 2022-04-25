@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import br.com.usinasantafe.pbm.PBMContext;
 import br.com.usinasantafe.pbm.R;
+import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 
 public class OpcaoInterroperFinalActivity extends ActivityGeneric {
 
@@ -22,9 +23,17 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opcao_interroper_final);
 
-        ArrayList<String> itens = new ArrayList<String>();
-
         pbmContext = (PBMContext) getApplication();
+
+        LogProcessoDAO.getInstance().insertLogProcesso("ArrayList<String> itens = new ArrayList<String>();\n" +
+                "        itens.add(\"FINALIZAR\");\n" +
+                "        itens.add(\"INTERROPER\");\n" +
+                "        itens.add(\"CANCELAR\");\n" +
+                "        AdapterList adapterList = new AdapterList(this, itens);\n" +
+                "        lista = (ListView) findViewById(R.id.listViewMenuOpcao);\n" +
+                "        lista.setAdapter(adapterList);", getLocalClassName());
+
+        ArrayList<String> itens = new ArrayList<String>();
 
         itens.add("FINALIZAR");
         itens.add("INTERROPER");
@@ -33,34 +42,45 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
         AdapterList adapterList = new AdapterList(this, itens);
         lista = (ListView) findViewById(R.id.listViewMenuOpcao);
         lista.setAdapter(adapterList);
-
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position,
                                     long id) {
 
+                LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                        "                                    long id) {\n" +
+                        "                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);\n" +
+                        "                String text = textView.getText().toString();", getLocalClassName());
                 TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 String text = textView.getText().toString();
 
                 if (text.equals("FINALIZAR")) {
 
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (text.equals(\"FINALIZAR\")) {\n" +
+                            "                    pbmContext.getMecanicoCTR().finalizarApont();\n" +
+                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);", getLocalClassName());
                     pbmContext.getMecanicoCTR().finalizarApont();
-
                     Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);
                     startActivity(it);
                     finish();
 
                 } else if (text.equals("INTERROPER")) {
 
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"INTERROPER\")) {\n" +
+                            "                    pbmContext.getMecanicoCTR().interroperApont();\n" +
+                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);", getLocalClassName());
                     pbmContext.getMecanicoCTR().interroperApont();
-
                     Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);
                     startActivity(it);
                     finish();
 
                 } else if (text.equals("CANCELAR")) {
 
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"CANCELAR\")) {\n" +
+                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);", getLocalClassName());
                     Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);
                     startActivity(it);
                     finish();

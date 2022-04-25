@@ -13,14 +13,15 @@ import java.util.Map;
 
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
 import br.com.usinasantafe.pbm.control.PneuCTR;
+import br.com.usinasantafe.pbm.model.dao.LogErroDAO;
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
-import br.com.usinasantafe.pbm.util.Tempo;
 
 public class PostCadGenerico extends AsyncTask<String, Void, String> {
 
 
 	private static PostCadGenerico instance = null;
 	private Map<String, Object> parametrosPost = null;
+	private String activity;
 
 	public PostCadGenerico() {
 	}
@@ -69,24 +70,23 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 			connection.disconnect();
 			
 		} catch (Exception e) {
-			Log.i("PMM", "Erro = " + e);
-			EnvioDadosServ.getInstance().setEnviando(false);
+			EnvioDadosServ.status = 1;
+			LogErroDAO.getInstance().insertLogErro(e);
 			if(bufferedReader != null){
 				try {
 					bufferedReader.close();
 				} catch (Exception er) {
-					Log.i("PMM", "Erro = " + er);
+					LogErroDAO.getInstance().insertLogErro(er);
 				}
 				
 			}
 		}
 		finally{
-			
 			if(bufferedReader != null){
 				try {
 					bufferedReader.close();
 				} catch (Exception e) {
-					Log.i("PMM", "Erro = " + e);
+					LogErroDAO.getInstance().insertLogErro(e);
 				}
 				
 			}
@@ -98,23 +98,8 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 
 	protected void onPostExecute(String result) {
 
-		try {
-			EnvioDadosServ.getInstance().setEnviando(false);
-			Log.i("ECM", "VALOR RECEBIDO --> " + result);
-			MecanicoCTR mecanicoCTR = new MecanicoCTR();
-			PneuCTR pneuCTR = new PneuCTR();
-			if(result.trim().startsWith("BOLFECHADOMEC")){
-				mecanicoCTR.updateBolFechado(result);
-			}
-			else if(result.trim().startsWith("BOLABERTOMEC")){
-				mecanicoCTR.updateBolAberto(result);
-			}
-			else if(result.trim().startsWith("BOLPNEU")){
-				pneuCTR.delBolPneu(result);
-			}
-		} catch (Exception e) {
-			EnvioDadosServ.getInstance().setEnviando(true);
-		}
+		Log.i("PMM", "VALOR RECEBIDO CAD --> " + result);
+		EnvioDadosServ.getInstance().recDados(result, activity);
 		
     }
 

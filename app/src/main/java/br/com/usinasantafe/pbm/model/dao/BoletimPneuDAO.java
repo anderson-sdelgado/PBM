@@ -7,7 +7,9 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimMecanBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
+import br.com.usinasantafe.pbm.model.pst.EspecificaPesquisa;
 import br.com.usinasantafe.pbm.util.Tempo;
 
 public class BoletimPneuDAO {
@@ -34,6 +36,19 @@ public class BoletimPneuDAO {
         BoletimPneuBean boletimPneuBean = getBoletimPneuAberto();
         boletimPneuBean.setStatusBolPneu(2L);
         boletimPneuBean.update();
+    }
+
+    public void deleteBoletimMecan(Long idBol){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBoletim(idBol));
+
+        BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
+        List<BoletimMecanBean> boletimMecanList = boletimMecanBean.get(pesqArrayList);
+        boletimMecanBean = boletimMecanList.get(0);
+        boletimMecanBean.delete();
+        boletimMecanList.clear();
+
     }
 
     public boolean verBoletimPneuAberto(){
@@ -63,13 +78,21 @@ public class BoletimPneuDAO {
     }
 
     public List<BoletimPneuBean> boletimPneuAbertoList(){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqStatusAberto());
+
         BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
-        return boletimPneuBean.get("statusBolPneu", 1L);
+        return boletimPneuBean.get(pesqArrayList);
     }
 
     public List<BoletimPneuBean> boletimPneuFechadoList(){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqStatusFechado());
+
         BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
-        return boletimPneuBean.get("statusBolPneu", 2L);
+        return boletimPneuBean.get(pesqArrayList);
     }
 
     public ArrayList<Long> idBoletimPneuList(List<BoletimPneuBean> boletimPneuList){
@@ -87,6 +110,25 @@ public class BoletimPneuDAO {
             boletimPneuBean.update();
         }
         boletimPneuList.clear();
+    }
+
+    public ArrayList<BoletimPneuBean> boletimExcluirArrayList() {
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqStatusEnviado());
+
+        BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
+        List<BoletimPneuBean> boletimPneuList =  boletimPneuBean.get(pesqArrayList);
+
+        ArrayList<BoletimPneuBean> boletimPneuArrayList = new ArrayList<>();
+        for (BoletimPneuBean boletimPneuBeanBD : boletimPneuList) {
+            if(boletimPneuBeanBD.getDthrLongBolPneu() < Tempo.getInstance().dthrLongDiaMenos(3)) {
+                boletimPneuArrayList.add(boletimPneuBeanBD);
+            }
+        }
+        boletimPneuList.clear();
+        return boletimPneuArrayList;
+
     }
 
     public ArrayList<Long> idBolPneuFechado(){
@@ -120,6 +162,54 @@ public class BoletimPneuDAO {
 
         return jsonBolFechado.toString();
 
+    }
+
+    public ArrayList<String> boletimPneuAllArrayList(ArrayList<String> dadosArrayList){
+        dadosArrayList.add("BOLETIM PNEU");
+        BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
+        List<BoletimPneuBean> boletimPneuList = boletimPneuBean.orderBy("idBolPneu", true);
+        for (BoletimPneuBean boletimPneuBeanBD : boletimPneuList) {
+            dadosArrayList.add(dadosBoletimPneu(boletimPneuBeanBD));
+        }
+        boletimPneuList.clear();
+        return dadosArrayList;
+    }
+
+    private String dadosBoletimPneu(BoletimPneuBean boletimPneuBean){
+        Gson gsonCabec = new Gson();
+        return gsonCabec.toJsonTree(boletimPneuBean, boletimPneuBean.getClass()).toString();
+    }
+
+    private EspecificaPesquisa getPesqStatusAberto(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusBolPneu");
+        pesquisa.setValor(1L);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqStatusFechado(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusBolPneu");
+        pesquisa.setValor(2L);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqStatusEnviado(){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("statusBolPneu");
+        pesquisa.setValor(3L);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqIdBoletim(Long idBol){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("idBolPneu");
+        pesquisa.setValor(idBol);
+        pesquisa.setTipo(1);
+        return pesquisa;
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.usinasantafe.pbm.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -54,7 +55,7 @@ public class TelaInicialActivity extends ActivityGeneric {
             VerifDadosServ.status = 3;
 
             LogProcessoDAO.getInstance().insertLogProcesso("atualizarAplic()", getLocalClassName());
-//            atualizarAplic();
+            atualizarAplic();
 
         }
     };
@@ -63,10 +64,65 @@ public class TelaInicialActivity extends ActivityGeneric {
         LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getCheckListCTR().deleteChecklist();\n" +
                 "        pmmContext.getMotoMecFertCTR().deleteBolEnviado();\n" +
                 "        pmmContext.getConfigCTR().deleteLogs();", getLocalClassName());
+        pbmContext.getMecanicoCTR().deleteBoletimSemApont();
         pbmContext.getMecanicoCTR().deleteBoletimEnviado();
+        pbmContext.getPneuCTR().deleteBoletimEnviado();
+        pbmContext.getConfigCTR().deleteLogs();
+    }
 
-//        pbmContext.getMotoMecFertCTR().deleteBolEnviado();
-//        pbmContext.getConfigCTR().deleteLogs();
+    public void atualizarAplic(){
+        LogProcessoDAO.getInstance().insertLogProcesso("public void atualizarAplic(){", getLocalClassName());
+        if (connectNetwork) {
+            LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {", getLocalClassName());
+            if (pbmContext.getConfigCTR().hasElemConfig()) {
+                LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getConfigCTR().hasElemConfig()\n" +
+                        "                customHandler.postDelayed(updateTimerThread, 10000);", getLocalClassName());
+                customHandler.postDelayed(encerraAtualThread, 10000);
+                LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getConfigCTR().verAtualAplic(pmmContext.versaoAplic, this, getLocalClassName());", getLocalClassName());
+                pbmContext.getConfigCTR().verAtualAplic(pbmContext.versaoAplic, this, getLocalClassName());
+            }
+            else{
+                LogProcessoDAO.getInstance().insertLogProcesso("else{\n" +
+                        "                VerifDadosServ.status = 3;\n" +
+                        "goMenuInicial();", getLocalClassName());
+                VerifDadosServ.status = 3;
+                goMenuInicial();
+            }
+        } else {
+            LogProcessoDAO.getInstance().insertLogProcesso("else{\n" +
+                    "                VerifDadosServ.status = 3;\n" +
+                    "goMenuInicial();", getLocalClassName());
+            VerifDadosServ.status = 3;
+            goMenuInicial();
+        }
+    }
+
+    private Runnable encerraAtualThread = new Runnable() {
+
+        public void run() {
+            LogProcessoDAO.getInstance().insertLogProcesso("    private Runnable updateTimerThread = new Runnable() {\n" +
+                    "        public void run() {", getLocalClassName());
+            LogProcessoDAO.getInstance().insertLogProcesso("verifEnvio();", getLocalClassName());
+            if(VerifDadosServ.status < 3) {
+                LogProcessoDAO.getInstance().insertLogProcesso("if(VerifDadosServ.status < 3) {\n" +
+                        "VerifDadosServ.getInstance().cancel();", getLocalClassName());
+                VerifDadosServ.getInstance().cancel();
+            }
+            LogProcessoDAO.getInstance().insertLogProcesso("goMenuInicial();", getLocalClassName());
+            goMenuInicial();
+        }
+    };
+
+    public void goMenuInicial(){
+
+        customHandler.removeCallbacks(encerraAtualThread);
+        LogProcessoDAO.getInstance().insertLogProcesso("    public void goMenuInicial(){\n" +
+                "        customHandler.removeCallbacks(encerraAtualThread);\n" +
+                "        Intent it = new Intent(TelaInicialActivity.this, MenuInicialActivity.class);", getLocalClassName());
+        Intent it = new Intent(TelaInicialActivity.this, MenuInicialActivity.class);
+        startActivity(it);
+        finish();
+
     }
 
 }

@@ -25,6 +25,8 @@ import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ConfigBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemCalibPneuBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemManutPneuBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.LogErroBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.LogProcessoBean;
 
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
@@ -76,6 +78,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(cs, ConfigBean.class);
 			TableUtils.createTable(cs, ItemCalibPneuBean.class);
 			TableUtils.createTable(cs, ItemManutPneuBean.class);
+			TableUtils.createTable(cs, LogErroBean.class);
+			TableUtils.createTable(cs, LogProcessoBean.class);
 
 		}
 		catch(Exception e){

@@ -6,11 +6,13 @@ import android.content.Context;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.usinasantafe.pbm.model.bean.AtualAplicBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ComponenteBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.EscalaTrabBean;
@@ -28,6 +30,7 @@ import br.com.usinasantafe.pbm.model.dao.ComponenteDAO;
 import br.com.usinasantafe.pbm.model.dao.EscalaTrabDAO;
 import br.com.usinasantafe.pbm.model.dao.ItemOSDAO;
 import br.com.usinasantafe.pbm.model.dao.LogErroDAO;
+import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pbm.model.dao.OSDAO;
 import br.com.usinasantafe.pbm.model.dao.ParadaDAO;
 import br.com.usinasantafe.pbm.model.dao.ParametroDAO;
@@ -84,34 +87,34 @@ public class MecanicoCTR {
 
     /////////////////////////// SALVAR/ATUALIZAR/EXCLUIR DADOS ///////////////////////////////////
 
-    public void insertParametro(String parametros){
+    public void insertParametro(String parametros) throws JSONException {
 
-        try {
+        JSONObject jObj = new JSONObject(parametros);
+        JSONArray jsonArray = jObj.getJSONArray("parametro");
 
-            JSONObject jObj = new JSONObject(parametros);
-            JSONArray jsonArray = jObj.getJSONArray("parametro");
+        if (jsonArray.length() > 0) {
 
-            if (jsonArray.length() > 0) {
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject objeto = jsonArray.getJSONObject(i);
-                    Gson gson = new Gson();
-                    ParametroDAO parametroDAO = new ParametroDAO();
-                    parametroDAO.insert(gson.fromJson(objeto.toString(), ParametroBean.class));
-                }
-
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject objeto = jsonArray.getJSONObject(i);
+                Gson gson = new Gson();
+                AtualAplicBean atualAplicBean = gson.fromJson(objeto.toString(), AtualAplicBean.class);
+                ParametroDAO parametroDAO = new ParametroDAO();
+                parametroDAO.insert(atualAplicBean);
             }
 
-        } catch (Exception e) {
         }
+
     }
 
-    public void atualSalvarBoletim(ColabBean colabBean){
+    public void atualSalvarBoletim(ColabBean colabBean, String activity){
 
         ConfigCTR configCTR = new ConfigCTR();
 
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
         boletimMecanDAO.atualSalvarBoletim(configCTR.getConfig().getEquipConfig(), colabBean.getIdColab(), getEscalaTrab(colabBean.getIdEscalaTrabColab()).getHorarioEntEscalaTrab());
+
+        LogProcessoDAO.getInstance().insertLogProcesso("EnvioDadosServ.getInstance().envioDados(activity);", activity);
+        EnvioDadosServ.getInstance().envioDados(activity);
 
     }
 
@@ -120,9 +123,12 @@ public class MecanicoCTR {
         boletimMecanDAO.atualBoletimSApont();
     }
 
-    public void salvarApont(){
+    public void salvarApont(Long itemOSApontMecan, Long paradaApontMecan, Long realizApontMecan){
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
+        apontMecanBean.setItemOSApontMecan(itemOSApontMecan);
+        apontMecanBean.setParadaApontMecan(paradaApontMecan);
+        apontMecanBean.setRealizApontMecan(realizApontMecan);
         apontMecanDAO.salvarApont(apontMecanBean, getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab(), boletimMecanDAO.getBoletimApont());
     }
 
@@ -153,7 +159,7 @@ public class MecanicoCTR {
         apontMecanDAO.interroperApont(apontMecanDAO.apontEnvioList(boletimMecanDAO.getBoletimApont().getIdBolMecan()).get(0));
     }
 
-    public void delBolSApont() {
+    public void deleteBoletimSemApont() {
 
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
@@ -448,6 +454,8 @@ public class MecanicoCTR {
             ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
             ArrayList<Long> idApontMecanArrayList = apontMecanDAO.idApontMecanArrayList(apontMecanDAO.apontMecanList(boletimMecanBean.getIdBolMecan()));
             apontMecanDAO.deleteApontMecan(idApontMecanArrayList);
+
+            boletimMecanDAO.deleteBoletimMecan(boletimMecanBean.getIdBolMecan());
 
         }
 

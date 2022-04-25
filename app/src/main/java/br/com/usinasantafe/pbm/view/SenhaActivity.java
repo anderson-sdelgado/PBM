@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import br.com.usinasantafe.pbm.PBMContext;
 import br.com.usinasantafe.pbm.R;
+import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 
 public class SenhaActivity extends ActivityGeneric {
 
@@ -22,40 +23,57 @@ public class SenhaActivity extends ActivityGeneric {
         pbmContext = (PBMContext) getApplication();
 
         editTextSenha = (EditText)  findViewById(R.id.editTextSenha);
-        Button btOkSenha =  (Button) findViewById(R.id.buttonOkSenha);
-        Button btCancSenha = (Button) findViewById(R.id.buttonCancSenha);
+        Button buttonOkSenha =  (Button) findViewById(R.id.buttonOkSenha);
+        Button buttonCancSenha = (Button) findViewById(R.id.buttonCancSenha);
 
-        btOkSenha.setOnClickListener(new View.OnClickListener() {
-
+        buttonOkSenha.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-
+                LogProcessoDAO.getInstance().insertLogProcesso("btOkSenha.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @SuppressWarnings(\"unchecked\")\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {", getLocalClassName());
                 if (!pbmContext.getConfigCTR().hasElemConfig()) {
-
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (!pbmContext.getConfigCTR().hasElemConfig()) {\n" +
+                            "                    Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);", getLocalClassName());
                     Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);
                     startActivity(it);
                     finish();
-
                 } else {
-
-                    if (pbmContext.getConfigCTR().verConfig(editTextSenha.getText().toString())) {
-
-                        Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);
-                        startActivity(it);
-                        finish();
-
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
+                    if(pbmContext.getVerTela() == 5){
+                        LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getVerTela() == 5){", getLocalClassName());
+                        if (pbmContext.getConfigCTR().verConfig(editTextSenha.getText().toString())) {
+                            LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getConfigCTR().verConfig(editTextSenha.getText().toString())) {\n" +
+                                    "                        Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);", getLocalClassName());
+                            Intent it = new Intent(SenhaActivity.this, ConfigActivity.class);
+                            startActivity(it);
+                            finish();
+                        }
                     }
-
+                    else{
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
+                        if (editTextSenha.getText().toString().equals("fgbny946")) {
+                            LogProcessoDAO.getInstance().insertLogProcesso("if (editTextSenha.getText().toString().equals(\"fgbny946\")) {\n" +
+                                    "Intent it = new Intent(SenhaActivity.this, LogProcessoActivity.class);", getLocalClassName());
+                            Intent it = new Intent(SenhaActivity.this, LogProcessoActivity.class);
+                            startActivity(it);
+                            finish();
+                        }
+                    }
                 }
 
             }
         });
 
-        btCancSenha.setOnClickListener(new View.OnClickListener() {
-
+        buttonCancSenha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LogProcessoDAO.getInstance().insertLogProcesso("btCancSenha.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {\n" +
+                        "                Intent it = new Intent(SenhaActivity.this, MenuInicialActivity.class);", getLocalClassName());
                 Intent it = new Intent(SenhaActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();

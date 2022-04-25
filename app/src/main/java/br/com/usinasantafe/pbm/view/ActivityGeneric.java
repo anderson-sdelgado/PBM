@@ -40,6 +40,12 @@ public class ActivityGeneric extends OrmLiteBaseActivity<DatabaseHelper> {
     }
 
     @Override
+    protected void onStop() {
+        unregisterReceiver(networkChangeListerner);
+        super.onStop();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 

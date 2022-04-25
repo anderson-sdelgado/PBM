@@ -8,11 +8,17 @@ import br.com.usinasantafe.pbm.control.PneuCTR;
 
 public class PBMContext extends Application {
 
-    public static String versaoAplic = "2.00";
+    public static String versaoAplic = "3.00";
     private ConfigCTR configCTR;
     private MecanicoCTR mecanicoCTR;
     private PneuCTR pneuCTR;
-    private int verTela; //1 - Parada Normal; 2 - Parada para Fechar Boletim; 3 - Calibragem de Pneu; 4 - Troca de Pneu;
+    private int verTela;
+    // 1 - Parada Normal;
+    // 2 - Parada para Fechar Boletim;
+    // 3 - Calibragem de Pneu;
+    // 4 - Troca de Pneu;
+    // 5 - Configuração;
+    // 6 - Log
 
     @Override
     public void onCreate() {

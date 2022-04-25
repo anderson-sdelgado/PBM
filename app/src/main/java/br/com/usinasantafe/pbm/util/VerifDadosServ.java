@@ -24,6 +24,7 @@ import br.com.usinasantafe.pbm.model.bean.AtualAplicBean;
 import br.com.usinasantafe.pbm.model.pst.GenericRecordable;
 import br.com.usinasantafe.pbm.util.conHttp.PostVerGenerico;
 import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
+import br.com.usinasantafe.pbm.view.TelaInicialActivity;
 
 /**
  * Created by anderson on 16/11/2015.
@@ -38,8 +39,7 @@ public class VerifDadosServ {
     private ProgressDialog progressDialog;
     private String dados;
     private String tipo;
-    private AtualAplicBean atualAplicBean;
-    private MenuInicialActivity menuInicialActivity;
+    private TelaInicialActivity telaInicialActivity;
     private PostVerGenerico postVerGenerico;
     private boolean verTerm;
     private boolean finalManutPneu;
@@ -69,17 +69,9 @@ public class VerifDadosServ {
             if (!result.equals("")) {
 
                 if (this.tipo.equals("Atualiza")) {
-
-                    String verAtual = result.trim();
-
-                    if (verAtual.equals("SIM")) {
-                        AtualizarAplicativo atualizarAplicativo = new AtualizarAplicativo();
-                        atualizarAplicativo.setContext(this.menuInicialActivity);
-                        atualizarAplicativo.execute();
-                    } else {
-                        this.menuInicialActivity.startTimer(verAtual);
-                    }
-
+                    MecanicoCTR mecanicoCTR = new MecanicoCTR();
+                    mecanicoCTR.insertParametro(result.trim());
+                    this.telaInicialActivity.goMenuInicial();
                 }
                 else if(this.tipo.equals("OS")) {
                     MecanicoCTR mecanicoCTR = new MecanicoCTR();
@@ -127,37 +119,14 @@ public class VerifDadosServ {
 
     }
 
-    public void verAtualAplic(String versaoAplic, MenuInicialActivity menuInicialActivity, ProgressDialog progressDialog) {
+    public void verifAtualAplic(String dados, TelaInicialActivity telaInicialActivity, String activity) {
 
         urlsConexaoHttp = new UrlsConexaoHttp();
-        this.progressDialog = progressDialog;
         this.tipo = "Atualiza";
-        this.menuInicialActivity = menuInicialActivity;
+        this.dados = dados;
+        this.telaInicialActivity = telaInicialActivity;
 
-        AtualAplicBean atualAplicBean = new AtualAplicBean();
-        atualAplicBean.setVersaoAtual(versaoAplic);
-
-        ConfigCTR configCTR = new ConfigCTR();
-
-        atualAplicBean.setIdEquipAtual(configCTR.getConfig().getEquipConfig());
-
-        JsonArray jsonArray = new JsonArray();
-
-        Gson gson = new Gson();
-        jsonArray.add(gson.toJsonTree(atualAplicBean, atualAplicBean.getClass()));
-
-        JsonObject json = new JsonObject();
-        json.add("dados", jsonArray);
-
-        Log.i("PMM", "LISTA = " + json.toString());
-
-        String[] url = {urlsConexaoHttp.urlVerifica(tipo)};
-        Map<String, Object> parametrosPost = new HashMap<String, Object>();
-        parametrosPost.put("dado", json.toString());
-
-        postVerGenerico = new PostVerGenerico();
-        postVerGenerico.setParametrosPost(parametrosPost);
-        postVerGenerico.execute(url);
+        envioVerif(activity);
 
     }
 
@@ -171,28 +140,6 @@ public class VerifDadosServ {
 
         Log.i("PMM", "postVerGenerico.execute('" + urlsConexaoHttp.urlVerifica(tipo) + "'); - Dados de Envio = " + this.dados);
         LogProcessoDAO.getInstance().insertLogProcesso("postVerGenerico.execute('" + urlsConexaoHttp.urlVerifica(tipo) + "'); - Dados de Envio = " + this.dados, activity);
-        postVerGenerico = new PostVerGenerico();
-        postVerGenerico.setParametrosPost(parametrosPost);
-        postVerGenerico.execute(url);
-
-    }
-
-    public void envioAtualizacao() {
-
-        JsonArray jsonArray = new JsonArray();
-
-        Gson gson = new Gson();
-        jsonArray.add(gson.toJsonTree(atualAplicBean, atualAplicBean.getClass()));
-
-        JsonObject json = new JsonObject();
-        json.add("dados", jsonArray);
-
-        Log.i("PMM", "LISTA = " + json.toString());
-
-        String[] url = {urlsConexaoHttp.urlVerifica(tipo)};
-        Map<String, Object> parametrosPost = new HashMap<String, Object>();
-        parametrosPost.put("dado", json.toString());
-
         postVerGenerico = new PostVerGenerico();
         postVerGenerico.setParametrosPost(parametrosPost);
         postVerGenerico.execute(url);
@@ -213,9 +160,8 @@ public class VerifDadosServ {
 
     }
 
-
-    public void cancelVer() {
-        verTerm = true;
+    public void cancel() {
+        status = 3;
         if (postVerGenerico.getStatus() == AsyncTask.Status.RUNNING) {
             postVerGenerico.cancel(true);
         }

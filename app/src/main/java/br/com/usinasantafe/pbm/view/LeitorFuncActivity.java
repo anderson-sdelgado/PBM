@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import br.com.usinasantafe.pbm.PBMContext;
 import br.com.usinasantafe.pbm.R;
+import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pbm.util.ConnectNetwork;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ColabBean;
+import br.com.usinasantafe.pbm.zxing.CaptureActivity;
 
 public class LeitorFuncActivity extends ActivityGeneric {
 
@@ -35,6 +37,13 @@ public class LeitorFuncActivity extends ActivityGeneric {
         Button buttonDigFunc = (Button) findViewById(R.id.buttonDigFunc);
         Button buttonAtualPadrao = (Button) findViewById(R.id.buttonAtualPadrao);
 
+        LogProcessoDAO.getInstance().insertLogProcesso("colabBean = new ColabBean();\n" +
+                "        colabBean.setIdColab(0L);\n" +
+                "        colabBean.setMatricColab(0L);\n" +
+                "        colabBean.setIdEscalaTrabColab(0L);\n" +
+                "        colabBean.setNomeColab(\"\");\n" +
+                "        txtRetFunc.setText(\"Por Favor, realize a leitura do Cartão do Colaborador Mecânico.\");", getLocalClassName());
+
         colabBean = new ColabBean();
         colabBean.setIdColab(0L);
         colabBean.setMatricColab(0L);
@@ -44,15 +53,20 @@ public class LeitorFuncActivity extends ActivityGeneric {
         txtRetFunc.setText("Por Favor, realize a leitura do Cartão do Colaborador Mecânico.");
 
         buttonOkFunc.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonOkFunc.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {", getLocalClassName());
                 if (colabBean.getIdColab() > 0) {
 
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (colabBean.getIdColab() > 0) {\n" +
+                            "                    pbmContext.getMecanicoCTR().atualBoletimSApont();\n" +
+                            "                    pbmContext.getMecanicoCTR().atualSalvarBoletim(colabBean, getLocalClassName());\n" +
+                            "                    Intent it = new Intent(LeitorFuncActivity.this, MenuFuncaoActivity.class);", getLocalClassName());
                     pbmContext.getMecanicoCTR().atualBoletimSApont();
-                    pbmContext.getMecanicoCTR().atualSalvarBoletim(colabBean);
-
+                    pbmContext.getMecanicoCTR().atualSalvarBoletim(colabBean, getLocalClassName());
                     Intent it = new Intent(LeitorFuncActivity.this, MenuFuncaoActivity.class);
                     startActivity(it);
                     finish();
@@ -62,9 +76,12 @@ public class LeitorFuncActivity extends ActivityGeneric {
         });
 
         buttonCancFunc.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonCancFunc.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {\n" +
+                        "                Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);", getLocalClassName());
                 Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();
@@ -73,9 +90,12 @@ public class LeitorFuncActivity extends ActivityGeneric {
         });
 
         buttonDigFunc.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonDigFunc.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {\n" +
+                        "                Intent it = new Intent(LeitorFuncActivity.this, DigFuncActivity.class);", getLocalClassName());
                 Intent it = new Intent(LeitorFuncActivity.this, DigFuncActivity.class);
                 startActivity(it);
                 finish();
@@ -87,6 +107,12 @@ public class LeitorFuncActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
 
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonAtualPadrao.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {\n" +
+                        "                AlertDialog.Builder alerta = new AlertDialog.Builder(LeitorFuncActivity.this);\n" +
+                        "                alerta.setTitle(\"ATENÇÃO\");\n" +
+                        "                alerta.setMessage(\"DESEJA REALMENTE ATUALIZAR BASE DE DADOS?\");", getLocalClassName());
                 AlertDialog.Builder alerta = new AlertDialog.Builder(LeitorFuncActivity.this);
                 alerta.setTitle("ATENÇÃO");
                 alerta.setMessage("DESEJA REALMENTE ATUALIZAR BASE DE DADOS?");
@@ -94,8 +120,18 @@ public class LeitorFuncActivity extends ActivityGeneric {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
+                                "                    @Override\n" +
+                                "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
                         if (connectNetwork) {
 
+                            LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                                    "                            progressBar = new ProgressDialog(LeitorFuncActivity.this);\n" +
+                                    "                            progressBar.setCancelable(true);\n" +
+                                    "                            progressBar.setMessage(\"Atualizando Colaborador...\");\n" +
+                                    "                            progressBar.show();\n" +
+                                    "                            pbmContext.getMecanicoCTR().atualDadosColab(LeitorFuncActivity.this\n" +
+                                    "                                    , LeitorFuncActivity.class, progressBar);", getLocalClassName());
                             progressBar = new ProgressDialog(LeitorFuncActivity.this);
                             progressBar.setCancelable(true);
                             progressBar.setMessage("Atualizando Colaborador...");
@@ -106,13 +142,19 @@ public class LeitorFuncActivity extends ActivityGeneric {
 
                         } else {
 
+                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                    "                            AlertDialog.Builder alerta = new AlertDialog.Builder(LeitorFuncActivity.this);\n" +
+                                    "                            alerta.setTitle(\"ATENÇÃO\");\n" +
+                                    "                            alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
                             AlertDialog.Builder alerta = new AlertDialog.Builder(LeitorFuncActivity.this);
                             alerta.setTitle("ATENÇÃO");
                             alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
                             alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
+                                    LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                                            "                                @Override\n" +
+                                            "                                public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
                                 }
                             });
 
@@ -127,7 +169,9 @@ public class LeitorFuncActivity extends ActivityGeneric {
                 alerta.setPositiveButton("NÃO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
+                                "                    @Override\n" +
+                                "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
                     }
                 });
 
@@ -140,21 +184,34 @@ public class LeitorFuncActivity extends ActivityGeneric {
     }
 
     public void callZXing(View view) {
-        Intent it = new Intent(LeitorFuncActivity.this, br.com.usinasantafe.pbm.zxing.CaptureActivity.class);
+        LogProcessoDAO.getInstance().insertLogProcesso("public void callZXing(View view) {\n" +
+                "        Intent it = new Intent(LeitorFuncActivity.this, CaptureActivity.class);\n" +
+                "        startActivityForResult(it, REQUEST_CODE);", getLocalClassName());
+        Intent it = new Intent(LeitorFuncActivity.this, CaptureActivity.class);
         startActivityForResult(it, REQUEST_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        LogProcessoDAO.getInstance().insertLogProcesso("@Override\n" +
+                "    public void onActivityResult(int requestCode, int resultCode, Intent data) {", getLocalClassName());
         if (REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
+            LogProcessoDAO.getInstance().insertLogProcesso("if (REQUEST_CODE == requestCode && RESULT_OK == resultCode) {\n" +
+                    "            String matricula = data.getStringExtra(\"SCAN_RESULT\");", getLocalClassName());
             String matricula = data.getStringExtra("SCAN_RESULT");
             if (matricula.length() == 8) {
+                LogProcessoDAO.getInstance().insertLogProcesso("if (matricula.length() == 8) {\n" +
+                        "                matricula = matricula.substring(0, 7);", getLocalClassName());
                 matricula = matricula.substring(0, 7);
                 if (pbmContext.getMecanicoCTR().verMatricColab(Long.parseLong(matricula))) {
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().verMatricColab(Long.parseLong(matricula))) {\n" +
+                            "                    colabBean = pbmContext.getMecanicoCTR().getColab(Long.parseLong(matricula));\n" +
+                            "                    txtRetFunc.setText(matricula + \"\\n\" + colabBean.getNomeColab());", getLocalClassName());
                     colabBean = pbmContext.getMecanicoCTR().getColab(Long.parseLong(matricula));
                     txtRetFunc.setText(matricula + "\n" + colabBean.getNomeColab());
                 } else {
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                            "                    txtRetFunc.setText(\"Funcionário Inexistente\");", getLocalClassName());
                     txtRetFunc.setText("Funcionário Inexistente");
                 }
             }
@@ -163,6 +220,8 @@ public class LeitorFuncActivity extends ActivityGeneric {
     }
 
     public void onBackPressed() {
+        LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed() {\n" +
+                "        Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);", getLocalClassName());
         Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);
         startActivity(it);
         finish();

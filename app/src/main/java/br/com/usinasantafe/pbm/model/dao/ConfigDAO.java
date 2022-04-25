@@ -13,6 +13,7 @@ public class ConfigDAO {
         ConfigBean configBean = new ConfigBean();
         configBean.setEquipConfig(idEquip);
         configBean.setSenhaConfig(senha);
+        configBean.setDifDthrConfig(0L);
         configBean.insert();
     }
 

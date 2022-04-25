@@ -95,6 +95,19 @@ public class BoletimMecanDAO {
         boletimMecanBean.update();
     }
 
+    public void deleteBoletimMecan(Long idBol){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBoletim(idBol));
+
+        BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
+        List<BoletimMecanBean> boletimMecanList = boletimMecanBean.get(pesqArrayList);
+        boletimMecanBean = boletimMecanList.get(0);
+        boletimMecanBean.delete();
+        boletimMecanList.clear();
+
+    }
+
     public ArrayList<BoletimMecanBean> boletimExcluirArrayList(){
 
         ArrayList pesqArrayList = new ArrayList();
@@ -148,10 +161,8 @@ public class BoletimMecanDAO {
     }
 
     public List<BoletimMecanBean> boletimAllList(){
-
         BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
         return boletimMecanBean.all();
-
     }
 
     public BoletimMecanBean getBoletimApont(){
@@ -225,10 +236,26 @@ public class BoletimMecanDAO {
 
     }
 
-    private EspecificaPesquisa getPesqIdBoletim(Long idBoletim){
+    public ArrayList<String> boletimMecanAllArrayList(ArrayList<String> dadosArrayList){
+        dadosArrayList.add("BOLETIM MECANICO");
+        BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
+        List<BoletimMecanBean> boletimMecanList = boletimMecanBean.orderBy("idBolMecan", true);
+        for (BoletimMecanBean boletimMecanBeanBD : boletimMecanList) {
+            dadosArrayList.add(dadosBoletimMecanFert(boletimMecanBeanBD));
+        }
+        boletimMecanList.clear();
+        return dadosArrayList;
+    }
+
+    private String dadosBoletimMecanFert(BoletimMecanBean boletimMecanBean){
+        Gson gsonCabec = new Gson();
+        return gsonCabec.toJsonTree(boletimMecanBean, boletimMecanBean.getClass()).toString();
+    }
+
+    private EspecificaPesquisa getPesqIdBoletim(Long idBol){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idBolMecan");
-        pesquisa.setValor(idBoletim);
+        pesquisa.setValor(idBol);
         pesquisa.setTipo(1);
         return pesquisa;
     }

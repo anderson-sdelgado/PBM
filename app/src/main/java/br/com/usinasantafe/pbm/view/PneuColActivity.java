@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import br.com.usinasantafe.pbm.PBMContext;
 import br.com.usinasantafe.pbm.R;
-import br.com.usinasantafe.pbm.util.ConnectNetwork;
+import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
 
 public class PneuColActivity extends ActivityGeneric {
@@ -33,14 +33,27 @@ public class PneuColActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
 
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonOkPneuCol.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @SuppressWarnings(\"rawtypes\")\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {", getLocalClassName());
                 if (!editTextPadrao.getText().toString().equals("")) {
 
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {\n" +
+                            "                    pbmContext.getPneuCTR().getItemManutPneuBean().setNroPneuColItemManutPneu(editTextPadrao.getText().toString());", getLocalClassName());
                     pbmContext.getPneuCTR().getItemManutPneuBean().setNroPneuColItemManutPneu(editTextPadrao.getText().toString());
-
                     if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){
-
+                        LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){", getLocalClassName());
                         if (connectNetwork) {
 
+                            LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                                    "                            progressBar = new ProgressDialog(PneuColActivity.this);\n" +
+                                    "                            progressBar.setCancelable(true);\n" +
+                                    "                            progressBar.setMessage(\"Atualizando Pneu...\");\n" +
+                                    "                            progressBar.show();\n" +
+                                    "                            customHandler.postDelayed(updateTimerThread, 10000);\n" +
+                                    "                            pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()\n" +
+                                    "                                    , PneuColActivity.this, MenuInicialActivity.class, progressBar, true);", getLocalClassName());
                             progressBar = new ProgressDialog(PneuColActivity.this);
                             progressBar.setCancelable(true);
                             progressBar.setMessage("Atualizando Pneu...");
@@ -51,21 +64,27 @@ public class PneuColActivity extends ActivityGeneric {
                             pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()
                                     , PneuColActivity.this, MenuInicialActivity.class, progressBar, true);
 
-                        }
-                        else{
+                        } else {
 
+                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                    "                            salvarBoletimPneu();\n" +
+                                    "                            Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);", getLocalClassName());
                             salvarBoletimPneu();
                             Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
                             startActivity(it);
+                            finish();
 
                         }
 
-                    }
-                    else {
+                    } else {
 
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                        salvarBoletimPneu();\n" +
+                                "                        Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);", getLocalClassName());
                         salvarBoletimPneu();
                         Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
                         startActivity(it);
+                        finish();
                     }
 
                 }
@@ -79,6 +98,11 @@ public class PneuColActivity extends ActivityGeneric {
             @Override
             public void onClick(View v) {
                 if (editTextPadrao.getText().toString().length() > 0) {
+                    LogProcessoDAO.getInstance().insertLogProcesso("buttonCancPneuCol.setOnClickListener(new View.OnClickListener() {\n" +
+                            "            @Override\n" +
+                            "            public void onClick(View v) {\n" +
+                            "                if (editTextPadrao.getText().toString().length() > 0) {\n" +
+                            "                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));", getLocalClassName());
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
             }
@@ -87,6 +111,8 @@ public class PneuColActivity extends ActivityGeneric {
     }
 
     public void onBackPressed() {
+        LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed() {\n" +
+                "        Intent it = new Intent(PneuColActivity.this, PneuRetActivity.class);", getLocalClassName());
         Intent it = new Intent(PneuColActivity.this, PneuRetActivity.class);
         startActivity(it);
         finish();
@@ -96,15 +122,23 @@ public class PneuColActivity extends ActivityGeneric {
 
         public void run() {
 
+            LogProcessoDAO.getInstance().insertLogProcesso("private Runnable updateTimerThread = new Runnable() {\n" +
+                    "        public void run() {", getLocalClassName());
             if(!VerifDadosServ.getInstance().isVerTerm()) {
 
-                VerifDadosServ.getInstance().cancelVer();
+                LogProcessoDAO.getInstance().insertLogProcesso("if(!VerifDadosServ.getInstance().isVerTerm()) {\n" +
+                        "                VerifDadosServ.getInstance().cancel();\n" +
+                        "        public void run() {", getLocalClassName());
+                VerifDadosServ.getInstance().cancel();
                 if (progressBar.isShowing()) {
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (progressBar.isShowing()) {\n" +
+                            "                    progressBar.dismiss();", getLocalClassName());
                     progressBar.dismiss();
                 }
 
+                LogProcessoDAO.getInstance().insertLogProcesso("salvarBoletimPneu();\n" +
+                        "                Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);", getLocalClassName());
                 salvarBoletimPneu();
-
                 Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
                 startActivity(it);
                 finish();
@@ -116,9 +150,12 @@ public class PneuColActivity extends ActivityGeneric {
 
     public void salvarBoletimPneu(){
 
+        LogProcessoDAO.getInstance().insertLogProcesso("public void salvarBoletimPneu(){\n" +
+                "        pbmContext.getPneuCTR().salvarItemManutPneu();\n" +
+                "        pbmContext.getPneuCTR().fecharBoletim();\n" +
+                "        Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);", getLocalClassName());
         pbmContext.getPneuCTR().salvarItemManutPneu();
         pbmContext.getPneuCTR().fecharBoletim();
-
         Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
         startActivity(it);
         finish();

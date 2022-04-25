@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import br.com.usinasantafe.pbm.PBMContext;
 import br.com.usinasantafe.pbm.R;
+import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 
 public class DescrOSActivity extends ActivityGeneric {
 
@@ -25,6 +26,8 @@ public class DescrOSActivity extends ActivityGeneric {
 
         pbmContext = (PBMContext) getApplication();
 
+        LogProcessoDAO.getInstance().insertLogProcesso("textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getOS().getEquipOS()));\n" +
+                "        textViewDescEquip.setText(pbmContext.getMecanicoCTR().getOS().getDescrEquipOS());", getLocalClassName());
         textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getOS().getEquipOS()));
         textViewDescEquip.setText(pbmContext.getMecanicoCTR().getOS().getDescrEquipOS());
 
@@ -32,6 +35,10 @@ public class DescrOSActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonOkDescrOS.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {\n" +
+                        "                Intent it = new Intent(DescrOSActivity.this, ListaItemOSActivity.class);", getLocalClassName());
                 Intent it = new Intent(DescrOSActivity.this, ListaItemOSActivity.class);
                 startActivity(it);
                 finish();
@@ -42,6 +49,10 @@ public class DescrOSActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonCancDescrOS.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {\n" +
+                        "                Intent it = new Intent(DescrOSActivity.this, OSActivity.class);", getLocalClassName());
                 Intent it = new Intent(DescrOSActivity.this, OSActivity.class);
                 startActivity(it);
                 finish();

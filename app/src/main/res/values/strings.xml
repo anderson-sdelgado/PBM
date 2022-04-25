@@ -126,7 +126,7 @@
     <string name="wifi_ssid_label">Network Name</string>
     <string name="wifi_type_label">Type</string>
     <string name="app_name">PBM</string>
-    <string name="texto_menu_principal">PRINCIPAL - V 2.00</string>
+    <string name="texto_menu_principal">PRINCIPAL - V 3.00</string>
     <string name="texto_item_list">TESTE</string>
     <string name="texto_num1">1</string>
     <string name="texto_num2">2</string>
@@ -174,4 +174,10 @@
     <string name="texto_pressao_enc">PRESSÃO ENCONTRADA:</string>
     <string name="texto_pressao_col">PRESSÃO COLOCADA:</string>
     <string name="texto_inicio">INICIANDO O APLICATIVO...</string>
+    <string name="texto_titulo_log_base_dado">LOG - BASE DADO</string>
+    <string name="texto_padrao_avancar">AVANÇAR</string>
+    <string name="texto_titulo_log_erro">LOG - ERRO</string>
+    <string name="texto_titulo_log_proc">LOG - PROCESSO</string>
+    <string name="texto_hist_horario">10:08</string>
+    <string name="texto_hist_impl_transb">TRANSBORDO: 1001</string>
 </resources>
