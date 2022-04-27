@@ -26,8 +26,8 @@ public class LogErroDAO {
             LogErroBean logErroBean = new LogErroBean();
             logErroBean.setIdEquip(configBean.getEquipConfig());
             logErroBean.setException(throwableToString(ex));
-            logErroBean.setDthr(Tempo.getInstance().dthr());
-            logErroBean.setDthrLong(Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthr()));
+            logErroBean.setDthr(Tempo.getInstance().dthrAtualString());
+            logErroBean.setDthrLong(Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthrAtualString()));
             logErroBean.setStatus(1L);
             logErroBean.insert();
         }
@@ -40,8 +40,8 @@ public class LogErroDAO {
             LogErroBean logErroBean = new LogErroBean();
             logErroBean.setIdEquip(configBean.getEquipConfig());
             logErroBean.setException("RETORNO SERVIDOR COM FALHA = " + erro);
-            logErroBean.setDthr(Tempo.getInstance().dthr());
-            logErroBean.setDthrLong(Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthr()));
+            logErroBean.setDthr(Tempo.getInstance().dthrAtualString());
+            logErroBean.setDthrLong(Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthrAtualString()));
             logErroBean.setStatus(1L);
             logErroBean.insert();
         }
@@ -70,7 +70,7 @@ public class LogErroDAO {
         LogErroBean logErroBean = new LogErroBean();
         List<LogErroBean> logErroList = logErroBean.all();
         for(LogErroBean logErroBeanBD : logErroList){
-            if(logErroBeanBD.getDthrLong() < Tempo.getInstance().dthrLongDiaMenos(3)){
+            if(logErroBeanBD.getDthrLong() < Tempo.getInstance().subDiaLong(3)){
                 logErroBeanBD.delete();
             }
         }

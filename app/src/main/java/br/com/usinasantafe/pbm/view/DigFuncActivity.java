@@ -176,8 +176,8 @@ public class DigFuncActivity extends ActivityGeneric {
 
     public void onBackPressed()  {
         LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed()  {\n" +
-                "        Intent it = new Intent(DigFuncActivity.this, MenuInicialActivity.class);", getLocalClassName());
-        Intent it = new Intent(DigFuncActivity.this, MenuInicialActivity.class);
+                "        Intent it = new Intent(DigFuncActivity.this, TelaInicialActivity.class);", getLocalClassName());
+        Intent it = new Intent(DigFuncActivity.this, TelaInicialActivity.class);
         startActivity(it);
         finish();
     }

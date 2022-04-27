@@ -33,7 +33,7 @@ public class BoletimMecanDAO {
 
         if(boletimList.size() == 0){
             BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
-            String dthrInicial = Tempo.getInstance().dt() + " " + horarioEntr;
+            String dthrInicial = Tempo.getInstance().dtAtualString() + " " + horarioEntr;
             boletimMecanBean.setDthrInicialBolMecan(dthrInicial);
             boletimMecanBean.setDthrInicialLongBolMecan(Tempo.getInstance().dthrStringToLong(dthrInicial));
             boletimMecanBean.setIdEquipBolMecan(idEquip);
@@ -80,7 +80,7 @@ public class BoletimMecanDAO {
     }
 
     public void fecharBoletim(BoletimMecanBean boletimMecanBean){
-        String dthrFinal = Tempo.getInstance().dthr();
+        String dthrFinal = Tempo.getInstance().dthrAtualString();
         boletimMecanBean.setDthrFinalBolMecan(dthrFinal);
         boletimMecanBean.setDthrFinalLongBolMecan(Tempo.getInstance().dthrStringToLong(dthrFinal));
         boletimMecanBean.setStatusBolMecan(2L);
@@ -118,7 +118,7 @@ public class BoletimMecanDAO {
 
         ArrayList<BoletimMecanBean> boletimMecanArrayList = new ArrayList<>();
         for (BoletimMecanBean boletimMecanBeanBD : boletimMecanList) {
-            if(boletimMecanBeanBD.getDthrFinalLongBolMecan() < Tempo.getInstance().dthrLongDiaMenos(3)) {
+            if(boletimMecanBeanBD.getDthrFinalLongBolMecan() < Tempo.getInstance().subDiaLong(3)) {
                 boletimMecanArrayList.add(boletimMecanBeanBD);
             }
         }
@@ -165,17 +165,17 @@ public class BoletimMecanDAO {
         return boletimMecanBean.all();
     }
 
-    public BoletimMecanBean getBoletimApont(){
-        List<BoletimMecanBean> boletimList = boletimApontList();
+    public BoletimMecanBean getBolApontando(){
+        List<BoletimMecanBean> boletimList = bolApontandoList();
         BoletimMecanBean boletimMecanBean = boletimList.get(0);
         boletimList.clear();
         return boletimMecanBean;
     }
 
-    public List<BoletimMecanBean> boletimApontList(){
+    public List<BoletimMecanBean> bolApontandoList(){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqApont());
+        pesqArrayList.add(getPesqBolApontando());
 
         BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
         return boletimMecanBean.get(pesqArrayList);
@@ -292,7 +292,7 @@ public class BoletimMecanDAO {
         return pesquisa;
     }
 
-    private EspecificaPesquisa getPesqApont(){
+    private EspecificaPesquisa getPesqBolApontando(){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("statusApontBolMecan");
         pesquisa.setValor(1L);

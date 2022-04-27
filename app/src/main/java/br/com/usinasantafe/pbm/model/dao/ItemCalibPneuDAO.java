@@ -18,7 +18,7 @@ public class ItemCalibPneuDAO {
 
     public void insertItemCalibPneu(ItemCalibPneuBean itemCalibPneuBean, Long idBolPneu){
         itemCalibPneuBean.setIdBolItemCalibPneu(idBolPneu);
-        itemCalibPneuBean.setDthrItemCalibPneu(Tempo.getInstance().dthr());
+        itemCalibPneuBean.setDthrItemCalibPneu(Tempo.getInstance().dthrAtualString());
         itemCalibPneuBean.insert();
     }
 

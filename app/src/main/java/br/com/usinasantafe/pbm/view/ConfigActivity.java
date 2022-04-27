@@ -63,9 +63,9 @@ public class ConfigActivity extends ActivityGeneric {
 
                         LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getConfigCTR().verNroEquip(nroEquip)) {\n" +
                                 "                        pbmContext.getConfigCTR().insertConfig(pbmContext.getConfigCTR().getEquip(nroEquip).getIdEquip(), editTextSenhaConfig.getText().toString());\n" +
-                                "                        Intent it = new Intent(ConfigActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                "                        Intent it = new Intent(ConfigActivity.this, TelaInicialActivity.class);", getLocalClassName());
                         pbmContext.getConfigCTR().insertConfig(pbmContext.getConfigCTR().getEquip(nroEquip).getIdEquip(), editTextSenhaConfig.getText().toString());
-                        Intent it = new Intent(ConfigActivity.this, MenuInicialActivity.class);
+                        Intent it = new Intent(ConfigActivity.this, TelaInicialActivity.class);
                         startActivity(it);
                         finish();
 
@@ -103,8 +103,8 @@ public class ConfigActivity extends ActivityGeneric {
                 LogProcessoDAO.getInstance().insertLogProcesso("buttonCancConfig.setOnClickListener(new View.OnClickListener() {\n" +
                         "            @Override\n" +
                         "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(ConfigActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                Intent it = new Intent(ConfigActivity.this, MenuInicialActivity.class);
+                        "                Intent it = new Intent(ConfigActivity.this, TelaInicialActivity.class);", getLocalClassName());
+                Intent it = new Intent(ConfigActivity.this, TelaInicialActivity.class);
                 startActivity(it);
                 finish();
 

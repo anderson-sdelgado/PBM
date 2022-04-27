@@ -50,9 +50,9 @@ public class PressaoColPneuActivity extends ActivityGeneric {
                         if(pbmContext.getPneuCTR().verFinalBolCalib()){
                             LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getPneuCTR().verFinalBolCalib()){\n" +
                                     "                            pbmContext.getPneuCTR().fecharBoletim();\n" +
-                                    "                            Intent it = new Intent(PressaoColPneuActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                    "                            Intent it = new Intent(PressaoColPneuActivity.this, TelaInicialActivity.class);", getLocalClassName());
                             pbmContext.getPneuCTR().fecharBoletim();
-                            Intent it = new Intent(PressaoColPneuActivity.this, MenuInicialActivity.class);
+                            Intent it = new Intent(PressaoColPneuActivity.this, TelaInicialActivity.class);
                             startActivity(it);
                             finish();
                         } else {

@@ -23,7 +23,7 @@ public class BoletimPneuDAO {
             BoletimPneuBean boletimPneuBean = new BoletimPneuBean();
             boletimPneuBean.setIdEquipBolPneu(idEquip);
             boletimPneuBean.setIdFuncBolPneu(matricColab);
-            String dthr = Tempo.getInstance().dthr();
+            String dthr = Tempo.getInstance().dthrAtualString();
             boletimPneuBean.setDthrBolPneu(dthr);
             boletimPneuBean.setDthrLongBolPneu(Tempo.getInstance().dthrStringToLong(dthr));
             boletimPneuBean.setStatusBolPneu(1L);
@@ -122,7 +122,7 @@ public class BoletimPneuDAO {
 
         ArrayList<BoletimPneuBean> boletimPneuArrayList = new ArrayList<>();
         for (BoletimPneuBean boletimPneuBeanBD : boletimPneuList) {
-            if(boletimPneuBeanBD.getDthrLongBolPneu() < Tempo.getInstance().dthrLongDiaMenos(3)) {
+            if(boletimPneuBeanBD.getDthrLongBolPneu() < Tempo.getInstance().subDiaLong(3)) {
                 boletimPneuArrayList.add(boletimPneuBeanBD);
             }
         }

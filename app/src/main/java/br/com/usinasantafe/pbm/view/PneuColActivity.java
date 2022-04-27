@@ -53,7 +53,7 @@ public class PneuColActivity extends ActivityGeneric {
                                     "                            progressBar.show();\n" +
                                     "                            customHandler.postDelayed(updateTimerThread, 10000);\n" +
                                     "                            pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()\n" +
-                                    "                                    , PneuColActivity.this, MenuInicialActivity.class, progressBar, true);", getLocalClassName());
+                                    "                                    , PneuColActivity.this, TelaInicialActivity.class, progressBar, true);", getLocalClassName());
                             progressBar = new ProgressDialog(PneuColActivity.this);
                             progressBar.setCancelable(true);
                             progressBar.setMessage("Atualizando Pneu...");
@@ -62,15 +62,15 @@ public class PneuColActivity extends ActivityGeneric {
                             customHandler.postDelayed(updateTimerThread, 10000);
 
                             pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()
-                                    , PneuColActivity.this, MenuInicialActivity.class, progressBar, true);
+                                    , PneuColActivity.this, TelaInicialActivity.class, progressBar, true);
 
                         } else {
 
                             LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
                                     "                            salvarBoletimPneu();\n" +
-                                    "                            Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                    "                            Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
                             salvarBoletimPneu();
-                            Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
+                            Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);
                             startActivity(it);
                             finish();
 
@@ -80,9 +80,9 @@ public class PneuColActivity extends ActivityGeneric {
 
                         LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
                                 "                        salvarBoletimPneu();\n" +
-                                "                        Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                "                        Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
                         salvarBoletimPneu();
-                        Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
+                        Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);
                         startActivity(it);
                         finish();
                     }
@@ -137,9 +137,9 @@ public class PneuColActivity extends ActivityGeneric {
                 }
 
                 LogProcessoDAO.getInstance().insertLogProcesso("salvarBoletimPneu();\n" +
-                        "                Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                        "                Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
                 salvarBoletimPneu();
-                Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
+                Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);
                 startActivity(it);
                 finish();
 
@@ -153,10 +153,10 @@ public class PneuColActivity extends ActivityGeneric {
         LogProcessoDAO.getInstance().insertLogProcesso("public void salvarBoletimPneu(){\n" +
                 "        pbmContext.getPneuCTR().salvarItemManutPneu();\n" +
                 "        pbmContext.getPneuCTR().fecharBoletim();\n" +
-                "        Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                "        Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
         pbmContext.getPneuCTR().salvarItemManutPneu();
         pbmContext.getPneuCTR().fecharBoletim();
-        Intent it = new Intent(PneuColActivity.this, MenuInicialActivity.class);
+        Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);
         startActivity(it);
         finish();
 

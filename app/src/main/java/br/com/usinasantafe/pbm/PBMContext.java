@@ -5,8 +5,11 @@ import android.app.Application;
 import br.com.usinasantafe.pbm.control.ConfigCTR;
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
 import br.com.usinasantafe.pbm.control.PneuCTR;
+import br.com.usinasantafe.pbm.model.dao.LogErroDAO;
 
 public class PBMContext extends Application {
+
+    private Thread.UncaughtExceptionHandler mDefaultExceptionHandler;
 
     public static String versaoAplic = "3.00";
     private ConfigCTR configCTR;
@@ -23,6 +26,8 @@ public class PBMContext extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mDefaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(handler);
     }
 
     public ConfigCTR getConfigCTR() {
@@ -50,4 +55,12 @@ public class PBMContext extends Application {
     public void setVerTela(int verTela) {
         this.verTela = verTela;
     }
+
+    private Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
+        public void uncaughtException(Thread thread, Throwable ex) {
+            LogErroDAO.getInstance().insertLogErro(ex);
+            mDefaultExceptionHandler.uncaughtException(thread, ex);
+        }
+    };
+
 }

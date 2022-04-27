@@ -4,8 +4,8 @@ import br.com.usinasantafe.pbm.PBMContext;
 
 public class UrlsConexaoHttp {
 
-    public static String urlPrincipal = "http://www.usinasantafe.com.br/pbmdev/view/";
-    public static String urlPrincEnvio = "http://www.usinasantafe.com.br/pbmdev/view/";
+    public static String urlPrincipal = "https://www.usinasantafe.com.br/pbmdev/view/";
+    public static String urlPrincEnvio = "https://www.usinasantafe.com.br/pbmdev/view/";
 
     public static String localPSTEstatica = "br.com.usinasantafe.pbm.model.bean.estaticas.";
     public static String localUrl = "br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp";
@@ -24,15 +24,11 @@ public class UrlsConexaoHttp {
     }
 
     public String getsInsertBolFechado() {
-        return urlPrincEnvio + "inserirbolfechado.php" + put;
+        return urlPrincEnvio + "inserirbolmecanfechado.php" + put;
     }
 
     public String getsInsertBolAberto() {
-        return urlPrincEnvio + "inserirbolaberto.php" + put;
-    }
-
-    public String getsInsertApont() {
-        return urlPrincEnvio + "inserirapont.php" + put;
+        return urlPrincEnvio + "inserirbolmecanaberto.php" + put;
     }
 
     public String getsInsertBolPneu() {

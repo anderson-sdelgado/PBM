@@ -81,8 +81,8 @@ public class LeitorFuncActivity extends ActivityGeneric {
                 LogProcessoDAO.getInstance().insertLogProcesso("buttonCancFunc.setOnClickListener(new View.OnClickListener() {\n" +
                         "            @Override\n" +
                         "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);
+                        "                Intent it = new Intent(LeitorFuncActivity.this, TelaInicialActivity.class);", getLocalClassName());
+                Intent it = new Intent(LeitorFuncActivity.this, TelaInicialActivity.class);
                 startActivity(it);
                 finish();
             }
@@ -221,8 +221,8 @@ public class LeitorFuncActivity extends ActivityGeneric {
 
     public void onBackPressed() {
         LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed() {\n" +
-                "        Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);", getLocalClassName());
-        Intent it = new Intent(LeitorFuncActivity.this, MenuInicialActivity.class);
+                "        Intent it = new Intent(LeitorFuncActivity.this, TelaInicialActivity.class);", getLocalClassName());
+        Intent it = new Intent(LeitorFuncActivity.this, TelaInicialActivity.class);
         startActivity(it);
         finish();
     }

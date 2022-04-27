@@ -23,7 +23,11 @@ public class ApontMecanBean extends Entidade {
     @DatabaseField
     private String dthrInicialApontMecan;
     @DatabaseField
+    private Long dthrInicialLongApontMecan;
+    @DatabaseField
     private String dthrFinalApontMecan;
+    @DatabaseField
+    private Long dthrFinalLongApontMecan;
     @DatabaseField
     private Long realizApontMecan;
     @DatabaseField
@@ -84,12 +88,28 @@ public class ApontMecanBean extends Entidade {
         this.dthrInicialApontMecan = dthrInicialApontMecan;
     }
 
+    public Long getDthrInicialLongApontMecan() {
+        return dthrInicialLongApontMecan;
+    }
+
+    public void setDthrInicialLongApontMecan(Long dthrInicialLongApontMecan) {
+        this.dthrInicialLongApontMecan = dthrInicialLongApontMecan;
+    }
+
     public String getDthrFinalApontMecan() {
         return dthrFinalApontMecan;
     }
 
     public void setDthrFinalApontMecan(String dthrFinalApontMecan) {
         this.dthrFinalApontMecan = dthrFinalApontMecan;
+    }
+
+    public Long getDthrFinalLongApontMecan() {
+        return dthrFinalLongApontMecan;
+    }
+
+    public void setDthrFinalLongApontMecan(Long dthrFinalLongApontMecan) {
+        this.dthrFinalLongApontMecan = dthrFinalLongApontMecan;
     }
 
     public Long getRealizApontMecan() {
@@ -107,7 +127,4 @@ public class ApontMecanBean extends Entidade {
     public void setStatusApontMecan(Long statusApontMecan) {
         this.statusApontMecan = statusApontMecan;
     }
-
-
-
 }

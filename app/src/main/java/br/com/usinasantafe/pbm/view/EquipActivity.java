@@ -174,8 +174,8 @@ public class EquipActivity extends ActivityGeneric {
 
     public void onBackPressed()  {
         LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed()  {\n" +
-                "        Intent it = new Intent(EquipActivity.this, MenuInicialActivity.class);", getLocalClassName());
-        Intent it = new Intent(EquipActivity.this, MenuInicialActivity.class);
+                "        Intent it = new Intent(EquipActivity.this, TelaInicialActivity.class);", getLocalClassName());
+        Intent it = new Intent(EquipActivity.this, TelaInicialActivity.class);
         startActivity(it);
         finish();
     }

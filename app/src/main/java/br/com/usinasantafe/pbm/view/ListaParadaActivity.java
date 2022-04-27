@@ -106,7 +106,7 @@ public class ListaParadaActivity extends ActivityGeneric {
                                 "                        if(pbmContext.getVerTela() == 2){\n" +
                                 "                            pbmContext.getMecanicoCTR().fecharBoletim();\n" +
                                 "                        }\n" +
-                                "                        Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                "                        Intent it = new Intent(  ListaParadaActivity.this, TelaInicialActivity.class);", getLocalClassName());
                         pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());
                         pbmContext.getMecanicoCTR().getApontBean().setOsApontMecan(0L);
                         pbmContext.getMecanicoCTR().salvarApont(0L, pbmContext.getMecanicoCTR().getParadaCod(Long.parseLong(textParada.substring(0, textParada.indexOf('-')).trim())).getIdParada(), 1L);
@@ -115,7 +115,7 @@ public class ListaParadaActivity extends ActivityGeneric {
                             pbmContext.getMecanicoCTR().fecharBoletim();
                         }
 
-                        Intent it = new Intent(  ListaParadaActivity.this, MenuInicialActivity.class);
+                        Intent it = new Intent(  ListaParadaActivity.this, TelaInicialActivity.class);
                         startActivity(it);
                         finish();
 

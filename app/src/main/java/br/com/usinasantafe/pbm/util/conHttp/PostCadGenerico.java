@@ -38,8 +38,9 @@ public class PostCadGenerico extends AsyncTask<String, Void, String> {
 		
 		BufferedReader bufferedReader = null;
 		String resultado = null;
-		
+
 		String url = arg[0];
+		this.activity = arg[1];
 		
 		try {
 

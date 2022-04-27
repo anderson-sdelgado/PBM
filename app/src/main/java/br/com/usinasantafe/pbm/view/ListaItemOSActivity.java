@@ -123,10 +123,10 @@ public class ListaItemOSActivity extends ActivityGeneric {
                         "                                    long id) {\n" +
                         "                ItemOSBean itemOSBean = itemOSList.get(position);\n" +
                         "                pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);\n" +
-                        "                Intent it = new Intent(ListaItemOSActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                        "                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);", getLocalClassName());
                 ItemOSBean itemOSBean = itemOSList.get(position);
                 pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);
-                Intent it = new Intent(ListaItemOSActivity.this, MenuInicialActivity.class);
+                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);
                 startActivity(it);
                 finish();
 

@@ -61,9 +61,9 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("if (text.equals(\"FINALIZAR\")) {\n" +
                             "                    pbmContext.getMecanicoCTR().finalizarApont();\n" +
-                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);", getLocalClassName());
                     pbmContext.getMecanicoCTR().finalizarApont();
-                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);
+                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);
                     startActivity(it);
                     finish();
 
@@ -71,17 +71,17 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"INTERROPER\")) {\n" +
                             "                    pbmContext.getMecanicoCTR().interroperApont();\n" +
-                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);", getLocalClassName());
                     pbmContext.getMecanicoCTR().interroperApont();
-                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);
+                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);
                     startActivity(it);
                     finish();
 
                 } else if (text.equals("CANCELAR")) {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"CANCELAR\")) {\n" +
-                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, MenuInicialActivity.class);
+                            "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);", getLocalClassName());
+                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);
                     startActivity(it);
                     finish();
 

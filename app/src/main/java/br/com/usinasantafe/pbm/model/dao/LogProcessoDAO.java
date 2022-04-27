@@ -21,8 +21,8 @@ public class LogProcessoDAO {
         LogProcessoBean logProcessoBean = new LogProcessoBean();
         logProcessoBean.setProcesso(processo);
         logProcessoBean.setActivity(activity);
-        logProcessoBean.setDthr(Tempo.getInstance().dthr());
-        logProcessoBean.setDthrLong(Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthr()));
+        logProcessoBean.setDthr(Tempo.getInstance().dthrAtualString());
+        logProcessoBean.setDthrLong(Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthrAtualString()));
         logProcessoBean.insert();
     }
 
@@ -33,7 +33,7 @@ public class LogProcessoDAO {
 
     public void deleteLogProcesso(){
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqDtrhLongDiaMenos(Tempo.getInstance().dthrLongDiaMenos(3)));
+        pesqArrayList.add(getPesqDtrhLongDiaMenos(Tempo.getInstance().subDiaLong(3)));
         LogProcessoBean logProcessoBean = new LogProcessoBean();
         logProcessoBean.deleteGet(pesqArrayList);
     }

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,11 +18,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import br.com.usinasantafe.pbm.PBMContext;
 import br.com.usinasantafe.pbm.R;
 import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
+import br.com.usinasantafe.pbm.util.Tempo;
 
 public class MenuInicialActivity extends ActivityGeneric {
 
@@ -90,6 +93,7 @@ public class MenuInicialActivity extends ActivityGeneric {
                 String text = textView.getText().toString();
 
                 if (text.equals("APONTAMENTO")) {
+
                     LogProcessoDAO.getInstance().insertLogProcesso("if (text.equals(\"APONTAMENTO\")) {", getLocalClassName());
                     if(pbmContext.getConfigCTR().hasElemConfig() && pbmContext.getMecanicoCTR().hasElementsColab()) {
 

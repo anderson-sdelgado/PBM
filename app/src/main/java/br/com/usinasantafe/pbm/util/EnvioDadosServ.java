@@ -146,7 +146,7 @@ public class EnvioDadosServ {
     /////////////////////////////////////RECEBER DADOS////////////////////////////////////////////
 
     public void recDados(String result, String activity){
-        LogProcessoDAO.getInstance().insertLogProcesso("public void recDados(String result, String activity){", activity);
+        LogProcessoDAO.getInstance().insertLogProcesso("public void recDados(String " + result + ", String activity){", activity);
         if(result.trim().startsWith("BOLFECHADOMEC")){
             LogProcessoDAO.getInstance().insertLogProcesso("if(result.trim().startsWith(\"BOLFECHADOMEC\")){\n" +
                     "            MecanicoCTR mecanicoCTR = new MecanicoCTR();\n" +

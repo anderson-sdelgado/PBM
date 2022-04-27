@@ -73,8 +73,8 @@ public class SenhaActivity extends ActivityGeneric {
                 LogProcessoDAO.getInstance().insertLogProcesso("btCancSenha.setOnClickListener(new View.OnClickListener() {\n" +
                         "            @Override\n" +
                         "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(SenhaActivity.this, MenuInicialActivity.class);", getLocalClassName());
-                Intent it = new Intent(SenhaActivity.this, MenuInicialActivity.class);
+                        "                Intent it = new Intent(SenhaActivity.this, TelaInicialActivity.class);", getLocalClassName());
+                Intent it = new Intent(SenhaActivity.this, TelaInicialActivity.class);
                 startActivity(it);
                 finish();
             }

@@ -39,10 +39,10 @@ public class DigItemOSActivity extends ActivityGeneric {
 
                         LogProcessoDAO.getInstance().insertLogProcesso("if(Long.parseLong(editTextPadrao.getText().toString()) < 1000){\n" +
                                 "                        pbmContext.getMecanicoCTR().salvarApont(Long.parseLong(editTextPadrao.getText().toString()), 0L, 0L)" +
-                                "                        Intent it = new Intent(DigItemOSActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                "                        Intent it = new Intent(DigItemOSActivity.this, TelaInicialActivity.class);", getLocalClassName());
                         pbmContext.getMecanicoCTR().salvarApont(Long.parseLong(editTextPadrao.getText().toString()), 0L, 0L);
 
-                        Intent it = new Intent(DigItemOSActivity.this, MenuInicialActivity.class);
+                        Intent it = new Intent(DigItemOSActivity.this, TelaInicialActivity.class);
                         startActivity(it);
                         finish();
 

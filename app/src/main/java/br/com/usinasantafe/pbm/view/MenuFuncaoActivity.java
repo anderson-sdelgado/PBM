@@ -72,14 +72,14 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         "                                    long id) {\n" +
                         "                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);\n" +
                         "                String text = textView.getText().toString();", getLocalClassName());
-                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
+                TextView textView = v.findViewById(R.id.textViewItemList);
                 String text = textView.getText().toString();
 
                 if (text.equals("APONTAMENTO")) {
                     LogProcessoDAO.getInstance().insertLogProcesso("if (text.equals(\"APONTAMENTO\")) {", getLocalClassName());
-                    if (!pbmContext.getMecanicoCTR().verApont()) {
+                    if (!pbmContext.getMecanicoCTR().verApontBolApontando()) {
                         LogProcessoDAO.getInstance().insertLogProcesso("if (!pbmContext.getMecanicoCTR().verApont()) {", getLocalClassName());
-                        if (Tempo.getInstance().verifDataHoraParada(Tempo.getInstance().dthr() + " " + pbmContext.getMecanicoCTR().getEscalaTrab(pbmContext.getMecanicoCTR().getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab())) {
+                        if (pbmContext.getMecanicoCTR().verifDataHoraTurno()) {
                             LogProcessoDAO.getInstance().insertLogProcesso("if (Tempo.getInstance().verifDataHoraParada(Tempo.getInstance().dthr() + \" \" + pbmContext.getMecanicoCTR().getEscalaTrab(pbmContext.getMecanicoCTR().getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab())) {\n" +
                                     "                            Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
                             Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
@@ -96,9 +96,9 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         }
                     } else {
                         LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                        if(Tempo.getInstance().verifDataHoraFechBoletim(pbmContext.getMecanicoCTR().getDthrApont())) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("if(Tempo.getInstance().verifDataHoraFechBoletim(pbmContext.getMecanicoCTR().getDthrApont())) {", getLocalClassName());
-                            if (pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApontMecan().equals(Tempo.getInstance().dthr())) {
+                        if(pbmContext.getMecanicoCTR().verifDataHoraForcaFechBol()) {
+                            LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getMecanicoCTR().verifDataHoraUltApont()) {", getLocalClassName());
+                            if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrInicialLongApontMecan() == Tempo.getInstance().dthrAtualLong()) {
                                 LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApontMecan().equals(Tempo.getInstance().dthr())) {\n" +
                                         "                                Toast.makeText(MenuFuncaoActivity.this, \"POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.\",\n" +
                                         "                                        Toast.LENGTH_LONG).show();", getLocalClassName());
@@ -106,7 +106,7 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                                         Toast.LENGTH_LONG).show();
                             } else {
                                 LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                                if (pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan().equals("")) {
+                                if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrFinalApontMecan().equals("")) {
                                     LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan().equals(\"\")) {\n" +
                                             "                                    Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
                                     Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
@@ -114,7 +114,7 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                                     finish();
                                 } else {
                                     LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                                    if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan())) {
+                                    if (pbmContext.getMecanicoCTR().verifDataHoraFinalUltApont()) {
                                         LogProcessoDAO.getInstance().insertLogProcesso("if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan())) {\n" +
                                                 "                                        Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
                                         Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
@@ -150,9 +150,9 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                                             "                                @Override\n" +
                                             "                                public void onClick(DialogInterface dialog, int which) {\n" +
                                             "                                    pbmContext.getMecanicoCTR().forcarFechBoletim();\n" +
-                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);", getLocalClassName());
                                     pbmContext.getMecanicoCTR().forcarFechBoletim();
-                                    Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
+                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);
                                     startActivity(it);
                                     finish();
 
@@ -167,11 +167,11 @@ public class MenuFuncaoActivity extends ActivityGeneric {
 
                 } else if (text.equals("FINALIZAR/INTERROPER")) {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"FINALIZAR/INTERROPER\")) {", getLocalClassName());
-                    if (pbmContext.getMecanicoCTR().verApont()) {
+                    if (pbmContext.getMecanicoCTR().verApontBolApontando()) {
                         LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().verApont()) {", getLocalClassName());
-                        if(Tempo.getInstance().verifDataHoraFechBoletim(pbmContext.getMecanicoCTR().getDthrApont())) {
+                        if(pbmContext.getMecanicoCTR().verifDataHoraForcaFechBol()) {
                             LogProcessoDAO.getInstance().insertLogProcesso("if(Tempo.getInstance().verifDataHoraFechBoletim(pbmContext.getMecanicoCTR().getDthrApont())) {", getLocalClassName());
-                            if (pbmContext.getMecanicoCTR().getUltApont().getParadaApontMecan() == 0L) {
+                            if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getParadaApontMecan() == 0L) {
                                 LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getParadaApontMecan() == 0L) {\n" +
                                         "                                Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterroperFinalActivity.class);", getLocalClassName());
                                 Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterroperFinalActivity.class);
@@ -213,9 +213,9 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                                             "                                @Override\n" +
                                             "                                public void onClick(DialogInterface dialog, int which) {\n" +
                                             "                                    pbmContext.getMecanicoCTR().forcarFechBoletim();\n" +
-                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);", getLocalClassName());
                                     pbmContext.getMecanicoCTR().forcarFechBoletim();
-                                    Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
+                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);
                                     startActivity(it);
                                     finish();
                                 }
@@ -262,27 +262,27 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                             LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
                                     "                        @Override\n" +
                                     "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                            if (pbmContext.getMecanicoCTR().verApont()) {
+                            if (pbmContext.getMecanicoCTR().verApontBolApontando()) {
                                 LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().verApont()) {", getLocalClassName());
-                                if (pbmContext.getMecanicoCTR().getUltApont().getParadaApontMecan() == 0L) {
+                                if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getParadaApontMecan() == 0L) {
 
                                     LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getParadaApontMecan() == 0L) {\n" +
                                             "                                    pbmContext.getMecanicoCTR().fecharBoletim();\n" +
-                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);", getLocalClassName());
                                     pbmContext.getMecanicoCTR().fecharBoletim();
-                                    Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
+                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);
                                     startActivity(it);
                                     finish();
 
                                 } else {
                                     LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                                    if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan())) {
+                                    if (pbmContext.getMecanicoCTR().verifDataHoraFinalUltApont()) {
 
                                         LogProcessoDAO.getInstance().insertLogProcesso("if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan())) {\n" +
                                                 "                                        pbmContext.getMecanicoCTR().fecharBoletim();\n" +
-                                                "                                        Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);", getLocalClassName());
+                                                "                                        Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);", getLocalClassName());
                                         pbmContext.getMecanicoCTR().fecharBoletim();
-                                        Intent it = new Intent(MenuFuncaoActivity.this, MenuInicialActivity.class);
+                                        Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);
                                         startActivity(it);
                                         finish();
 

@@ -25,13 +25,17 @@ public class ApontMecanDAO {
 
             if(apontList.size() > 0) {
                 ApontMecanBean apontMecanBeanBD = apontList.get(0);
+                apontMecanBean.setDthrInicialLongApontMecan(apontMecanBeanBD.getDthrFinalLongApontMecan());
                 apontMecanBean.setDthrInicialApontMecan(apontMecanBeanBD.getDthrFinalApontMecan());
             }
             else{
-                apontMecanBean.setDthrInicialApontMecan(Tempo.getInstance().dt() + " " + horarioEnt);
+                Long dthrLong = Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dtAtualString() + " " + horarioEnt);
+                apontMecanBean.setDthrInicialLongApontMecan(dthrLong);
+                apontMecanBean.setDthrInicialApontMecan(Tempo.getInstance().dthrLongToString(dthrLong));
             }
 
-            apontMecanBean.setDthrFinalApontMecan(Tempo.getInstance().dthr());
+            apontMecanBean.setDthrFinalApontMecan(Tempo.getInstance().dthrAtualString());
+            apontMecanBean.setStatusApontMecan(3L);
 
         }
         else {
@@ -39,26 +43,31 @@ public class ApontMecanDAO {
             if(apontList.size() > 0) {
 
                 ApontMecanBean apontMecanBeanBD = apontList.get(0);
-                apontMecanBeanBD.setDthrFinalApontMecan(Tempo.getInstance().dthr());
+                Long dthrLong = Tempo.getInstance().dthrAtualLong();
+                apontMecanBeanBD.setDthrFinalLongApontMecan(dthrLong);
+                apontMecanBeanBD.setDthrFinalApontMecan(Tempo.getInstance().dthrLongToString(dthrLong));
                 apontMecanBeanBD.setStatusApontMecan(0L);
                 apontMecanBeanBD.update();
 
-                apontMecanBean.setDthrInicialApontMecan(Tempo.getInstance().dthr());
+                apontMecanBean.setDthrInicialLongApontMecan(dthrLong);
+                apontMecanBean.setDthrInicialApontMecan(Tempo.getInstance().dthrLongToString(dthrLong));
 
             }
             else{
 
-                apontMecanBean.setDthrInicialApontMecan(Tempo.getInstance().dt() + " " + horarioEnt);
+                Long dthrLong = Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dtAtualString() + " " + horarioEnt);
+                apontMecanBean.setDthrInicialLongApontMecan(dthrLong);
+                apontMecanBean.setDthrInicialApontMecan(Tempo.getInstance().dthrLongToString(dthrLong));
 
             }
 
             apontMecanBean.setDthrFinalApontMecan("");
+            apontMecanBean.setStatusApontMecan(1L);
 
         }
 
         apontList.clear();
         apontMecanBean.setIdBolApontMecan(boletimMecanBean.getIdBolMecan());
-        apontMecanBean.setStatusApontMecan(1L);
         apontMecanBean.insert();
 
     }
@@ -167,14 +176,14 @@ public class ApontMecanDAO {
     }
 
     public void finalizarApont(ApontMecanBean apontMecanBean){
-        apontMecanBean.setDthrFinalApontMecan(Tempo.getInstance().dthr());
+        apontMecanBean.setDthrFinalApontMecan(Tempo.getInstance().dthrAtualString());
         apontMecanBean.setRealizApontMecan(1L);
         apontMecanBean.setStatusApontMecan(3L);
         apontMecanBean.update();
     }
 
     public void interroperApont(ApontMecanBean apontMecanBean){
-        apontMecanBean.setDthrFinalApontMecan(Tempo.getInstance().dthr());
+        apontMecanBean.setDthrFinalApontMecan(Tempo.getInstance().dthrAtualString());
         apontMecanBean.setStatusApontMecan(3L);
         apontMecanBean.update();
     }
@@ -196,7 +205,7 @@ public class ApontMecanDAO {
 
     public void fecharApont(ApontMecanBean apontMecanBean){
         if(apontMecanBean.getParadaApontMecan() == 0L){
-            apontMecanBean.setDthrFinalApontMecan(Tempo.getInstance().dthr());
+            apontMecanBean.setDthrFinalApontMecan(Tempo.getInstance().dthrAtualString());
             apontMecanBean.setStatusApontMecan(3L);
             apontMecanBean.update();
         }

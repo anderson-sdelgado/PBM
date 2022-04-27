@@ -59,8 +59,8 @@ public class MecanicoCTR {
         return colabDAO.verMatricColab(matricColab);
     }
 
-    public boolean verApont(){
-        List<ApontMecanBean> apontList = apontBolApontList();
+    public boolean verApontBolApontando(){
+        List<ApontMecanBean> apontList = apontBolApontandoList();
         boolean ret = (apontList.size() > 0);
         apontList.clear();
         return ret;
@@ -70,7 +70,7 @@ public class MecanicoCTR {
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
         OSDAO osDAO = new OSDAO();
-        return (apontMecanDAO.verOSApont(boletimMecanDAO.getBoletimApont().getIdBolMecan(), nroOS) && osDAO.verOS(nroOS));
+        return (apontMecanDAO.verOSApont(boletimMecanDAO.getBolApontando().getIdBolMecan(), nroOS) && osDAO.verOS(nroOS));
     }
 
     public boolean verBoletimFechado(){
@@ -81,6 +81,18 @@ public class MecanicoCTR {
     public boolean verApontSemEnvio(){
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
         return apontMecanDAO.verApontSemEnvio();
+    }
+
+    public boolean verifDataHoraTurno(){
+        return Tempo.getInstance().verifHora(getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab());
+    }
+
+    public boolean verifDataHoraFinalUltApont(){
+        return Tempo.getInstance().verifDataHoraParada(getUltApontBolApontando().getDthrFinalApontMecan(), getParametro().getMinutosParada());
+    }
+
+    public boolean verifDataHoraForcaFechBol(){
+        return Tempo.getInstance().verifDataHoraForcaFechBol(getDthrApontBolApontando(), getParametro().getHoraFechBoletim());
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,34 +141,34 @@ public class MecanicoCTR {
         apontMecanBean.setItemOSApontMecan(itemOSApontMecan);
         apontMecanBean.setParadaApontMecan(paradaApontMecan);
         apontMecanBean.setRealizApontMecan(realizApontMecan);
-        apontMecanDAO.salvarApont(apontMecanBean, getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab(), boletimMecanDAO.getBoletimApont());
+        apontMecanDAO.salvarApont(apontMecanBean, getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioEntEscalaTrab(), boletimMecanDAO.getBolApontando());
     }
 
     public void fecharBoletim(){
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
-        boletimMecanDAO.fecharBoletim(boletimMecanDAO.getBoletimApont());
+        boletimMecanDAO.fecharBoletim(boletimMecanDAO.getBolApontando());
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
-        apontMecanDAO.fecharApont(getUltApont());
+        apontMecanDAO.fecharApont(getUltApontBolApontando());
     }
 
     public void forcarFechBoletim(){
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
-        String dthrFinal = Tempo.getInstance().dataFinalizarBol(boletimMecanDAO.getBoletimApont().getDthrInicialBolMecan(), getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioSaiEscalaTrab());
-        boletimMecanDAO.fecharBoletim(boletimMecanDAO.getBoletimApont(), dthrFinal);
-        apontMecanDAO.fecharApont(getUltApont(), dthrFinal);
+        String dthrFinal = Tempo.getInstance().dthrFinalizarBol(boletimMecanDAO.getBolApontando().getDthrInicialLongBolMecan(), boletimMecanDAO.getBolApontando().getDthrInicialBolMecan().substring(0, 10) + " " + getEscalaTrab(getColabApont().getIdEscalaTrabColab()).getHorarioSaiEscalaTrab());
+        boletimMecanDAO.fecharBoletim(boletimMecanDAO.getBolApontando(), dthrFinal);
+        apontMecanDAO.fecharApont(getUltApontBolApontando(), dthrFinal);
     }
 
     public void finalizarApont(){
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
-        apontMecanDAO.finalizarApont(apontMecanDAO.apontEnvioList(boletimMecanDAO.getBoletimApont().getIdBolMecan()).get(0));
+        apontMecanDAO.finalizarApont(apontMecanDAO.apontEnvioList(boletimMecanDAO.getBolApontando().getIdBolMecan()).get(0));
     }
 
     public void interroperApont(){
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
-        apontMecanDAO.interroperApont(apontMecanDAO.apontEnvioList(boletimMecanDAO.getBoletimApont().getIdBolMecan()).get(0));
+        apontMecanDAO.interroperApont(apontMecanDAO.apontEnvioList(boletimMecanDAO.getBolApontando().getIdBolMecan()).get(0));
     }
 
     public void deleteBoletimSemApont() {
@@ -178,9 +190,9 @@ public class MecanicoCTR {
 
     ////////////////////////////////////// GET DADOS /////////////////////////////////////////////
 
-    public BoletimMecanBean getBoletimApont(){
+    public BoletimMecanBean getBolApontando(){
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
-        return boletimMecanDAO.getBoletimApont();
+        return boletimMecanDAO.getBolApontando();
     }
 
     public EscalaTrabBean getEscalaTrab(Long idEscalaTrab){
@@ -195,23 +207,23 @@ public class MecanicoCTR {
 
     public ColabBean getColabApont(){
         ColabDAO colabDAO = new ColabDAO();
-        return colabDAO.getIdColab(getBoletimApont().getIdFuncBolMecan());
+        return colabDAO.getIdColab(getBolApontando().getIdFuncBolMecan());
     }
 
-    public List<ApontMecanBean> apontBolApontList(){
+    public List<ApontMecanBean> apontBolApontandoList(){
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
-        return apontMecanDAO.apontEnvioList(getBoletimApont().getIdBolMecan());
+        return apontMecanDAO.apontEnvioList(getBolApontando().getIdBolMecan());
     }
 
-    public ApontMecanBean getUltApont(){
-        List<ApontMecanBean> apontList = apontBolApontList();
+    public ApontMecanBean getUltApontBolApontando(){
+        List<ApontMecanBean> apontList = apontBolApontandoList();
         ApontMecanBean apontMecanBean = apontList.get(0);
         apontList.clear();
         return apontMecanBean;
     }
 
-    public String getDthrApont(){
-        ApontMecanBean apontMecanBean = getUltApont();
+    public String getDthrApontBolApontando(){
+        ApontMecanBean apontMecanBean = getUltApontBolApontando();
         return (apontMecanBean.getParadaApontMecan() == 0L) ? apontMecanBean.getDthrFinalApontMecan() : apontMecanBean.getDthrInicialApontMecan();
     }
 
@@ -236,7 +248,7 @@ public class MecanicoCTR {
 
     public List<ApontMecanBean> apontList(){
         ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
-        return apontMecanDAO.apontEnvioList(getBoletimApont().getIdBolMecan());
+        return apontMecanDAO.apontEnvioList(getBolApontando().getIdBolMecan());
     }
 
     public List<ItemOSBean> itemOSList(){
