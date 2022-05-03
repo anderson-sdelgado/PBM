@@ -96,135 +96,71 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         }
                     } else {
                         LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                        if(pbmContext.getMecanicoCTR().verifDataHoraForcaFechBol()) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getMecanicoCTR().verifDataHoraUltApont()) {", getLocalClassName());
-                            if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrInicialLongApontMecan() == Tempo.getInstance().dthrAtualLong()) {
-                                LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApontMecan().equals(Tempo.getInstance().dthr())) {\n" +
-                                        "                                Toast.makeText(MenuFuncaoActivity.this, \"POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.\",\n" +
-                                        "                                        Toast.LENGTH_LONG).show();", getLocalClassName());
-                                Toast.makeText(MenuFuncaoActivity.this, "POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.",
-                                        Toast.LENGTH_LONG).show();
+                        if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrInicialLongApontMecan() == Tempo.getInstance().dthrAtualLong()) {
+                            LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApontMecan().equals(Tempo.getInstance().dthr())) {\n" +
+                                    "                                Toast.makeText(MenuFuncaoActivity.this, \"POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.\",\n" +
+                                    "                                        Toast.LENGTH_LONG).show();", getLocalClassName());
+                            Toast.makeText(MenuFuncaoActivity.this, "POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
+                            if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrFinalApontMecan().equals("")) {
+                                LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan().equals(\"\")) {\n" +
+                                        "                                    Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
+                                Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
+                                startActivity(it);
+                                finish();
                             } else {
                                 LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                                if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrFinalApontMecan().equals("")) {
-                                    LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan().equals(\"\")) {\n" +
-                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
+                                if (pbmContext.getMecanicoCTR().verifDataHoraFinalUltApont()) {
+                                    LogProcessoDAO.getInstance().insertLogProcesso("if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan())) {\n" +
+                                            "                                        Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
                                     Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                                     startActivity(it);
                                     finish();
                                 } else {
-                                    LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                                    if (pbmContext.getMecanicoCTR().verifDataHoraFinalUltApont()) {
-                                        LogProcessoDAO.getInstance().insertLogProcesso("if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan())) {\n" +
-                                                "                                        Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
-                                        Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
-                                        startActivity(it);
-                                        finish();
-                                    } else {
-                                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                                "                                        pbmContext.setVerTela(1);\n" +
-                                                "                                        Intent it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);", getLocalClassName());
-                                        pbmContext.setVerTela(1);
-                                        Intent it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
-                                        startActivity(it);
-                                        finish();
-                                    }
-                                }
-
-                            }
-
-                        } else {
-
-                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                    "                            AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);\n" +
-                                    "                            alerta.setTitle(\"ATENÇÃO\");\n" +
-                                    "                            alerta.setMessage(\"O BOLETIM SERÁ ENCERRADO POR FALTA DE ENCERRAMENTO DO TURNO ANTERIOR!\");", getLocalClassName());
-                            AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
-                            alerta.setTitle("ATENÇÃO");
-                            alerta.setMessage("O BOLETIM SERÁ ENCERRADO POR FALTA DE ENCERRAMENTO DO TURNO ANTERIOR!");
-                            alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                            "                                @Override\n" +
-                                            "                                public void onClick(DialogInterface dialog, int which) {\n" +
-                                            "                                    pbmContext.getMecanicoCTR().forcarFechBoletim();\n" +
-                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                                    pbmContext.getMecanicoCTR().forcarFechBoletim();
-                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);
+                                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                            "                                        pbmContext.setVerTela(1);\n" +
+                                            "                                        Intent it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);", getLocalClassName());
+                                    pbmContext.setVerTela(1);
+                                    Intent it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
                                     startActivity(it);
                                     finish();
-
                                 }
-                            });
-
-                            alerta.show();
+                            }
 
                         }
-
                     }
 
                 } else if (text.equals("FINALIZAR/INTERROPER")) {
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"FINALIZAR/INTERROPER\")) {", getLocalClassName());
                     if (pbmContext.getMecanicoCTR().verApontBolApontando()) {
                         LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().verApont()) {", getLocalClassName());
-                        if(pbmContext.getMecanicoCTR().verifDataHoraForcaFechBol()) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("if(Tempo.getInstance().verifDataHoraFechBoletim(pbmContext.getMecanicoCTR().getDthrApont())) {", getLocalClassName());
-                            if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getParadaApontMecan() == 0L) {
-                                LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getParadaApontMecan() == 0L) {\n" +
-                                        "                                Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterroperFinalActivity.class);", getLocalClassName());
-                                Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterroperFinalActivity.class);
-                                startActivity(it);
-                                finish();
-                            } else {
-                                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                        "                                AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);\n" +
-                                        "                                alerta.setTitle(\"ATENÇÃO\");\n" +
-                                        "                                alerta.setMessage(\"NÃO EXISTE APONTAMENTO PARA FINALIZAR/INTERROMPER.\");", getLocalClassName());
-                                AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
-                                alerta.setTitle("ATENÇÃO");
-                                alerta.setMessage("NÃO EXISTE APONTAMENTO PARA FINALIZAR/INTERROMPER.");
-                                alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                                "                                    @Override\n" +
-                                                "                                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                                    }
-                                });
-
-                                alerta.show();
-                            }
-
+                        if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getParadaApontMecan() == 0L) {
+                            LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getParadaApontMecan() == 0L) {\n" +
+                                    "                                Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterroperFinalActivity.class);", getLocalClassName());
+                            Intent it = new Intent(MenuFuncaoActivity.this, OpcaoInterroperFinalActivity.class);
+                            startActivity(it);
+                            finish();
                         } else {
-
                             LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                    "                            AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);\n" +
-                                    "                            alerta.setTitle(\"ATENÇÃO\");\n" +
-                                    "                            alerta.setMessage(\"O BOLETIM SERÁ ENCERRADO POR FALTA DE ENCERRAMENTO DO TURNO ANTERIOR!\");", getLocalClassName());
+                                    "                                AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);\n" +
+                                    "                                alerta.setTitle(\"ATENÇÃO\");\n" +
+                                    "                                alerta.setMessage(\"NÃO EXISTE APONTAMENTO PARA FINALIZAR/INTERROMPER.\");", getLocalClassName());
                             AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
                             alerta.setTitle("ATENÇÃO");
-                            alerta.setMessage("O BOLETIM SERÁ ENCERRADO POR FALTA DE ENCERRAMENTO DO TURNO ANTERIOR!");
+                            alerta.setMessage("NÃO EXISTE APONTAMENTO PARA FINALIZAR/INTERROMPER.");
                             alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                            "                                @Override\n" +
-                                            "                                public void onClick(DialogInterface dialog, int which) {\n" +
-                                            "                                    pbmContext.getMecanicoCTR().forcarFechBoletim();\n" +
-                                            "                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                                    pbmContext.getMecanicoCTR().forcarFechBoletim();
-                                    Intent it = new Intent(MenuFuncaoActivity.this, TelaInicialActivity.class);
-                                    startActivity(it);
-                                    finish();
+                                            "                                    @Override\n" +
+                                            "                                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
                                 }
                             });
 
                             alerta.show();
-
                         }
-
 
                     } else {
 

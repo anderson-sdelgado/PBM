@@ -19,6 +19,8 @@ public class REquipPneuBean extends Entidade {
     private Long idPosConfPneu;
     @DatabaseField
     private String posPneu;
+    @DatabaseField
+    private Long statusPneu;
 
     public REquipPneuBean() {
     }
@@ -53,5 +55,13 @@ public class REquipPneuBean extends Entidade {
 
     public void setPosPneu(String posPneu) {
         this.posPneu = posPneu;
+    }
+
+    public Long getStatusPneu() {
+        return statusPneu;
+    }
+
+    public void setStatusPneu(Long statusPneu) {
+        this.statusPneu = statusPneu;
     }
 }

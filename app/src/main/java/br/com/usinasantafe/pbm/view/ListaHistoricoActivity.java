@@ -27,7 +27,7 @@ public class ListaHistoricoActivity extends ActivityGeneric {
                 "        AdapterListHistorico adapterListHistorico = new AdapterListHistorico(this, pbmContext.getMecanicoCTR().apontList());\n" +
                 "        listaHistorico.setAdapter(adapterListHistorico);", getLocalClassName());
         ListView listaHistorico = (ListView) findViewById(R.id.listaHistorico);
-        AdapterListHistorico adapterListHistorico = new AdapterListHistorico(this, pbmContext.getMecanicoCTR().apontList());
+        AdapterListHistorico adapterListHistorico = new AdapterListHistorico(this, pbmContext.getMecanicoCTR().apontBolApontandoList());
         listaHistorico.setAdapter(adapterListHistorico);
         buttonRetHistorico.setOnClickListener(new View.OnClickListener() {
             @Override

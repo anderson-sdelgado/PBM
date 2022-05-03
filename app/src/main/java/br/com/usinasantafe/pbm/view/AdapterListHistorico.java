@@ -12,7 +12,6 @@ import java.util.List;
 
 import br.com.usinasantafe.pbm.R;
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
-import br.com.usinasantafe.pbm.util.Tempo;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ParadaBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ApontMecanBean;
 
@@ -59,7 +58,7 @@ public class AdapterListHistorico extends BaseAdapter {
         textViewHistHrFinal.setText("HORÁRIO FINAL: " + apontMecanBean.getDthrFinalApontMecan());
 
         if(apontMecanBean.getParadaApontMecan() == 0) {
-            textViewHistApont.setText("TRABALHANDO: OS " + apontMecanBean.getOsApontMecan() + " - ITEM " + apontMecanBean.getItemOSApontMecan());
+            textViewHistApont.setText("TRABALHANDO: OS " + apontMecanBean.getNroOSApontMecan() + " - ITEM " + apontMecanBean.getItemOSApontMecan());
             textViewHistApont.setTextColor(Color.BLUE);
         }
         else{

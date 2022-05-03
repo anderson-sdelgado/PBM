@@ -11,7 +11,6 @@ import android.widget.Button;
 import br.com.usinasantafe.pbm.PBMContext;
 import br.com.usinasantafe.pbm.R;
 import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
-import br.com.usinasantafe.pbm.util.ConnectNetwork;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
 
 public class EquipActivity extends ActivityGeneric {
@@ -125,6 +124,7 @@ public class EquipActivity extends ActivityGeneric {
                                 "                        pbmContext.getPneuCTR().salvarBoletim(pbmContext.getConfigCTR().getEquip(Long.parseLong(editTextPadrao.getText().toString())).getIdEquip());\n" +
                                 "                        Intent it = new Intent(EquipActivity.this, ListaPosPneuActivity.class);", getLocalClassName());
                         pbmContext.getPneuCTR().salvarBoletim(pbmContext.getConfigCTR().getEquip(Long.parseLong(editTextPadrao.getText().toString())).getIdEquip());
+
                         Intent it = new Intent(EquipActivity.this, ListaPosPneuActivity.class);
                         startActivity(it);
                         finish();
@@ -174,8 +174,8 @@ public class EquipActivity extends ActivityGeneric {
 
     public void onBackPressed()  {
         LogProcessoDAO.getInstance().insertLogProcesso("public void onBackPressed()  {\n" +
-                "        Intent it = new Intent(EquipActivity.this, TelaInicialActivity.class);", getLocalClassName());
-        Intent it = new Intent(EquipActivity.this, TelaInicialActivity.class);
+                "        Intent it = new Intent(EquipActivity.this, MenuFuncaoActivity.class);", getLocalClassName());
+        Intent it = new Intent(EquipActivity.this, MenuFuncaoActivity.class);
         startActivity(it);
         finish();
     }

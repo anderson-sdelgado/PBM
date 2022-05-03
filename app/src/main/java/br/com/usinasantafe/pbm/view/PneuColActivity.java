@@ -42,8 +42,8 @@ public class PneuColActivity extends ActivityGeneric {
                     LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {\n" +
                             "                    pbmContext.getPneuCTR().getItemManutPneuBean().setNroPneuColItemManutPneu(editTextPadrao.getText().toString());", getLocalClassName());
                     pbmContext.getPneuCTR().getItemManutPneuBean().setNroPneuColItemManutPneu(editTextPadrao.getText().toString());
-                    if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){
-                        LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){", getLocalClassName());
+                    if(pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())) {
+                        LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())) {", getLocalClassName());
                         if (connectNetwork) {
 
                             LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
@@ -53,7 +53,7 @@ public class PneuColActivity extends ActivityGeneric {
                                     "                            progressBar.show();\n" +
                                     "                            customHandler.postDelayed(updateTimerThread, 10000);\n" +
                                     "                            pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()\n" +
-                                    "                                    , PneuColActivity.this, TelaInicialActivity.class, progressBar, true);", getLocalClassName());
+                                    "                                    , PneuColActivity.this, ListaPosPneuActivity.class, progressBar, true);", getLocalClassName());
                             progressBar = new ProgressDialog(PneuColActivity.this);
                             progressBar.setCancelable(true);
                             progressBar.setMessage("Atualizando Pneu...");
@@ -62,29 +62,28 @@ public class PneuColActivity extends ActivityGeneric {
                             customHandler.postDelayed(updateTimerThread, 10000);
 
                             pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()
-                                    , PneuColActivity.this, TelaInicialActivity.class, progressBar, true);
+                                    , PneuColActivity.this, ListaPosPneuActivity.class, progressBar, true);
 
                         } else {
-
                             LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                    "                            salvarBoletimPneu();\n" +
+                                    "                            pbmContext.getPneuCTR().salvarItemManutPneu();\n" +
                                     "                            Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                            salvarBoletimPneu();
-                            Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);
+                            pbmContext.getPneuCTR().salvarItemManutPneu();
+                            Intent it = new Intent(PneuColActivity.this, ListaPosPneuActivity.class);
                             startActivity(it);
                             finish();
-
                         }
 
                     } else {
 
                         LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                "                        salvarBoletimPneu();\n" +
-                                "                        Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                        salvarBoletimPneu();
-                        Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);
+                                "                            pbmContext.getPneuCTR().salvarItemManutPneu();\n" +
+                                "                            Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
+                        pbmContext.getPneuCTR().salvarItemManutPneu();
+                        Intent it = new Intent(PneuColActivity.this, ListaPosPneuActivity.class);
                         startActivity(it);
                         finish();
+
                     }
 
                 }
@@ -97,11 +96,11 @@ public class PneuColActivity extends ActivityGeneric {
 
             @Override
             public void onClick(View v) {
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonCancPneuCol.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {", getLocalClassName());
                 if (editTextPadrao.getText().toString().length() > 0) {
-                    LogProcessoDAO.getInstance().insertLogProcesso("buttonCancPneuCol.setOnClickListener(new View.OnClickListener() {\n" +
-                            "            @Override\n" +
-                            "            public void onClick(View v) {\n" +
-                            "                if (editTextPadrao.getText().toString().length() > 0) {\n" +
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (editTextPadrao.getText().toString().length() > 0) {\n" +
                             "                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));", getLocalClassName());
                     editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
                 }
@@ -136,10 +135,10 @@ public class PneuColActivity extends ActivityGeneric {
                     progressBar.dismiss();
                 }
 
-                LogProcessoDAO.getInstance().insertLogProcesso("salvarBoletimPneu();\n" +
-                        "                Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                salvarBoletimPneu();
-                Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);
+                LogProcessoDAO.getInstance().insertLogProcesso("pbmContext.getPneuCTR().salvarItemManutPneu();\n" +
+                        "                Intent it = new Intent(PneuColActivity.this, ListaPosPneuActivity.class);", getLocalClassName());
+                pbmContext.getPneuCTR().salvarItemManutPneu();
+                Intent it = new Intent(PneuColActivity.this, ListaPosPneuActivity.class);
                 startActivity(it);
                 finish();
 
@@ -147,19 +146,5 @@ public class PneuColActivity extends ActivityGeneric {
 
         }
     };
-
-    public void salvarBoletimPneu(){
-
-        LogProcessoDAO.getInstance().insertLogProcesso("public void salvarBoletimPneu(){\n" +
-                "        pbmContext.getPneuCTR().salvarItemManutPneu();\n" +
-                "        pbmContext.getPneuCTR().fecharBoletim();\n" +
-                "        Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);", getLocalClassName());
-        pbmContext.getPneuCTR().salvarItemManutPneu();
-        pbmContext.getPneuCTR().fecharBoletim();
-        Intent it = new Intent(PneuColActivity.this, TelaInicialActivity.class);
-        startActivity(it);
-        finish();
-
-    }
 
 }

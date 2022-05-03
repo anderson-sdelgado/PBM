@@ -88,7 +88,7 @@ public class BoletimMecanDAO {
         boletimMecanBean.update();
     }
 
-    public void fecharBoletim(BoletimMecanBean boletimMecanBean, String dthrFinal){
+    public void forcarFechamentoBoletim(BoletimMecanBean boletimMecanBean, String dthrFinal){
         boletimMecanBean.setDthrFinalBolMecan(dthrFinal);
         boletimMecanBean.setStatusBolMecan(2L);
         boletimMecanBean.setStatusFechBolMecan(0L);
@@ -139,6 +139,16 @@ public class BoletimMecanDAO {
         return boletimMecanBean.in("idBolMecan", idBolAbertoList);
     }
 
+    public List<BoletimMecanBean> boletimAbertoList(){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqStatusFechado());
+
+        BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
+        return boletimMecanBean.get(pesqArrayList);
+
+    }
+
     public List<BoletimMecanBean> boletimFechadoList(){
 
         ArrayList pesqArrayList = new ArrayList();
@@ -158,11 +168,6 @@ public class BoletimMecanDAO {
         BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
         return boletimMecanBean.get(pesqArrayList);
 
-    }
-
-    public List<BoletimMecanBean> boletimAllList(){
-        BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
-        return boletimMecanBean.all();
     }
 
     public BoletimMecanBean getBolApontando(){

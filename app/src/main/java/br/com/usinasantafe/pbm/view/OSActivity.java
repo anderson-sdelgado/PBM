@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -44,74 +45,52 @@ public class OSActivity extends ActivityGeneric {
                             "                    pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());\n" +
                             "                    pbmContext.getMecanicoCTR().getApontBean().setOsApontMecan(Long.parseLong(editTextPadrao.getText().toString()));", getLocalClassName());
                     pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());
-                    pbmContext.getMecanicoCTR().getApontBean().setOsApontMecan(Long.parseLong(editTextPadrao.getText().toString()));
+                    pbmContext.getMecanicoCTR().getApontBean().setNroOSApontMecan(Long.parseLong(editTextPadrao.getText().toString()));
 
-                    try {
+                    if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {
 
-                        if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {
+                        LogProcessoDAO.getInstance().insertLogProcesso("try {\n" +
+                                "                        if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {\n" +
+                                "                            Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);", getLocalClassName());
+                        Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);
+                        startActivity(it);
+                        finish();
 
-                            LogProcessoDAO.getInstance().insertLogProcesso("try {\n" +
-                                    "                        if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {\n" +
-                                    "                            Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);", getLocalClassName());
-                            Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);
+                    } else {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
+                        if (connectNetwork) {
+
+                            LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                                    "                                progressBar = new ProgressDialog(v.getContext());\n" +
+                                    "                                progressBar.setCancelable(true);\n" +
+                                    "                                progressBar.setMessage(\"Pequisando a OS...\");\n" +
+                                    "                                progressBar.show();\n" +
+                                    "                                customHandler.postDelayed(updateTimerThread, 10000);\n" +
+                                    "                                pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()\n" +
+                                    "                                        , OSActivity.this, DescrOSActivity.class, progressBar);", getLocalClassName());
+                            progressBar = new ProgressDialog(v.getContext());
+                            progressBar.setCancelable(true);
+                            progressBar.setMessage("Pequisando a OS...");
+                            progressBar.show();
+
+                            customHandler.postDelayed(updateTimerThread, 10000);
+
+                            pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()
+                                    , OSActivity.this, DescrOSActivity.class, progressBar);
+
+                        } else {
+
+                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                    "                                Intent it = new Intent(OSActivity.this, DigItemOSActivity.class);", getLocalClassName());
+                            Intent it = new Intent(OSActivity.this, DigItemOSActivity.class);
                             startActivity(it);
                             finish();
 
-                        } else {
-                            LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                            if (connectNetwork) {
-
-                                LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                                        "                                progressBar = new ProgressDialog(v.getContext());\n" +
-                                        "                                progressBar.setCancelable(true);\n" +
-                                        "                                progressBar.setMessage(\"Pequisando a OS...\");\n" +
-                                        "                                progressBar.show();\n" +
-                                        "                                customHandler.postDelayed(updateTimerThread, 10000);\n" +
-                                        "                                pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()\n" +
-                                        "                                        , OSActivity.this, DescrOSActivity.class, progressBar);", getLocalClassName());
-                                progressBar = new ProgressDialog(v.getContext());
-                                progressBar.setCancelable(true);
-                                progressBar.setMessage("Pequisando a OS...");
-                                progressBar.show();
-
-                                customHandler.postDelayed(updateTimerThread, 10000);
-
-                                pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()
-                                        , OSActivity.this, DescrOSActivity.class, progressBar);
-
-                            } else {
-
-                                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                        "                                Intent it = new Intent(OSActivity.this, DigItemOSActivity.class);", getLocalClassName());
-                                Intent it = new Intent(OSActivity.this, DigItemOSActivity.class);
-                                startActivity(it);
-                                finish();
-
-                            }
-
                         }
 
-                    } catch (Exception e) {
-
-                        LogProcessoDAO.getInstance().insertLogProcesso("} catch (Exception e) {\n" +
-                                "                        AlertDialog.Builder alerta = new AlertDialog.Builder(OSActivity.this);\n" +
-                                "                        alerta.setTitle(\"ATENÇÃO\");\n" +
-                                "                        alerta.setMessage(\"O.S. INCORRETA OU INEXISTENTE! FAVOR VERIFICAR.\");", getLocalClassName());
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(OSActivity.this);
-                        alerta.setTitle("ATENÇÃO");
-                        alerta.setMessage("O.S. INCORRETA OU INEXISTENTE! FAVOR VERIFICAR.");
-                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                        "                            @Override\n" +
-                                        "                            public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                            }
-                        });
-
-                        alerta.show();
-
                     }
+
                 }
             }
         });

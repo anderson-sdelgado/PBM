@@ -39,30 +39,45 @@ public class PneuCalibActivity extends ActivityGeneric {
                         "            @Override\n" +
                         "            public void onClick(View v) {", getLocalClassName());
                 if (!editTextPadrao.getText().toString().equals("")) {
+
                     LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {\n" +
                             "                    pbmContext.getPneuCTR().getItemCalibPneuBean().setNroPneuItemCalibPneu(editTextPadrao.getText().toString());", getLocalClassName());
                     pbmContext.getPneuCTR().getItemCalibPneuBean().setNroPneuItemCalibPneu(editTextPadrao.getText().toString());
-                    if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){
-                        LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){", getLocalClassName());
-                        if (connectNetwork) {
 
-                            LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                                    "                            progressBar = new ProgressDialog(PneuCalibActivity.this);\n" +
-                                    "                            progressBar.setCancelable(true);\n" +
-                                    "                            progressBar.setMessage(\"Atualizando Pneu...\");\n" +
-                                    "                            progressBar.show();\n" +
-                                    "                            customHandler.postDelayed(updateTimerThread, 10000);\n" +
-                                    "                            pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()\n" +
-                                    "                                    , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar, false);", getLocalClassName());
-                            progressBar = new ProgressDialog(PneuCalibActivity.this);
-                            progressBar.setCancelable(true);
-                            progressBar.setMessage("Atualizando Pneu...");
-                            progressBar.show();
+                    if (pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())) {
+                        LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())) {", getLocalClassName());
 
-                            customHandler.postDelayed(updateTimerThread, 10000);
+                        if(pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())){
+                            LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())){", getLocalClassName());
+                            if (connectNetwork) {
 
-                            pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()
-                                    , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar, false);
+                                LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                                        "                            progressBar = new ProgressDialog(PneuCalibActivity.this);\n" +
+                                        "                            progressBar.setCancelable(true);\n" +
+                                        "                            progressBar.setMessage(\"Atualizando Pneu...\");\n" +
+                                        "                            progressBar.show();\n" +
+                                        "                            customHandler.postDelayed(updateTimerThread, 10000);\n" +
+                                        "                            pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()\n" +
+                                        "                                    , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar, false);", getLocalClassName());
+                                progressBar = new ProgressDialog(PneuCalibActivity.this);
+                                progressBar.setCancelable(true);
+                                progressBar.setMessage("Atualizando Pneu...");
+                                progressBar.show();
+
+                                customHandler.postDelayed(updateTimerThread, 10000);
+
+                                pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString()
+                                        , PneuCalibActivity.this, PressaoEncPneuActivity.class, progressBar, false);
+
+                            } else {
+
+                                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                        "                            Intent it = new Intent(PneuCalibActivity.this, PressaoEncPneuActivity.class);", getLocalClassName());
+                                Intent it = new Intent(PneuCalibActivity.this, PressaoEncPneuActivity.class);
+                                startActivity(it);
+                                finish();
+
+                            }
 
                         } else {
 
@@ -75,32 +90,22 @@ public class PneuCalibActivity extends ActivityGeneric {
                         }
 
                     } else {
-                        LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                        if(!pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())){
-                            LogProcessoDAO.getInstance().insertLogProcesso("if(!pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())){\n" +
-                                    "                            Intent it = new Intent(PneuCalibActivity.this, PressaoEncPneuActivity.class);", getLocalClassName());
-                            Intent it = new Intent(PneuCalibActivity.this, PressaoEncPneuActivity.class);
-                            startActivity(it);
-                            finish();
-                        } else {
-                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                    "                            AlertDialog.Builder alerta = new AlertDialog.Builder(PneuCalibActivity.this);\n" +
-                                    "                            alerta.setTitle(\"ATENÇÃO\");\n" +
-                                    "                            alerta.setMessage(\"PNEU REPETIDO! FAVOR CALIBRAR OUTRO PNEU.\");", getLocalClassName());
-                            AlertDialog.Builder alerta = new AlertDialog.Builder(PneuCalibActivity.this);
-                            alerta.setTitle("ATENÇÃO");
-                            alerta.setMessage("PNEU REPETIDO! FAVOR CALIBRAR OUTRO PNEU.");
-                            alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                            "                                @Override\n" +
-                                            "                                public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                                }
-                            });
-                            alerta.show();
-
-                        }
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                            AlertDialog.Builder alerta = new AlertDialog.Builder(PneuCalibActivity.this);\n" +
+                                "                            alerta.setTitle(\"ATENÇÃO\");\n" +
+                                "                            alerta.setMessage(\"PNEU REPETIDO! FAVOR CALIBRAR OUTRO PNEU.\");", getLocalClassName());
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(PneuCalibActivity.this);
+                        alerta.setTitle("ATENÇÃO");
+                        alerta.setMessage("PNEU REPETIDO! FAVOR CALIBRAR OUTRO PNEU.");
+                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                                        "                                @Override\n" +
+                                        "                                public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
+                            }
+                        });
+                        alerta.show();
 
                     }
 

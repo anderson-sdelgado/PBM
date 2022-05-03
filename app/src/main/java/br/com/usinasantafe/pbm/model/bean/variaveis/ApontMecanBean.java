@@ -15,7 +15,7 @@ public class ApontMecanBean extends Entidade {
     @DatabaseField
     private Long idBolApontMecan;
     @DatabaseField
-    private Long osApontMecan;
+    private Long nroOSApontMecan;
     @DatabaseField
     private Long itemOSApontMecan;
     @DatabaseField
@@ -56,12 +56,12 @@ public class ApontMecanBean extends Entidade {
         this.idBolApontMecan = idBolApontMecan;
     }
 
-    public Long getOsApontMecan() {
-        return osApontMecan;
+    public Long getNroOSApontMecan() {
+        return nroOSApontMecan;
     }
 
-    public void setOsApontMecan(Long osApontMecan) {
-        this.osApontMecan = osApontMecan;
+    public void setNroOSApontMecan(Long nroOSApontMecan) {
+        this.nroOSApontMecan = nroOSApontMecan;
     }
 
     public Long getItemOSApontMecan() {

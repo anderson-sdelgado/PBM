@@ -64,8 +64,9 @@ public class TelaInicialActivity extends ActivityGeneric {
         LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getCheckListCTR().deleteChecklist();\n" +
                 "        pmmContext.getMotoMecFertCTR().deleteBolEnviado();\n" +
                 "        pmmContext.getConfigCTR().deleteLogs();", getLocalClassName());
-        pbmContext.getMecanicoCTR().deleteBoletimSemApont();
-        pbmContext.getMecanicoCTR().deleteBoletimEnviado();
+        pbmContext.getMecanicoCTR().deleteBolMecanSemApont();
+        pbmContext.getMecanicoCTR().forcarFechamentoBoletim();
+        pbmContext.getMecanicoCTR().deleteBolMecanEnviado();
         pbmContext.getPneuCTR().deleteBoletimEnviado();
         pbmContext.getConfigCTR().deleteLogs();
     }
@@ -79,7 +80,7 @@ public class TelaInicialActivity extends ActivityGeneric {
                         "                customHandler.postDelayed(updateTimerThread, 10000);", getLocalClassName());
                 customHandler.postDelayed(encerraAtualThread, 10000);
                 LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getConfigCTR().verAtualAplic(pmmContext.versaoAplic, this, getLocalClassName());", getLocalClassName());
-                pbmContext.getConfigCTR().verAtualAplic(pbmContext.versaoAplic, this, getLocalClassName());
+                pbmContext.getConfigCTR().verAtualAplic(pbmContext.versaoAPP, this, getLocalClassName());
             }
             else{
                 LogProcessoDAO.getInstance().insertLogProcesso("else{\n" +

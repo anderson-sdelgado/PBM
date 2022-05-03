@@ -15,9 +15,7 @@ public class OSBean extends Entidade {
     @DatabaseField
     private Long nroOS;
     @DatabaseField
-    private Long equipOS;
-    @DatabaseField
-    private String descrEquipOS;
+    private Long idEquip;
 
     public OSBean() {
     }
@@ -38,20 +36,11 @@ public class OSBean extends Entidade {
         this.nroOS = nroOS;
     }
 
-    public Long getEquipOS() {
-        return equipOS;
+    public Long getIdEquip() {
+        return idEquip;
     }
 
-    public void setEquipOS(Long equipOS) {
-        this.equipOS = equipOS;
+    public void setIdEquip(Long idEquip) {
+        this.idEquip = idEquip;
     }
-
-    public String getDescrEquipOS() {
-        return descrEquipOS;
-    }
-
-    public void setDescrEquipOS(String descrEquipOS) {
-        this.descrEquipOS = descrEquipOS;
-    }
-
 }

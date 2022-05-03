@@ -8,11 +8,18 @@
         <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_item_log_erro.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_item_log_processo.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_lista_item_os.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_lista_parada.xml" value="0.15729166666666666" />
+        <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_lista_pos_pneu.xml" value="0.20104166666666667" />
+        <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_lista_pos_pneu_calib.xml" value="0.20104166666666667" />
+        <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_lista_pos_pneu_manut.xml" value="0.20104166666666667" />
+        <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_lista_tipo_manut.xml" value="0.15729166666666666" />
         <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_log_base_dado.xml" value="0.12552083333333333" />
         <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_log_erro.xml" value="0.12552083333333333" />
         <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_log_processo.xml" value="0.12552083333333333" />
         <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_opcao_interroper_final.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_pneu_calib.xml" value="0.15729166666666666" />
         <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_tela_inicial.xml" value="0.20104166666666667" />
+        <entry key="..\:/Users/anderson/Documents/Android/PBM/app/src/main/res/layout/activity_tipo_manut.xml" value="0.15729166666666666" />
       </map>
     </option>
   </component>

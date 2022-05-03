@@ -40,7 +40,7 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
         itens.add("CANCELAR");
 
         AdapterList adapterList = new AdapterList(this, itens);
-        lista = (ListView) findViewById(R.id.listViewMenuOpcao);
+        lista = findViewById(R.id.listViewMenuOpcao);
         lista.setAdapter(adapterList);
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -54,7 +54,7 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
                         "                                    long id) {\n" +
                         "                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);\n" +
                         "                String text = textView.getText().toString();", getLocalClassName());
-                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
+                TextView textView = v.findViewById(R.id.textViewItemList);
                 String text = textView.getText().toString();
 
                 if (text.equals("FINALIZAR")) {

@@ -22,7 +22,7 @@ public class PneuDAO {
 
     public boolean verPneu(String codPneu){
         List<PneuBean> pneuList = pneuList(codPneu);
-        boolean ret = (pneuList.size() > 0);
+        boolean ret = pneuList.size() == 0;
         pneuList.clear();
         return ret;
     }

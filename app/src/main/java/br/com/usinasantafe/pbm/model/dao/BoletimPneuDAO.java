@@ -38,6 +38,11 @@ public class BoletimPneuDAO {
         boletimPneuBean.update();
     }
 
+    public void deleteBoletimPneuAberto(){
+        BoletimPneuBean boletimPneuBean = getBoletimPneuAberto();
+        boletimPneuBean.delete();
+    }
+
     public void deleteBoletimMecan(Long idBol){
 
         ArrayList pesqArrayList = new ArrayList();

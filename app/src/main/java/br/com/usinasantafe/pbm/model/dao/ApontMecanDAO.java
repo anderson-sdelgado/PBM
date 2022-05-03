@@ -19,7 +19,7 @@ public class ApontMecanDAO {
 
     public void salvarApont(ApontMecanBean apontMecanBean, String horarioEnt, BoletimMecanBean boletimMecanBean){
 
-        List<ApontMecanBean> apontList = apontEnvioList(boletimMecanBean.getIdBolMecan());
+        List<ApontMecanBean> apontList = apontIdBolList(boletimMecanBean.getIdBolMecan());
 
         if(apontMecanBean.getParadaApontMecan() > 0) {
 
@@ -116,20 +116,27 @@ public class ApontMecanDAO {
     }
 
     public boolean verApont(Long idBol){
-        List<ApontMecanBean> apontList = apontEnvioList(idBol);
+        List<ApontMecanBean> apontList = apontIdBolList(idBol);
         boolean ret = (apontList.size() > 0);
         apontList.clear();
         return ret;
     }
 
-    public List<ApontMecanBean> apontEnvioList(Long idBol){
+    public ApontMecanBean getUltApontIdBol(Long idBol){
+        List<ApontMecanBean> apontMecanList = apontIdBolList(idBol);
+        ApontMecanBean apontMecanBean = apontMecanList.get(0);
+        apontMecanList.clear();
+        return apontMecanBean;
+    }
+
+    public List<ApontMecanBean> apontIdBolList(Long idBol){
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdBolMecan(idBol));
         ApontMecanBean apontMecanBean = new ApontMecanBean();
         return apontMecanBean.getAndOrderBy(pesqArrayList, "idApontMecan", false);
     }
 
-    public List<ApontMecanBean> apontEnvioList(ArrayList<Long> idBolArrayList){
+    public List<ApontMecanBean> apontIdBolList(ArrayList<Long> idBolArrayList){
         ApontMecanBean apontMecanBean = new ApontMecanBean();
         return apontMecanBean.in("idBolApontMecan", idBolArrayList);
     }
@@ -140,14 +147,6 @@ public class ApontMecanDAO {
         pesqArrayList.add(getPesqStatusAbertoEnviadoMecan());
         ApontMecanBean apontMecanBean = new ApontMecanBean();
         return apontMecanBean.getWithOr(pesqArrayList);
-    }
-
-    public List<ApontMecanBean> apontMecanList(Long idBol) {
-        ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdBolMecan(idBol));
-
-        ApontMecanBean apontMecanBean = new ApontMecanBean();
-        return apontMecanBean.getAndOrderBy(pesqArrayList, "idApontMecan", true);
     }
 
     public List<ApontMecanBean> apontMecanList(ArrayList<Long> idApontMecanArrayList){
@@ -221,7 +220,7 @@ public class ApontMecanDAO {
 
     public String dadosEnvioApont(ArrayList<Long> idBolArrayList){
 
-        List<ApontMecanBean> apontList = apontEnvioList(idBolArrayList);
+        List<ApontMecanBean> apontList = apontIdBolList(idBolArrayList);
         JsonArray jsonArrayApont = new JsonArray();
 
         for (ApontMecanBean apontMecanBean : apontList) {
@@ -274,7 +273,7 @@ public class ApontMecanDAO {
 
     private EspecificaPesquisa getPesqOSApontMecan(Long nroOS){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("osApontMecan");
+        pesquisa.setCampo("nroOSApontMecan");
         pesquisa.setValor(nroOS);
         pesquisa.setTipo(1);
         return pesquisa;

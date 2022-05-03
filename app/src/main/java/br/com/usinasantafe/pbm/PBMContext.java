@@ -11,7 +11,8 @@ public class PBMContext extends Application {
 
     private Thread.UncaughtExceptionHandler mDefaultExceptionHandler;
 
-    public static String versaoAplic = "3.00";
+    public static String versaoWebService = "3.00";
+    public static String versaoAPP = "3.00";
     private ConfigCTR configCTR;
     private MecanicoCTR mecanicoCTR;
     private PneuCTR pneuCTR;

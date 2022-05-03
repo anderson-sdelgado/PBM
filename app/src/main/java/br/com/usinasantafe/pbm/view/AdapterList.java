@@ -42,7 +42,7 @@ public class AdapterList extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = layoutInflater.inflate(R.layout.activity_item_lista, null);
-        TextView textView = (TextView) convertView.findViewById(R.id.textViewItemList);
+        TextView textView = convertView.findViewById(R.id.textViewItemList);
         textView.setText(itens.get(position));
         return convertView;
     }

@@ -55,6 +55,34 @@ public class ListaItemOSActivity extends ActivityGeneric {
                     + pbmContext.getMecanicoCTR().getComponente(itemOSBean.getIdCompItemOS()).getDescrComponente());
         }
 
+        LogProcessoDAO.getInstance().insertLogProcesso("AdapterList adapterList = new AdapterList(this, itens);\n" +
+                "        itemOSListView = (ListView) findViewById(R.id.listItemOS);\n" +
+                "        itemOSListView.setAdapter(adapterList);", getLocalClassName());
+        AdapterList adapterList = new AdapterList(this, itens);
+        itemOSListView = (ListView) findViewById(R.id.listItemOS);
+        itemOSListView.setAdapter(adapterList);
+        itemOSListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> l, View v, int position,
+                                    long id) {
+
+                LogProcessoDAO.getInstance().insertLogProcesso("itemOSListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                        "                                    long id) {\n" +
+                        "                ItemOSBean itemOSBean = itemOSList.get(position);\n" +
+                        "                pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);\n" +
+                        "                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);", getLocalClassName());
+                ItemOSBean itemOSBean = itemOSList.get(position);
+                pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);
+                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);
+                startActivity(it);
+                finish();
+
+            }
+
+        });
+
         buttonAtualItemOS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,34 +132,6 @@ public class ListaItemOSActivity extends ActivityGeneric {
                     alerta.show();
                 }
             }
-        });
-
-        LogProcessoDAO.getInstance().insertLogProcesso("AdapterList adapterList = new AdapterList(this, itens);\n" +
-                "        itemOSListView = (ListView) findViewById(R.id.listItemOS);\n" +
-                "        itemOSListView.setAdapter(adapterList);", getLocalClassName());
-        AdapterList adapterList = new AdapterList(this, itens);
-        itemOSListView = (ListView) findViewById(R.id.listItemOS);
-        itemOSListView.setAdapter(adapterList);
-        itemOSListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
-
-                LogProcessoDAO.getInstance().insertLogProcesso("itemOSListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                ItemOSBean itemOSBean = itemOSList.get(position);\n" +
-                        "                pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);\n" +
-                        "                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                ItemOSBean itemOSBean = itemOSList.get(position);
-                pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);
-                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);
-                startActivity(it);
-                finish();
-
-            }
-
         });
 
         buttonRetItemOS.setOnClickListener(new View.OnClickListener() {

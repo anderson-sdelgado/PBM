@@ -70,13 +70,6 @@ public class ConfigCTR {
         return configDAO.getStatusRetVerif();
     }
 
-    public void deleteLogs(){
-        LogProcessoDAO logProcessoDAO = new LogProcessoDAO();
-        LogErroDAO logErroDAO = new LogErroDAO();
-        logProcessoDAO.deleteLogProcesso();
-        logErroDAO.deleteLogErro();
-    }
-
     public void verAtualAplic(String versaoAplic, TelaInicialActivity telaInicialActivity, String activity) {
         AtualAplicDAO atualAplicDAO = new AtualAplicDAO();
         LogProcessoDAO.getInstance().insertLogProcesso("VerifDadosServ.getInstance().verifAtualAplic(atualAplicDAO.dadosVerAtualAplicBean(equipBean.getNroEquip(), equipBean.getIdCheckList(), versaoAplic)\n" +
@@ -108,6 +101,13 @@ public class ConfigCTR {
     public List<LogProcessoBean> logProcessoList(){
         LogProcessoDAO logProcessoDAO = new LogProcessoDAO();
         return logProcessoDAO.logProcessoList();
+    }
+
+    public void deleteLogs(){
+        LogProcessoDAO logProcessoDAO = new LogProcessoDAO();
+        LogErroDAO logErroDAO = new LogErroDAO();
+        logProcessoDAO.deleteLogProcesso();
+        logErroDAO.deleteLogErro();
     }
 
 }

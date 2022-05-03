@@ -21,7 +21,7 @@ public class ParadaDAO {
         return paradaBean;
     }
 
-    public List<ParadaBean> paradaCodList(){
+    public List<ParadaBean> paradaList(){
         ParadaBean paradaTO = new ParadaBean();
         return paradaTO.orderBy("codParada",true);
     }

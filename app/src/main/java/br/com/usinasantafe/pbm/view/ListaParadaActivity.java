@@ -22,7 +22,6 @@ import br.com.usinasantafe.pbm.R;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ParadaBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ApontMecanBean;
 import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
-import br.com.usinasantafe.pbm.util.ConnectNetwork;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
 
 public class ListaParadaActivity extends ActivityGeneric {
@@ -108,7 +107,7 @@ public class ListaParadaActivity extends ActivityGeneric {
                                 "                        }\n" +
                                 "                        Intent it = new Intent(  ListaParadaActivity.this, TelaInicialActivity.class);", getLocalClassName());
                         pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());
-                        pbmContext.getMecanicoCTR().getApontBean().setOsApontMecan(0L);
+                        pbmContext.getMecanicoCTR().getApontBean().setNroOSApontMecan(0L);
                         pbmContext.getMecanicoCTR().salvarApont(0L, pbmContext.getMecanicoCTR().getParadaCod(Long.parseLong(textParada.substring(0, textParada.indexOf('-')).trim())).getIdParada(), 1L);
 
                         if(pbmContext.getVerTela() == 2){

@@ -25,8 +25,8 @@ public class PneuRetActivity extends ActivityGeneric {
 
         pbmContext = (PBMContext) getApplication();
 
-        Button buttonOkPneuRet = (Button) findViewById(R.id.buttonOkPadrao);
-        Button buttonCancPneuRet = (Button) findViewById(R.id.buttonCancPadrao);
+        Button buttonOkPneuRet = findViewById(R.id.buttonOkPadrao);
+        Button buttonCancPneuRet = findViewById(R.id.buttonCancPadrao);
 
         buttonOkPneuRet.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("rawtypes")
@@ -37,12 +37,12 @@ public class PneuRetActivity extends ActivityGeneric {
                         "            @SuppressWarnings(\"rawtypes\")\n" +
                         "            @Override\n" +
                         "            public void onClick(View v) {", getLocalClassName());
-                if (!editTextPadrao.getText().toString().equals("")) {
 
+                if (!editTextPadrao.getText().toString().equals("")) {
                     LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {\n" +
                             "                    pbmContext.getPneuCTR().getItemManutPneuBean().setNroPneuRetItemManutPneu(editTextPadrao.getText().toString());", getLocalClassName());
                     pbmContext.getPneuCTR().getItemManutPneuBean().setNroPneuRetItemManutPneu(editTextPadrao.getText().toString());
-                    if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){
+                    if(pbmContext.getPneuCTR().verPneu(editTextPadrao.getText().toString())) {
 
                         LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getPneuCTR().verPneuItemCalib(editTextPadrao.getText().toString())){", getLocalClassName());
                         if (connectNetwork) {
@@ -78,10 +78,11 @@ public class PneuRetActivity extends ActivityGeneric {
                     } else {
 
                         LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                "                        Intent it = new Intent(PneuRetActivity.this, PneuColActivity.class);", getLocalClassName());
+                                "                            Intent it = new Intent(PneuRetActivity.this, PneuColActivity.class);", getLocalClassName());
                         Intent it = new Intent(PneuRetActivity.this, PneuColActivity.class);
                         startActivity(it);
                         finish();
+
                     }
 
                 }

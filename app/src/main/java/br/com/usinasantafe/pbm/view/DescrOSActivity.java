@@ -19,17 +19,17 @@ public class DescrOSActivity extends ActivityGeneric {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_descr_os);
 
-        TextView textViewCodEquip = (TextView) findViewById(R.id.textViewCodEquip);
-        TextView textViewDescEquip = (TextView) findViewById(R.id.textViewDescEquip);
-        Button buttonOkDescrOS = (Button) findViewById(R.id.buttonOkDescrOS);
-        Button buttonCancDescrOS = (Button) findViewById(R.id.buttonCancDescrOS);
+        TextView textViewCodEquip = findViewById(R.id.textViewCodEquip);
+        TextView textViewDescrEquip = findViewById(R.id.textViewDescrEquip);
+        Button buttonOkDescrOS = findViewById(R.id.buttonOkDescrOS);
+        Button buttonCancDescrOS = findViewById(R.id.buttonCancDescrOS);
 
         pbmContext = (PBMContext) getApplication();
 
         LogProcessoDAO.getInstance().insertLogProcesso("textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getOS().getEquipOS()));\n" +
-                "        textViewDescEquip.setText(pbmContext.getMecanicoCTR().getOS().getDescrEquipOS());", getLocalClassName());
-        textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getOS().getEquipOS()));
-        textViewDescEquip.setText(pbmContext.getMecanicoCTR().getOS().getDescrEquipOS());
+                "        textViewDescrEquip.setText(pbmContext.getMecanicoCTR().getOS().getDescrEquipOS());", getLocalClassName());
+        textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getEquipOS().getNroEquip()));
+            textViewDescrEquip.setText(pbmContext.getMecanicoCTR().getEquipOS().getDescrClasseEquip());
 
         buttonOkDescrOS.setOnClickListener(new View.OnClickListener() {
 

@@ -1,5 +1,7 @@
 package br.com.usinasantafe.pbm.util;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -120,21 +122,28 @@ public class Tempo {
         }
     }
 
-    public boolean verifDataHoraParada(String dthrInicio, Long qtdeMinutosParada){
-        Long dthrLongInicio = dthrStringToLong(dthrInicio) + (qtdeMinutosParada * 60 * 1000);
-        if(dthrAtualLong() > dthrLongInicio){
+    public boolean verifDataHoraParada(String dthrUltApont, Long qtdeMinutosParada){
+        Long dthrLongInicio = dthrStringToLong(dthrUltApont) + (qtdeMinutosParada * 60 * 1000);
+        Long dthrAtualLong = dthrAtualLong();
+        Log.i("PBM", "DATA ULTIMO APONTAMENTO = " + dthrUltApont);
+        Log.i("PBM", "DATA ULTIMO APONTAMENTO MAIS O MINUTOS = " + dthrLongToString(dthrLongInicio));
+        Log.i("PBM", "DATA ATUAL = " + dthrLongToString(dthrAtualLong));
+        if(dthrAtualLong > dthrLongInicio){
             return false;
         } else {
             return true;
         }
     }
 
-    public boolean verifDataHoraForcaFechBol(String dthrInicio, Long qtdeHoraForcaFechBol){
-        Long dthrLongInicio = dthrStringToLong(dthrInicio + (qtdeHoraForcaFechBol * 60 * 60 * 1000));
-        if(dthrAtualLong() > dthrLongInicio){
-            return false;
-        } else {
+    public boolean verifDataHoraForcaFechBol(Long dthrLongUltApont, Long qtdeHoraForcaFechBol){
+        Long dthrLongInicio = dthrLongUltApont + (qtdeHoraForcaFechBol * 60 * 60 * 1000);
+        Long dthrAtualLong = dthrAtualLong();
+        Log.i("PBM", "DATA ULTIMO APONTAMENTO = " + dthrLongToString(dthrLongInicio));
+        Log.i("PBM", "DATA ATUAL = " + dthrLongToString(dthrAtualLong));
+        if(dthrAtualLong > dthrLongInicio){
             return true;
+        } else {
+            return false;
         }
     }
 

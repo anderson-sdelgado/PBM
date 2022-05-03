@@ -13,7 +13,6 @@ import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pbm.util.ConnectNetwork;
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
 import br.com.usinasantafe.pbm.util.Tempo;
-import br.com.usinasantafe.pbm.model.pst.DatabaseHelper;
 import br.com.usinasantafe.pbm.util.VerifDadosServ;
 import br.com.usinasantafe.pbm.view.ActivityGeneric;
 
@@ -75,7 +74,7 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 			Log.i("PBM", "APONTAMENTO");
 			Log.i("PBM", "idApont = " + apontTO.getIdApontMecan());
 			Log.i("PBM", "idBolApont = " + apontTO.getIdBolApontMecan());
-			Log.i("PBM", "osApont = " + apontTO.getOsApontMecan());
+			Log.i("PBM", "osApont = " + apontTO.getNroOSApontMecan());
 			Log.i("PBM", "itemOSApont = " + apontTO.getItemOSApontMecan());
 			Log.i("PBM", "paradaApont = " + apontTO.getParadaApontMecan());
 			Log.i("PBM", "dthrInicialAponta = " + apontTO.getDthrInicialApontMecan());

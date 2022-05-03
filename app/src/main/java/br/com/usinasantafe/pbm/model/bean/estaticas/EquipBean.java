@@ -14,6 +14,8 @@ public class EquipBean extends Entidade {
     private Long idEquip;
     @DatabaseField
     private Long nroEquip;
+    @DatabaseField
+    private String descrClasseEquip;
 
     public EquipBean() {
     }
@@ -32,5 +34,13 @@ public class EquipBean extends Entidade {
 
     public void setNroEquip(Long nroEquip) {
         this.nroEquip = nroEquip;
+    }
+
+    public String getDescrClasseEquip() {
+        return descrClasseEquip;
+    }
+
+    public void setDescrClasseEquip(String descrClasseEquip) {
+        this.descrClasseEquip = descrClasseEquip;
     }
 }

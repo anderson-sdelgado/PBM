@@ -41,27 +41,16 @@ public class PressaoColPneuActivity extends ActivityGeneric {
                     Long qtde = Long.parseLong(editTextPadrao.getText().toString());
                     if (qtde < 1000) {
 
-                        LogProcessoDAO.getInstance().insertLogProcesso("if (qtde < 1000) {\n" +
-                                "                        pbmContext.getPneuCTR().getItemCalibPneuBean().setPressaoColItemCalibPneu(qtde);\n" +
-                                "                        pbmContext.getPneuCTR().salvarItemCalibPneu();", getLocalClassName());
                         pbmContext.getPneuCTR().getItemCalibPneuBean().setPressaoColItemCalibPneu(qtde);
                         pbmContext.getPneuCTR().salvarItemCalibPneu();
 
-                        if(pbmContext.getPneuCTR().verFinalBolCalib()){
-                            LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getPneuCTR().verFinalBolCalib()){\n" +
-                                    "                            pbmContext.getPneuCTR().fecharBoletim();\n" +
-                                    "                            Intent it = new Intent(PressaoColPneuActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                            pbmContext.getPneuCTR().fecharBoletim();
-                            Intent it = new Intent(PressaoColPneuActivity.this, TelaInicialActivity.class);
-                            startActivity(it);
-                            finish();
-                        } else {
-                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                    "                            Intent it = new Intent(PressaoColPneuActivity.this, ListaPosPneuActivity.class);", getLocalClassName());
-                            Intent it = new Intent(PressaoColPneuActivity.this, ListaPosPneuActivity.class);
-                            startActivity(it);
-                            finish();
-                        }
+                        LogProcessoDAO.getInstance().insertLogProcesso("if (qtde < 1000) {\n" +
+                                "                        pbmContext.getPneuCTR().getItemCalibPneuBean().setPressaoColItemCalibPneu(qtde);\n" +
+                                "                        pbmContext.getPneuCTR().salvarItemCalibPneu();\n" +
+                                "                        Intent it = new Intent(PressaoColPneuActivity.this, ListaPosPneuActivity.class);", getLocalClassName());
+                        Intent it = new Intent(PressaoColPneuActivity.this, ListaPosPneuActivity.class);
+                        startActivity(it);
+                        finish();
 
                     } else {
 

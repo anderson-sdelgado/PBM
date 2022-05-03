@@ -38,7 +38,7 @@
             />
 
         <TextView
-            android:id="@+id/textViewDescEquip"
+            android:id="@+id/textViewDescrEquip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -60,7 +60,7 @@
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/texto_padrao_cancelar" />
+            android:text="@string/texto_padrao_canc" />
 
         <Button
             android:id="@+id/buttonOkDescrOS"

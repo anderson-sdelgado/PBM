@@ -13,7 +13,7 @@ public class PneuBean extends Entidade {
     @DatabaseField(id=true)
     private Long idPneu;
     @DatabaseField
-    private String nroPneu;
+    private String codPneu;
 
     public PneuBean() {
     }
@@ -26,11 +26,11 @@ public class PneuBean extends Entidade {
         this.idPneu = idPneu;
     }
 
-    public String getNroPneu() {
-        return nroPneu;
+    public String getCodPneu() {
+        return codPneu;
     }
 
-    public void setNroPneu(String nroPneu) {
-        this.nroPneu = nroPneu;
+    public void setCodPneu(String codPneu) {
+        this.codPneu = codPneu;
     }
 }

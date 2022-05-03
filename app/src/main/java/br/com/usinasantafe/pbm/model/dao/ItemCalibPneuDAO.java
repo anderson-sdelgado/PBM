@@ -17,9 +17,39 @@ public class ItemCalibPneuDAO {
     }
 
     public void insertItemCalibPneu(ItemCalibPneuBean itemCalibPneuBean, Long idBolPneu){
-        itemCalibPneuBean.setIdBolItemCalibPneu(idBolPneu);
-        itemCalibPneuBean.setDthrItemCalibPneu(Tempo.getInstance().dthrAtualString());
-        itemCalibPneuBean.insert();
+        if(verItemMedPneuIdBolIdPosConf(idBolPneu, itemCalibPneuBean.getIdPosItemCalibPneu())) {
+            ItemCalibPneuBean itemCalibPneuBeanBD = getItemMedPneuIdBolIdPosConf(idBolPneu, itemCalibPneuBean.getIdPosItemCalibPneu());
+            itemCalibPneuBeanBD.setNroPneuItemCalibPneu(itemCalibPneuBean.getNroPneuItemCalibPneu());
+            itemCalibPneuBeanBD.setPressaoEncItemCalibPneu(itemCalibPneuBean.getPressaoEncItemCalibPneu());
+            itemCalibPneuBeanBD.setPressaoColItemCalibPneu(itemCalibPneuBean.getPressaoColItemCalibPneu());
+            itemCalibPneuBeanBD.setDthrItemCalibPneu(Tempo.getInstance().dthrAtualString());
+            itemCalibPneuBeanBD.update();
+        } else {
+            itemCalibPneuBean.setDthrItemCalibPneu(Tempo.getInstance().dthrAtualString());
+            itemCalibPneuBean.setIdBolItemCalibPneu(idBolPneu);
+            itemCalibPneuBean.insert();
+        }
+    }
+
+    public ItemCalibPneuBean getItemMedPneuIdBolIdPosConf(Long idBol, Long idPosConf){
+        List<ItemCalibPneuBean> itemMedPneuIdBolPosList = itemMedPneuIdBolIdPosConfList(idBol, idPosConf);
+        ItemCalibPneuBean itemCalibPneuBean = itemMedPneuIdBolPosList.get(0);
+        itemMedPneuIdBolPosList.clear();
+        return itemCalibPneuBean;
+    }
+
+    public void deleteItemMedPneuIdBol(Long idBol){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqItemMedPneuIdBol(idBol));
+
+        ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
+        List<ItemCalibPneuBean> itemMedPneuList = itemCalibPneuBean.get(pesqArrayList);
+
+        for(ItemCalibPneuBean itemCalibPneuBeanBD : itemMedPneuList){
+            itemCalibPneuBeanBD.delete();
+        }
+
     }
 
     public void deleteItemCalibPneu(ArrayList<Long> idBolPneuList){
@@ -40,13 +70,14 @@ public class ItemCalibPneuDAO {
         return idItemCalibPneuList;
     }
 
-    public List<ItemCalibPneuBean> itemCalibPneuList(Long idBolPneu){
+    public List<ItemCalibPneuBean> itemCalibPneuIdBolList(Long idBol){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdBol(idBolPneu));
+        pesqArrayList.add(getPesqItemMedPneuIdBol(idBol));
 
         ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
-        return itemCalibPneuBean.get(pesqArrayList);
+        return itemCalibPneuBean.getAndOrderBy(pesqArrayList, "idItemCalibPneu", true);
+
     }
 
     public List<ItemCalibPneuBean> itemCalibPneuList(ArrayList<Long> idBolPneuArrayList){
@@ -54,15 +85,22 @@ public class ItemCalibPneuDAO {
         return itemCalibPneuBean.in("idBolItemCalibPneu", idBolPneuArrayList);
     }
 
+    public boolean verItemMedPneuIdBolIdPosConf(Long idBol, Long idPosConf){
+        List<ItemCalibPneuBean> itemMedPneuIdBolPosList = itemMedPneuIdBolIdPosConfList(idBol, idPosConf);
+        boolean ret = (itemMedPneuIdBolPosList.size() > 0);
+        itemMedPneuIdBolPosList.clear();
+        return ret;
+    }
+
     public boolean verPneuItemCalib(Long idBol, String nroPneu){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqIdBol(idBol));
-        pesqArrayList.add(getPesqNroPneu(nroPneu));
+        pesqArrayList.add(getPesqItemMedPneuIdBol(idBol));
+        pesqArrayList.add(getPesqItemMedPneuNroPneu(nroPneu));
 
         ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
         List<ItemCalibPneuBean> itemCalibPneuList = itemCalibPneuBean.get(pesqArrayList);
-        boolean ret = (itemCalibPneuList.size() > 0);
+        boolean ret = (itemCalibPneuList.size() == 0);
         itemCalibPneuList.clear();
 
         return ret;
@@ -88,6 +126,17 @@ public class ItemCalibPneuDAO {
 
     }
 
+    public List<ItemCalibPneuBean> itemMedPneuIdBolIdPosConfList(Long idBol, Long idPosConf){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqItemMedPneuIdBol(idBol));
+        pesqArrayList.add(getPesqItemMedPneuPos(idPosConf));
+
+        ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
+        return itemCalibPneuBean.getAndOrderBy(pesqArrayList, "idItemCalibPneu", true);
+
+    }
+
     public ArrayList<String> itemCalibPneuAllArrayList(ArrayList<String> dadosArrayList){
         dadosArrayList.add("ITEM CALIB PNEU");
         ItemCalibPneuBean itemCalibPneuBean = new ItemCalibPneuBean();
@@ -104,7 +153,16 @@ public class ItemCalibPneuDAO {
         return gsonCabec.toJsonTree(itemCalibPneuBean, itemCalibPneuBean.getClass()).toString();
     }
 
-    private EspecificaPesquisa getPesqIdBol(Long idBol){
+
+    private EspecificaPesquisa getPesqItemMedPneuNroPneu(String nroPneu){
+        EspecificaPesquisa pesquisa = new EspecificaPesquisa();
+        pesquisa.setCampo("nroPneuItemCalibPneu");
+        pesquisa.setValor(nroPneu);
+        pesquisa.setTipo(1);
+        return pesquisa;
+    }
+
+    private EspecificaPesquisa getPesqItemMedPneuIdBol(Long idBol){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
         pesquisa.setCampo("idBolItemCalibPneu");
         pesquisa.setValor(idBol);
@@ -112,10 +170,10 @@ public class ItemCalibPneuDAO {
         return pesquisa;
     }
 
-    private EspecificaPesquisa getPesqNroPneu(String nroPneu){
+    private EspecificaPesquisa getPesqItemMedPneuPos(Long idPosConf){
         EspecificaPesquisa pesquisa = new EspecificaPesquisa();
-        pesquisa.setCampo("nroPneuItemCalibPneu");
-        pesquisa.setValor(nroPneu);
+        pesquisa.setCampo("idPosItemCalibPneu");
+        pesquisa.setValor(idPosConf);
         pesquisa.setTipo(1);
         return pesquisa;
     }
