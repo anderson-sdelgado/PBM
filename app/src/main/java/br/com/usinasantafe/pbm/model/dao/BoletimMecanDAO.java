@@ -29,7 +29,7 @@ public class BoletimMecanDAO {
 
     public void atualSalvarBoletim(Long idEquip, Long idColab, String horarioEntr){
 
-        List<BoletimMecanBean> boletimList = boletimList(idColab);
+        List<BoletimMecanBean> boletimList = boletimAbertoListIdFunc(idColab);
 
         if(boletimList.size() == 0){
             BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
@@ -65,7 +65,7 @@ public class BoletimMecanDAO {
 
     }
 
-    public void updateFechBoletim(BoletimMecanBean boletimMecanBean){
+    public void updateEnviadoBoletim(BoletimMecanBean boletimMecanBean){
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdBoletim(boletimMecanBean.getIdBolMecan()));
@@ -74,22 +74,23 @@ public class BoletimMecanDAO {
         List<BoletimMecanBean> boletimList = boletimMecanBeanBD.get(pesqArrayList);
 
         boletimMecanBeanBD = boletimList.get(0);
-        boletimMecanBeanBD.setStatusBolMecan(2L);
+        boletimMecanBeanBD.setStatusBolMecan(3L);
         boletimMecanBeanBD.update();
 
     }
 
     public void fecharBoletim(BoletimMecanBean boletimMecanBean){
-        String dthrFinal = Tempo.getInstance().dthrAtualString();
-        boletimMecanBean.setDthrFinalBolMecan(dthrFinal);
-        boletimMecanBean.setDthrFinalLongBolMecan(Tempo.getInstance().dthrStringToLong(dthrFinal));
+        Long dthrLongFinal = Tempo.getInstance().dthrAtualLong();
+        boletimMecanBean.setDthrFinalLongBolMecan(dthrLongFinal);
+        boletimMecanBean.setDthrFinalBolMecan(Tempo.getInstance().dthrLongToString(dthrLongFinal));
         boletimMecanBean.setStatusBolMecan(2L);
         boletimMecanBean.setStatusFechBolMecan(1L);
         boletimMecanBean.update();
     }
 
-    public void forcarFechamentoBoletim(BoletimMecanBean boletimMecanBean, String dthrFinal){
-        boletimMecanBean.setDthrFinalBolMecan(dthrFinal);
+    public void forcarFechamentoBoletim(BoletimMecanBean boletimMecanBean, Long dthrLongFinal){
+        boletimMecanBean.setDthrFinalLongBolMecan(dthrLongFinal);
+        boletimMecanBean.setDthrFinalBolMecan(Tempo.getInstance().dthrLongToString(dthrLongFinal));
         boletimMecanBean.setStatusBolMecan(2L);
         boletimMecanBean.setStatusFechBolMecan(0L);
         boletimMecanBean.update();
@@ -134,15 +135,39 @@ public class BoletimMecanDAO {
         return ret;
     }
 
-    public List<BoletimMecanBean> boletimSemEnvioList(ArrayList<Long> idBolAbertoList){
+    public BoletimMecanBean getBoletimApontando(){
+        List<BoletimMecanBean> boletimList = boletimApontandoList();
+        BoletimMecanBean boletimMecanBean = boletimList.get(0);
+        boletimList.clear();
+        return boletimMecanBean;
+    }
+
+    public BoletimMecanBean getBoletimListIdBol(Long idBol){
+        List<BoletimMecanBean> boletimList = boletimListIdBol(idBol);
+        BoletimMecanBean boletimMecanBean = boletimList.get(0);
+        boletimList.clear();
+        return boletimMecanBean;
+    }
+
+    public List<BoletimMecanBean> boletimList(ArrayList<Long> idBolList){
         BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
-        return boletimMecanBean.in("idBolMecan", idBolAbertoList);
+        return boletimMecanBean.in("idBolMecan", idBolList);
+    }
+
+    public List<BoletimMecanBean> boletimListIdBol(Long idBol){
+
+        ArrayList pesqArrayList = new ArrayList();
+        pesqArrayList.add(getPesqIdBoletim(idBol));
+
+        BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
+        return boletimMecanBean.get(pesqArrayList);
+
     }
 
     public List<BoletimMecanBean> boletimAbertoList(){
 
         ArrayList pesqArrayList = new ArrayList();
-        pesqArrayList.add(getPesqStatusFechado());
+        pesqArrayList.add(getPesqStatusAberto());
 
         BoletimMecanBean boletimMecanBean = new BoletimMecanBean();
         return boletimMecanBean.get(pesqArrayList);
@@ -159,7 +184,7 @@ public class BoletimMecanDAO {
 
     }
 
-    public List<BoletimMecanBean> boletimList(Long idFunc){
+    public List<BoletimMecanBean> boletimAbertoListIdFunc(Long idFunc){
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqIdFunc(idFunc));
@@ -170,14 +195,7 @@ public class BoletimMecanDAO {
 
     }
 
-    public BoletimMecanBean getBolApontando(){
-        List<BoletimMecanBean> boletimList = bolApontandoList();
-        BoletimMecanBean boletimMecanBean = boletimList.get(0);
-        boletimList.clear();
-        return boletimMecanBean;
-    }
-
-    public List<BoletimMecanBean> bolApontandoList(){
+    public List<BoletimMecanBean> boletimApontandoList(){
 
         ArrayList pesqArrayList = new ArrayList();
         pesqArrayList.add(getPesqBolApontando());
@@ -220,24 +238,24 @@ public class BoletimMecanDAO {
 
     }
 
-    public String dadosBolAbertoSemEnvio(ArrayList<Long> idBolAbertoList){
+    public String dadosBoletimApontSemEnvio(ArrayList<Long> idBolAbertoList){
 
-        List<BoletimMecanBean> bolFechadoList = boletimSemEnvioList(idBolAbertoList);
-        JsonArray jsonArrayBolFechado = new JsonArray();
+        List<BoletimMecanBean> boletimMecanList = boletimList(idBolAbertoList);
+        JsonArray jsonArrayBoletimMecan = new JsonArray();
 
-        for (BoletimMecanBean boletimMecanBean : bolFechadoList) {
+        for (BoletimMecanBean boletimMecanBean : boletimMecanList) {
 
             Gson gson = new Gson();
-            jsonArrayBolFechado.add(gson.toJsonTree(boletimMecanBean, boletimMecanBean.getClass()));
+            jsonArrayBoletimMecan.add(gson.toJsonTree(boletimMecanBean, boletimMecanBean.getClass()));
 
         }
 
-        bolFechadoList.clear();
+        boletimMecanList.clear();
 
-        JsonObject jsonBolFechado = new JsonObject();
-        jsonBolFechado.add("boletim", jsonArrayBolFechado);
+        JsonObject jsonBoletimMecan = new JsonObject();
+        jsonBoletimMecan.add("boletim", jsonArrayBoletimMecan);
 
-        return jsonBolFechado.toString();
+        return jsonBoletimMecan.toString();
 
     }
 

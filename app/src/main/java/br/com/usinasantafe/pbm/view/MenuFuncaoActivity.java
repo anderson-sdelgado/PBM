@@ -96,39 +96,43 @@ public class MenuFuncaoActivity extends ActivityGeneric {
                         }
                     } else {
                         LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                        if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrInicialLongApontMecan() == Tempo.getInstance().dthrAtualLong()) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getDthrInicialApontMecan().equals(Tempo.getInstance().dthr())) {\n" +
-                                    "                                Toast.makeText(MenuFuncaoActivity.this, \"POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.\",\n" +
-                                    "                                        Toast.LENGTH_LONG).show();", getLocalClassName());
-                            Toast.makeText(MenuFuncaoActivity.this, "POR FAVOR! ESPERE 1 MINUTO PARA REALIZAR UM NOVO APONTAMENTO.",
-                                    Toast.LENGTH_LONG).show();
+                        if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrFinalApontMecan().equals("")) {
+
+                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                    "                        AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);\n" +
+                                    "                        alerta.setTitle(\"ATENÇÃO\");\n" +
+                                    "                        alerta.setMessage(\"EXISTE APONTAMENTO PARA FINALIZAR/INTERROMPER! POR FAVOR, FINALIZE OU INTERROMPA O MESMO PRA REALIZAR OUTRO APONTAMENTO.\");", getLocalClassName());
+                            AlertDialog.Builder alerta = new AlertDialog.Builder(MenuFuncaoActivity.this);
+                            alerta.setTitle("ATENÇÃO");
+                            alerta.setMessage("EXISTE APONTAMENTO PARA FINALIZAR/INTERROMPER! POR FAVOR, FINALIZE OU INTERROMPA O MESMO PRA REALIZAR OUTRO APONTAMENTO.");
+                            alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                                            "                            @Override\n" +
+                                            "                            public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
+                                }
+                            });
+
+                            alerta.show();
+
                         } else {
                             LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                            if (pbmContext.getMecanicoCTR().getUltApontBolApontando().getDthrFinalApontMecan().equals("")) {
-                                LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan().equals(\"\")) {\n" +
-                                        "                                    Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
+                            if (pbmContext.getMecanicoCTR().verifDataHoraFinalUltApont()) {
+                                LogProcessoDAO.getInstance().insertLogProcesso("if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan())) {\n" +
+                                        "                                        Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
                                 Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
                                 startActivity(it);
                                 finish();
                             } else {
-                                LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                                if (pbmContext.getMecanicoCTR().verifDataHoraFinalUltApont()) {
-                                    LogProcessoDAO.getInstance().insertLogProcesso("if (Tempo.getInstance().verifDataHoraParada(pbmContext.getMecanicoCTR().getUltApont().getDthrFinalApontMecan())) {\n" +
-                                            "                                        Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);", getLocalClassName());
-                                    Intent it = new Intent(MenuFuncaoActivity.this, OSActivity.class);
-                                    startActivity(it);
-                                    finish();
-                                } else {
-                                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                            "                                        pbmContext.setVerTela(1);\n" +
-                                            "                                        Intent it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);", getLocalClassName());
-                                    pbmContext.setVerTela(1);
-                                    Intent it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
-                                    startActivity(it);
-                                    finish();
-                                }
+                                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                        "                                        pbmContext.setVerTela(1);\n" +
+                                        "                                        Intent it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);", getLocalClassName());
+                                pbmContext.setVerTela(1);
+                                Intent it = new Intent(MenuFuncaoActivity.this, ListaParadaActivity.class);
+                                startActivity(it);
+                                finish();
                             }
-
                         }
                     }
 

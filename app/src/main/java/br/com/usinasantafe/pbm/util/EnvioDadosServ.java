@@ -1,6 +1,5 @@
 package br.com.usinasantafe.pbm.util;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -33,30 +32,21 @@ public class EnvioDadosServ {
 
     /////////////////////////////////// ENVIAR DADOS //////////////////////////////////////////////
 
-    public void enviarBolAberto(String activity) {
+    public void enviarBoletimMecan(String activity) {
 
         MecanicoCTR mecanicoCTR = new MecanicoCTR();
 
         LogProcessoDAO.getInstance().insertLogProcesso("mecanicoCTR.dadosEnvioBolSemEnvio()", activity);
-        envio(urlsConexaoHttp.getsInsertBolAberto(), mecanicoCTR.dadosEnvioBolSemEnvio(), activity);
+        envio(urlsConexaoHttp.getsInsertBoletimMecan(), mecanicoCTR.dadosEnvioBolSemEnvio(), activity);
 
     }
 
-    public void enviarBolFechado(String activity) {
-
-        MecanicoCTR mecanicoCTR = new MecanicoCTR();
-
-        LogProcessoDAO.getInstance().insertLogProcesso("mecanicoCTR.dadosEnvioBolFechado()", activity);
-        envio(urlsConexaoHttp.getsInsertBolFechado(), mecanicoCTR.dadosEnvioBolFechado(), activity);
-
-    }
-
-    public void enviarPneu(String activity) {
+    public void enviarBoletimPneu(String activity) {
 
         PneuCTR pneuCTR = new PneuCTR();
 
         LogProcessoDAO.getInstance().insertLogProcesso("pneuCTR.dadosEnvioBolPneuFechado()", activity);
-        envio(urlsConexaoHttp.getsInsertBolPneu(), pneuCTR.dadosEnvioBolPneuFechado(), activity);
+        envio(urlsConexaoHttp.getsInsertBoletimPneu(), pneuCTR.dadosEnvioBolPneuFechado(), activity);
 
     }
 
@@ -104,23 +94,17 @@ public class EnvioDadosServ {
             LogProcessoDAO.getInstance().insertLogProcesso("if(ActivityGeneric.connectNetwork) {\n" +
                     "            status = 2;", activity);
             status = 2;
-            if (verBoletimFechado()) {
-                LogProcessoDAO.getInstance().insertLogProcesso("if (verBoletimFechado()) {\n" +
-                        "                enviarBolFechado(activity);", activity);
-                enviarBolFechado(activity);
+            LogProcessoDAO.getInstance().insertLogProcesso("} else {", activity);
+            if (verApontSemEnvio()) {
+                LogProcessoDAO.getInstance().insertLogProcesso("if (verApontSemEnvio()) {\n" +
+                        "                    enviarBolAberto(activity);", activity);
+                enviarBoletimMecan(activity);
             } else {
                 LogProcessoDAO.getInstance().insertLogProcesso("} else {", activity);
-                if (verApontSemEnvio()) {
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (verApontSemEnvio()) {\n" +
-                            "                    enviarBolAberto(activity);", activity);
-                    enviarBolAberto(activity);
-                } else {
-                    LogProcessoDAO.getInstance().insertLogProcesso("} else {", activity);
-                    if(verBoletimPneuFechado()){
-                        LogProcessoDAO.getInstance().insertLogProcesso("if(verBoletimPneuFechado()){\n" +
-                                "                        enviarPneu(activity);", activity);
-                        enviarPneu(activity);
-                    }
+                if(verBoletimPneuFechado()){
+                    LogProcessoDAO.getInstance().insertLogProcesso("if(verBoletimPneuFechado()){\n" +
+                            "                        enviarPneu(activity);", activity);
+                    enviarBoletimPneu(activity);
                 }
             }
         }
@@ -147,21 +131,14 @@ public class EnvioDadosServ {
 
     public void recDados(String result, String activity){
         LogProcessoDAO.getInstance().insertLogProcesso("public void recDados(String " + result + ", String activity){", activity);
-        if(result.trim().startsWith("BOLFECHADOMEC")){
+        if(result.trim().startsWith("BOLETIMMECAN")){
             LogProcessoDAO.getInstance().insertLogProcesso("if(result.trim().startsWith(\"BOLFECHADOMEC\")){\n" +
                     "            MecanicoCTR mecanicoCTR = new MecanicoCTR();\n" +
                     "            mecanicoCTR.updateBolFechado(result);", activity);
             MecanicoCTR mecanicoCTR = new MecanicoCTR();
-            mecanicoCTR.updateBolFechado(result);
+            mecanicoCTR.updateBoletim(result);
         }
-        else if(result.trim().startsWith("BOLABERTOMEC")){
-            LogProcessoDAO.getInstance().insertLogProcesso("else if(result.trim().startsWith(\"BOLABERTOMEC\")){\n" +
-                    "            MecanicoCTR mecanicoCTR = new MecanicoCTR();\n" +
-                    "            mecanicoCTR.updateBolAberto(result);", activity);
-            MecanicoCTR mecanicoCTR = new MecanicoCTR();
-            mecanicoCTR.updateBolAberto(result);
-        }
-        else if(result.trim().startsWith("BOLPNEU")){
+        else if(result.trim().startsWith("BOLETIMPNEU")){
             LogProcessoDAO.getInstance().insertLogProcesso("else if(result.trim().startsWith(\"BOLPNEU\")){\n" +
                     "            PneuCTR pneuCTR = new PneuCTR();\n" +
                     "            pneuCTR.updateBolEnviado(result);", activity);

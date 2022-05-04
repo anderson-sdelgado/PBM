@@ -31,16 +31,12 @@ public class UrlsConexaoHttp {
     public UrlsConexaoHttp() {
     }
 
-    public String getsInsertBolFechado() {
-        return urlPrincEnvio + "inserirbolmecanfechado.php";
+    public String getsInsertBoletimMecan() {
+        return urlPrincEnvio + "inserirboletimmecan.php";
     }
 
-    public String getsInsertBolAberto() {
-        return urlPrincEnvio + "inserirbolmecanaberto.php";
-    }
-
-    public String getsInsertBolPneu() {
-        return urlPrincEnvio + "inserirbolpneu.php";
+    public String getsInsertBoletimPneu() {
+        return urlPrincEnvio + "inserirboletimpneu.php";
     }
 
     public String urlVerifica(String classe) {

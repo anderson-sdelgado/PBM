@@ -49,7 +49,7 @@ public class AdapterListErro extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
 
-        view = layoutInflater.inflate(R.layout.activity_item_historico, null);
+        view = layoutInflater.inflate(R.layout.activity_item_log_erro, null);
         textViewErroId = view.findViewById(R.id.textViewErroId);
         textViewErroEquip = view.findViewById(R.id.textViewErroEquip);
         textViewErroDthr = view.findViewById(R.id.textViewErroDthr);

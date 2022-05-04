@@ -25,7 +25,7 @@ public class NetworkChangeListerner extends BroadcastReceiver {
 			LogProcessoDAO.getInstance().insertLogProcesso("if(ConnectNetwork.isConnected(context)){\n" +
 					"            ActivityGeneric.connectNetwork = true;\n" +
 					"Tempo.getInstance().zerarDifTempo()", context.getClass().getName());
-			Tempo.getInstance().zerarDifTempo();
+//			Tempo.getInstance().zerarDifTempo();
 			if(VerifDadosServ.status == 1){
 				LogProcessoDAO.getInstance().insertLogProcesso("if(VerifDadosServ.status == 1){\n" +
 						"VerifDadosServ.getInstance().reenvioVerif(context.getClass().getName());", context.getClass().getName());

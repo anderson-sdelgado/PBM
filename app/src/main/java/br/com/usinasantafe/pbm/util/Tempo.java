@@ -45,12 +45,12 @@ public class Tempo {
         return dthrStringToLong(dthrAtualString()) - (dia*24*60*60*1000);
     }
 
-    public String dthrFinalizarBol(Long dthrLongInicialTurno, String dthrFinalTurno){
+    public Long dthrLongFinalizarBol(Long dthrLongInicialTurno, String dthrFinalTurno){
         Long dthrLongFinalTurno = dthrStringToLong(dthrFinalTurno);
         if(dthrLongInicialTurno > dthrLongFinalTurno){
             dthrLongFinalTurno = dthrLongFinalTurno + (1*24*60*60*1000);
         }
-        return dthrLongToString(dthrLongFinalTurno);
+        return dthrLongFinalTurno;
     }
 
     ///////////////////////////////////// STRING TO LONG ///////////////////////////////////////////

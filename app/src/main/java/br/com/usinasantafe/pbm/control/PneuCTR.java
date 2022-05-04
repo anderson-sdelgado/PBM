@@ -14,9 +14,12 @@ import java.util.List;
 import br.com.usinasantafe.pbm.model.bean.estaticas.PneuBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.TipoManutBean;
+import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimMecanBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemCalibPneuBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ItemManutPneuBean;
+import br.com.usinasantafe.pbm.model.dao.ApontMecanDAO;
+import br.com.usinasantafe.pbm.model.dao.BoletimMecanDAO;
 import br.com.usinasantafe.pbm.model.dao.BoletimPneuDAO;
 import br.com.usinasantafe.pbm.model.dao.EquipDAO;
 import br.com.usinasantafe.pbm.model.dao.ItemCalibPneuDAO;
@@ -96,6 +99,29 @@ public class PneuCTR {
     public void fecharBoletimPneu(){
         BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
         boletimPneuDAO.fecharBoletimPneu();
+    }
+
+    public void deleteBoletimAberto() {
+
+        BoletimPneuDAO boletimPneuDAO = new BoletimPneuDAO();
+        ApontMecanDAO apontMecanDAO = new ApontMecanDAO();
+
+        List<BoletimPneuBean> boletimList = boletimPneuDAO.boletimPneuAbertoList();
+
+        for(BoletimPneuBean boletimPneuBean : boletimList){
+
+            ItemCalibPneuDAO itemCalibPneuDAO = new ItemCalibPneuDAO();
+            ArrayList<Long> idItemCalibPneuArrayList = itemCalibPneuDAO.idItemCalibPneuArrayList(itemCalibPneuDAO.itemCalibPneuIdBolList(boletimPneuBean.getIdBolPneu()));
+            itemCalibPneuDAO.deleteItemCalibPneu(idItemCalibPneuArrayList);
+
+            ItemManutPneuDAO itemManutPneuDAO = new ItemManutPneuDAO();
+            ArrayList<Long> idItemManutPneuArrayList = itemManutPneuDAO.idItemManutPneuArrayList(itemManutPneuDAO.itemManutPneuList(boletimPneuBean.getIdBolPneu()));
+            itemManutPneuDAO.deleteItemManutPneu(idItemManutPneuArrayList);
+
+            boletimPneuDAO.deleteBoletimMecan(boletimPneuBean.getIdBolPneu());
+
+        }
+
     }
 
     public void deleteBoletimEnviado(){

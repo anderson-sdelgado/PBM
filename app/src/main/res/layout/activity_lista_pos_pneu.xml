@@ -24,18 +24,11 @@
         />
 
     <Button
-        android:id="@+id/buttonAtualPosPneu"
-        style="@style/BotaoAvulso"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/texto_atualizar_bd" />
-
-    <Button
         android:id="@+id/buttonFinalCalibragem"
         style="@style/BotaoAvulso"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/texto_final_calibragem" />
+        android:text="@string/texto_final_bol_pneu" />
 
     <Button
         android:id="@+id/buttonCancPosPneu"

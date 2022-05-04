@@ -181,6 +181,6 @@
     <string name="texto_titulo_log_proc">LOG - PROCESSO</string>
     <string name="texto_hist_horario">10:08</string>
     <string name="texto_hist_impl_transb">TRANSBORDO: 1001</string>
-    <string name="texto_final_calibragem">FINALIZAR CALIBRAGEM</string>
+    <string name="texto_final_bol_pneu">FINALIZAR BOL. PNEU</string>
     <string name="texto_tipo_manut">TIPOS MANUTENÇÕES</string>
 </resources>
