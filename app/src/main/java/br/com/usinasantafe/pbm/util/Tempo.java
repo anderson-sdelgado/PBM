@@ -1,7 +1,5 @@
 package br.com.usinasantafe.pbm.util;
 
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +8,6 @@ import java.util.List;
 import br.com.usinasantafe.pbm.control.ConfigCTR;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ConfigBean;
 import br.com.usinasantafe.pbm.model.dao.LogErroDAO;
-
 
 public class Tempo {
 
@@ -28,17 +25,6 @@ public class Tempo {
     private String dthrAtualBaseString(){
         Date dataHora = new Date();
         return dthrLongToString(dataHora.getTime() + dif());
-    }
-
-//    private Long addTimeZone(Long dthrLong){
-//        TimeZone tz = TimeZone.getDefault();
-//        Date date = new Date();
-//        return dthrLong + tz.getOffset(date.getTime());
-//    }
-
-    public Long addMinutoLong(Long dthrLong, int minuto){
-        dthrLong = dthrLong + (minuto * 60 * 1000);
-        return dthrLong;
     }
 
     public Long subDiaLong(int dia){
@@ -60,17 +46,6 @@ public class Tempo {
         try {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             date = format.parse(dthrString + ":00");
-        } catch (ParseException e) {
-            LogErroDAO.getInstance().insertLogErro(e);
-        }
-        return date.getTime();
-    }
-
-    public Long dtStringToLong(String dtString){
-        Date date = new Date();
-        try {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            date = format.parse(dtString);
         } catch (ParseException e) {
             LogErroDAO.getInstance().insertLogErro(e);
         }
@@ -125,9 +100,6 @@ public class Tempo {
     public boolean verifDataHoraParada(String dthrUltApont, Long qtdeMinutosParada){
         Long dthrLongInicio = dthrStringToLong(dthrUltApont) + (qtdeMinutosParada * 60 * 1000);
         Long dthrAtualLong = dthrAtualLong();
-        Log.i("PBM", "DATA ULTIMO APONTAMENTO = " + dthrUltApont);
-        Log.i("PBM", "DATA ULTIMO APONTAMENTO MAIS O MINUTOS = " + dthrLongToString(dthrLongInicio));
-        Log.i("PBM", "DATA ATUAL = " + dthrLongToString(dthrAtualLong));
         if(dthrAtualLong > dthrLongInicio){
             return false;
         } else {
@@ -138,8 +110,6 @@ public class Tempo {
     public boolean verifDataHoraForcaFechBol(Long dthrLongUltApont, Long qtdeHoraForcaFechBol){
         Long dthrLongInicio = dthrLongUltApont + (qtdeHoraForcaFechBol * 60 * 60 * 1000);
         Long dthrAtualLong = dthrAtualLong();
-        Log.i("PBM", "DATA ULTIMO APONTAMENTO = " + dthrLongToString(dthrLongInicio));
-        Log.i("PBM", "DATA ATUAL = " + dthrLongToString(dthrAtualLong));
         if(dthrAtualLong > dthrLongInicio){
             return true;
         } else {
@@ -180,15 +150,6 @@ public class Tempo {
         }
         configList.clear();
         return dif;
-    }
-
-    public void zerarDifTempo(){
-        ConfigCTR configCTR = new ConfigCTR();
-        if (configCTR.hasElemConfig()) {
-            if (verDthrServ(configCTR.getConfig().getDtServConfig())) {
-                configCTR.setDifDthrConfig(0L);
-            }
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////

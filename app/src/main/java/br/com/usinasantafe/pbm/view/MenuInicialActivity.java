@@ -43,11 +43,6 @@ public class MenuInicialActivity extends ActivityGeneric {
 
         textViewProcesso = findViewById(R.id.textViewProcesso);
 
-        if(!checkPermission(Manifest.permission.CAMERA)){
-            String[] PERMISSIONS = {android.Manifest.permission.CAMERA};
-            ActivityCompat.requestPermissions((Activity) this, PERMISSIONS, 112);
-        }
-
         if(!checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
             String[] PERMISSIONS = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
             ActivityCompat.requestPermissions((Activity) this, PERMISSIONS, 112);
@@ -88,34 +83,28 @@ public class MenuInicialActivity extends ActivityGeneric {
                         "                                    long id) {\n" +
                         "                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);\n" +
                         "                String text = textView.getText().toString();", getLocalClassName());
-
                 TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
                 String text = textView.getText().toString();
 
                 if (text.equals("APONTAMENTO")) {
-
                     LogProcessoDAO.getInstance().insertLogProcesso("if (text.equals(\"APONTAMENTO\")) {", getLocalClassName());
                     if(pbmContext.getConfigCTR().hasElemConfig() && pbmContext.getMecanicoCTR().hasElementsColab()) {
-
                         LogProcessoDAO.getInstance().insertLogProcesso("if(pbmContext.getConfigCTR().hasElemConfig() && pbmContext.getMecanicoCTR().hasElementsColab()) {\n" +
+                                "                        pbmContext.getMecanicoCTR().forcarFechamentoBoletim();\n" +
                                 "                        Intent it = new Intent(MenuInicialActivity.this, LeitorFuncActivity.class);", getLocalClassName());
+                        pbmContext.getMecanicoCTR().forcarFechamentoBoletim();
                         Intent it = new Intent(MenuInicialActivity.this, LeitorFuncActivity.class);
                         startActivity(it);
                         finish();
-
                     }
-
                 } else if (text.equals("CONFIGURAÇÃO")) {
-
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"CONFIGURAÇÃO\")) {\n" +
                             "                    Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);", getLocalClassName());
                     pbmContext.setVerTela(5);
                     Intent it = new Intent(MenuInicialActivity.this, SenhaActivity.class);
                     startActivity(it);
                     finish();
-
                 } else if (text.equals("SAIR")) {
-
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"SAIR\")) {\n" +
                             "                    Intent intent = new Intent(Intent.ACTION_MAIN);\n" +
                             "                    intent.addCategory(Intent.CATEGORY_HOME);\n" +

@@ -67,11 +67,6 @@ public class EnvioDadosServ {
 
     //////////////////////////////////////// VERIFICAR DADOS //////////////////////////////////////
 
-    public boolean verBoletimFechado(){
-        MecanicoCTR mecanicoCTR = new MecanicoCTR();
-        return mecanicoCTR.verBoletimFechado();
-    }
-
     public boolean verApontSemEnvio(){
         MecanicoCTR mecanicoCTR = new MecanicoCTR();
         return mecanicoCTR.verApontSemEnvio();
@@ -136,14 +131,14 @@ public class EnvioDadosServ {
                     "            MecanicoCTR mecanicoCTR = new MecanicoCTR();\n" +
                     "            mecanicoCTR.updateBolFechado(result);", activity);
             MecanicoCTR mecanicoCTR = new MecanicoCTR();
-            mecanicoCTR.updateBoletim(result);
+            mecanicoCTR.updateBoletim(result, activity);
         }
         else if(result.trim().startsWith("BOLETIMPNEU")){
             LogProcessoDAO.getInstance().insertLogProcesso("else if(result.trim().startsWith(\"BOLPNEU\")){\n" +
                     "            PneuCTR pneuCTR = new PneuCTR();\n" +
                     "            pneuCTR.updateBolEnviado(result);", activity);
             PneuCTR pneuCTR = new PneuCTR();
-            pneuCTR.updateBolEnviado(result);
+            pneuCTR.updateBolEnviado(result, activity);
         }
         else{
             LogProcessoDAO.getInstance().insertLogProcesso("else{\n" +

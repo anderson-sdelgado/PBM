@@ -297,7 +297,7 @@ public class PneuCTR {
 
     }
 
-    public void updateBolEnviado(String result) {
+    public void updateBolEnviado(String result, String activity) {
 
         try {
 
@@ -321,6 +321,8 @@ public class PneuCTR {
                 }
 
             }
+
+            EnvioDadosServ.getInstance().envioDados(activity);
 
         } catch (Exception e) {
             EnvioDadosServ.status = 1;

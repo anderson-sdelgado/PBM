@@ -125,8 +125,8 @@
     <string name="wifi_changing_network">Requesting connection to network\u2026</string>
     <string name="wifi_ssid_label">Network Name</string>
     <string name="wifi_type_label">Type</string>
-    <string name="app_name">PBM</string>
-    <string name="texto_menu_principal">PRINCIPAL - V 3.00</string>
+    <string name="app_name">PBM-QA</string>
+    <string name="texto_menu_principal">PRINCIPAL - V 3.01</string>
     <string name="texto_item_list">TESTE</string>
     <string name="texto_num1">1</string>
     <string name="texto_num2">2</string>

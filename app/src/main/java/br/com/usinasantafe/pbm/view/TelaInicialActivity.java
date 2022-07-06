@@ -63,13 +63,11 @@ public class TelaInicialActivity extends ActivityGeneric {
     public void clearBD() {
         LogProcessoDAO.getInstance().insertLogProcesso("pbmContext.getMecanicoCTR().deleteBolMecanSemApont();\n" +
                 "        pbmContext.getPneuCTR().deleteBoletimAberto();\n" +
-                "        pbmContext.getMecanicoCTR().forcarFechamentoBoletim();\n" +
                 "        pbmContext.getMecanicoCTR().deleteBolMecanEnviado();\n" +
                 "        pbmContext.getPneuCTR().deleteBoletimEnviado();\n" +
                 "        pbmContext.getConfigCTR().deleteLogs();", getLocalClassName());
         pbmContext.getMecanicoCTR().deleteBolMecanSemApont();
         pbmContext.getPneuCTR().deleteBoletimAberto();
-        pbmContext.getMecanicoCTR().forcarFechamentoBoletim();
         pbmContext.getMecanicoCTR().deleteBolMecanEnviado();
         pbmContext.getPneuCTR().deleteBoletimEnviado();
         pbmContext.getConfigCTR().deleteLogs();

@@ -4,55 +4,50 @@ import br.com.usinasantafe.pbm.PBMContext;
 
 public class UrlsConexaoHttp {
 
-    public static String put = "?versao=" + PBMContext.versaoWebService.replace(".", "_");
+    public static String versao = "versao_" + PBMContext.versaoWS.replace(".", "_");
 
-    public static String urlPrincipal = "https://www.usinasantafe.com.br/pbmdev/view/";
-    public static String urlPrincEnvio = "https://www.usinasantafe.com.br/pbmdev/view/";
-
-//    public static String urlPrincipal = "https://www.usinasantafe.com.br/pbmqa/view/";
-//    public static String urlPrincEnvio = "https://www.usinasantafe.com.br/pbmqa/view/";
-//
-//    public static String urlPrincipal = "https://www.usinasantafe.com.br/pbmprod/" + versao + "/view/";
-//    public static String urlPrincEnvio = "https://www.usinasantafe.com.br/pbmprod/" + versao + "/view/";
+//    public static String url = "https://www.usinasantafe.com.br/pbmdev/view/";
+    public static String url = "https://www.usinasantafe.com.br/pbmqa/view/";
+//    public static String url = "https://www.usinasantafe.com.br/pbmprod/" + versao + "/view/";
 
     public static String localPSTEstatica = "br.com.usinasantafe.pbm.model.bean.estaticas.";
     public static String localUrl = "br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp";
 
-    public static String ColabBean = urlPrincipal + "colab.php";
-    public static String ComponenteBean = urlPrincipal + "componente.php";
-    public static String EquipBean = urlPrincipal + "equip.php";
-    public static String EscalaTrabBean = urlPrincipal + "escalatrab.php";
-    public static String ParadaBean = urlPrincipal + "parada.php";
-    public static String PneuBean = urlPrincipal + "pneu.php";
-    public static String REquipPneuBean = urlPrincipal + "requippneu.php";
-    public static String ServicoBean = urlPrincipal + "servico.php";
-    public static String TipoManutBean = urlPrincipal + "tipomanut.php";
+    public static String ColabBean = url + "colab.php";
+    public static String ComponenteBean = url + "componente.php";
+    public static String EquipBean = url + "equip.php";
+    public static String EscalaTrabBean = url + "escalatrab.php";
+    public static String ParadaBean = url + "parada.php";
+    public static String PneuBean = url + "pneu.php";
+    public static String REquipPneuBean = url + "requippneu.php";
+    public static String ServicoBean = url + "servico.php";
+    public static String TipoManutBean = url + "tipomanut.php";
 
     public UrlsConexaoHttp() {
     }
 
     public String getsInsertBoletimMecan() {
-        return urlPrincEnvio + "inserirboletimmecan.php";
+        return url + "inserirboletimmecan.php";
     }
 
     public String getsInsertBoletimPneu() {
-        return urlPrincEnvio + "inserirboletimpneu.php";
+        return url + "inserirboletimpneu.php";
     }
 
     public String urlVerifica(String classe) {
         String retorno = "";
         if (classe.equals("Equip")) {
-            retorno = urlPrincipal + "verequip.php";
+            retorno = url + "verequip.php";
         } else if (classe.equals("Colab")) {
-            retorno = urlPrincipal + "colab.php";
+            retorno = url + "colab.php";
         } else if (classe.equals("Parada")) {
-            retorno = urlPrincipal + "parada.php";
+            retorno = url + "parada.php";
         } else if (classe.equals("Atualiza")) {
-            retorno = urlPrincipal + "atualaplic.php";
+            retorno = url + "atualaplic.php";
         } else if (classe.equals("OS")) {
-            retorno = urlPrincipal + "os.php";
+            retorno = url + "os.php";
         } else if (classe.equals("Pneu")) {
-            retorno = urlPrincipal + "pesqpneu.php";
+            retorno = url + "pesqpneu.php";
         }
         return retorno;
     }

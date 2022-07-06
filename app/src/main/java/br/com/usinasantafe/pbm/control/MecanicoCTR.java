@@ -385,7 +385,7 @@ public class MecanicoCTR {
 
     }
 
-    public void updateBoletim(String result) {
+    public void updateBoletim(String result, String activity) {
 
         try {
 
@@ -428,6 +428,8 @@ public class MecanicoCTR {
                 }
 
             }
+
+            EnvioDadosServ.getInstance().envioDados(activity);
 
         } catch (Exception e) {
             EnvioDadosServ.status = 1;
