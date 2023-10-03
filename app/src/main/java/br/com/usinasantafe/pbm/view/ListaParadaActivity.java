@@ -37,9 +37,9 @@ public class ListaParadaActivity extends ActivityGeneric {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_parada);
 
-        Button buttonAtualParada = (Button) findViewById(R.id.buttonAtualParada);
-        Button buttonRetMenuParada = (Button) findViewById(R.id.buttonRetMenuParada);
-        EditText editPesqListParada = (EditText) findViewById(R.id.editPesqListParada);
+        Button buttonAtualParada = findViewById(R.id.buttonAtualParada);
+        Button buttonRetMenuParada = findViewById(R.id.buttonRetMenuParada);
+        EditText editPesqListParada = findViewById(R.id.editPesqListParada);
 
         pbmContext = (PBMContext) getApplication();
 
@@ -63,78 +63,62 @@ public class ListaParadaActivity extends ActivityGeneric {
             i++;
         }
 
-        stringArrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_item_lista, R.id.textViewItemList, itens);
-        paradaListView = (ListView) findViewById(R.id.listViewMotParada);
+        stringArrayAdapter = new ArrayAdapter<>(this, R.layout.activity_item_lista, R.id.textViewItemList, itens);
+        paradaListView = findViewById(R.id.listViewMotParada);
         paradaListView.setAdapter(stringArrayAdapter);
-        paradaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
+        paradaListView.setOnItemClickListener((l, v, position, id) -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("paradaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);\n" +
-                        "                textParada = textView.getText().toString();\n" +
-                        "                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);\n" +
-                        "                alerta.setTitle(\"ATENÇÃO\");\n" +
-                        "                String label = \"DESEJA REALMENTE REALIZAR A PARADA '\" + textParada + \"' ?\";\n" +
-                        "                alerta.setMessage(label);", getLocalClassName());
-                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
-                textParada = textView.getText().toString();
+            LogProcessoDAO.getInstance().insertLogProcesso("paradaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                    "                                    long id) {\n" +
+                    "                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);\n" +
+                    "                textParada = textView.getText().toString();\n" +
+                    "                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);\n" +
+                    "                alerta.setTitle(\"ATENÇÃO\");\n" +
+                    "                String label = \"DESEJA REALMENTE REALIZAR A PARADA '\" + textParada + \"' ?\";\n" +
+                    "                alerta.setMessage(label);", getLocalClassName());
+            TextView textView = (TextView) v.findViewById(R.id.textViewItemList);
+            textParada = textView.getText().toString();
 
-                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);
-                alerta.setTitle("ATENÇÃO");
-                String label = "DESEJA REALMENTE REALIZAR A PARADA '" + textParada + "' ?";
-                alerta.setMessage(label);
+            AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);
+            alerta.setTitle("ATENÇÃO");
+            String label = "DESEJA REALMENTE REALIZAR A PARADA '" + textParada + "' ?";
+            alerta.setMessage(label);
 
-                alerta.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+            alerta.setPositiveButton("SIM", (dialog, which) -> {
 
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
-                                "                    @Override\n" +
-                                "                    public void onClick(DialogInterface dialog, int which) {\n" +
-                                "                        pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());\n" +
-                                "                        pbmContext.getMecanicoCTR().getApontBean().setOsApontMecan(0L);\n" +
-                                "                        pbmContext.getMecanicoCTR().getApontBean().setItemOSApontMecan(0L);\n" +
-                                "                        pbmContext.getMecanicoCTR().getApontBean().setParadaApontMecan(pbmContext.getMecanicoCTR().getParadaCod(Long.parseLong(textParada.substring(0, textParada.indexOf('-')).trim())).getIdParada());\n" +
-                                "                        pbmContext.getMecanicoCTR().getApontBean().setRealizApontMecan(1L);\n" +
-                                "                        pbmContext.getMecanicoCTR().salvarApont();\n" +
-                                "                        if(pbmContext.getVerTela() == 2){\n" +
-                                "                            pbmContext.getMecanicoCTR().fecharBoletim();\n" +
-                                "                        }\n" +
-                                "                        Intent it = new Intent(  ListaParadaActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                        pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());
-                        pbmContext.getMecanicoCTR().getApontBean().setNroOSApontMecan(0L);
-                        pbmContext.getMecanicoCTR().salvarApont(0L, pbmContext.getMecanicoCTR().getParadaCod(Long.parseLong(textParada.substring(0, textParada.indexOf('-')).trim())).getIdParada(), 1L);
+                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
+                        "                    @Override\n" +
+                        "                    public void onClick(DialogInterface dialog, int which) {\n" +
+                        "                        pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());\n" +
+                        "                        pbmContext.getMecanicoCTR().getApontBean().setOsApontMecan(0L);\n" +
+                        "                        pbmContext.getMecanicoCTR().getApontBean().setItemOSApontMecan(0L);\n" +
+                        "                        pbmContext.getMecanicoCTR().getApontBean().setParadaApontMecan(pbmContext.getMecanicoCTR().getParadaCod(Long.parseLong(textParada.substring(0, textParada.indexOf('-')).trim())).getIdParada());\n" +
+                        "                        pbmContext.getMecanicoCTR().getApontBean().setRealizApontMecan(1L);\n" +
+                        "                        pbmContext.getMecanicoCTR().salvarApont();\n" +
+                        "                        if(pbmContext.getVerTela() == 2){\n" +
+                        "                            pbmContext.getMecanicoCTR().fecharBoletim();\n" +
+                        "                        }\n" +
+                        "                        Intent it = new Intent(  ListaParadaActivity.this, TelaInicialActivity.class);", getLocalClassName());
+                pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());
+                pbmContext.getMecanicoCTR().getApontBean().setNroOSApontMecan(0L);
+                pbmContext.getMecanicoCTR().salvarApont(0L, pbmContext.getMecanicoCTR().getParadaCod(Long.parseLong(textParada.substring(0, textParada.indexOf('-')).trim())).getIdParada(), 1L);
 
-                        if(pbmContext.getVerTela() == 2){
-                            pbmContext.getMecanicoCTR().fecharBoletim();
-                        }
+                if(pbmContext.getVerTela() == 2){
+                    pbmContext.getMecanicoCTR().fecharBoletim();
+                }
 
-                        Intent it = new Intent(  ListaParadaActivity.this, TelaInicialActivity.class);
-                        startActivity(it);
-                        finish();
+                Intent it = new Intent(  ListaParadaActivity.this, TelaInicialActivity.class);
+                startActivity(it);
+                finish();
 
-                    }
+            });
 
-                });
-
-                alerta.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
-                                "                    @Override\n" +
-                                "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                    }
-
-                });
-
-                alerta.show();
-
-            }
+            alerta.setNegativeButton("NÃO", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
+                    "                    @Override\n" +
+                    "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+            alerta.show();
 
         });
 
@@ -155,65 +139,53 @@ public class ListaParadaActivity extends ActivityGeneric {
             }
         });
 
-        buttonAtualParada.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonAtualParada.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if (connectNetwork) {
+        buttonAtualParada.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonAtualParada.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if (connectNetwork) {
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                            "                    progressBar = new ProgressDialog(v.getContext());\n" +
-                            "                    progressBar.setCancelable(true);\n" +
-                            "                    progressBar.setMessage(\"Atualizando Paradas...\");\n" +
-                            "                    progressBar.show();\n" +
-                            "                    VerifDadosServ.getInstance().verDados(\"\", \"Parada\"\n" +
-                            "                            , ListaParadaActivity.this, ListaParadaActivity.class, progressBar);", getLocalClassName());
-                    progressBar = new ProgressDialog(v.getContext());
-                    progressBar.setCancelable(true);
-                    progressBar.setMessage("Atualizando Paradas...");
-                    progressBar.show();
+                LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                        "                    progressBar = new ProgressDialog(v.getContext());\n" +
+                        "                    progressBar.setCancelable(true);\n" +
+                        "                    progressBar.setMessage(\"Atualizando Paradas...\");\n" +
+                        "                    progressBar.show();\n" +
+                        "                    VerifDadosServ.getInstance().verDados(\"\", \"Parada\"\n" +
+                        "                            , ListaParadaActivity.this, ListaParadaActivity.class, progressBar);", getLocalClassName());
+                progressBar = new ProgressDialog(v.getContext());
+                progressBar.setCancelable(true);
+                progressBar.setMessage("Atualizando Paradas...");
+                progressBar.show();
 
-                    VerifDadosServ.getInstance().verDados("", "Parada"
-                            , ListaParadaActivity.this, ListaParadaActivity.class, progressBar);
+                VerifDadosServ.getInstance().verDados("", "Parada"
+                        , ListaParadaActivity.this, ListaParadaActivity.class, progressBar);
 
-                } else {
+            } else {
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);\n" +
-                            "                    alerta.setTitle(\"ATENÇÃO\");\n" +
-                            "                    alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);
-                    alerta.setTitle("ATENÇÃO");
-                    alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
-                    alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                    "                        @Override\n" +
-                                    "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                        }
-                    });
-
-                    alerta.show();
-
-                }
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);\n" +
+                        "                    alerta.setTitle(\"ATENÇÃO\");\n" +
+                        "                    alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
+                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaParadaActivity.this);
+                alerta.setTitle("ATENÇÃO");
+                alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
+                alerta.setPositiveButton("OK", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                        "                        @Override\n" +
+                        "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+                alerta.show();
 
             }
+
         });
 
-        buttonRetMenuParada.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonRetMenuParada.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(ListaParadaActivity.this, MenuFuncaoActivity.class);", getLocalClassName());
-                Intent it = new Intent(ListaParadaActivity.this, MenuFuncaoActivity.class);
-                startActivity(it);
-                finish();
-            }
+        buttonRetMenuParada.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonRetMenuParada.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(ListaParadaActivity.this, MenuFuncaoActivity.class);", getLocalClassName());
+            Intent it = new Intent(ListaParadaActivity.this, MenuFuncaoActivity.class);
+            startActivity(it);
+            finish();
         });
 
     }

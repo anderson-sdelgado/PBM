@@ -46,7 +46,7 @@ public class ListaItemOSActivity extends ActivityGeneric {
                 "        }", getLocalClassName());
 
         itemOSList = pbmContext.getMecanicoCTR().itemOSList();
-        ArrayList<String> itens = new ArrayList<String>();
+        ArrayList<String> itens = new ArrayList<>();
 
         for(ItemOSBean itemOSBean : itemOSList){
             itens.add(itemOSBean.getSeqItemOS() + " - "
@@ -59,92 +59,75 @@ public class ListaItemOSActivity extends ActivityGeneric {
                 "        itemOSListView = (ListView) findViewById(R.id.listItemOS);\n" +
                 "        itemOSListView.setAdapter(adapterList);", getLocalClassName());
         AdapterList adapterList = new AdapterList(this, itens);
-        itemOSListView = (ListView) findViewById(R.id.listItemOS);
+        itemOSListView = findViewById(R.id.listItemOS);
         itemOSListView.setAdapter(adapterList);
-        itemOSListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
+        itemOSListView.setOnItemClickListener((l, v, position, id) -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("itemOSListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                ItemOSBean itemOSBean = itemOSList.get(position);\n" +
-                        "                pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);\n" +
-                        "                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);", getLocalClassName());
-                ItemOSBean itemOSBean = itemOSList.get(position);
-                pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);
-                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);
-                startActivity(it);
-                finish();
-
-            }
+            LogProcessoDAO.getInstance().insertLogProcesso("itemOSListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                    "                                    long id) {\n" +
+                    "                ItemOSBean itemOSBean = itemOSList.get(position);\n" +
+                    "                pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);\n" +
+                    "                Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);", getLocalClassName());
+            ItemOSBean itemOSBean = itemOSList.get(position);
+            pbmContext.getMecanicoCTR().salvarApont(itemOSBean.getSeqItemOS(), 0L, 0L);
+            Intent it = new Intent(ListaItemOSActivity.this, TelaInicialActivity.class);
+            startActivity(it);
+            finish();
 
         });
 
-        buttonAtualItemOS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonAtualItemOS.setOnClickListener(v -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonAtualItemOS.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if (connectNetwork) {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonAtualItemOS.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if (connectNetwork) {
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                            "                    progressBar = new ProgressDialog(ListaItemOSActivity.this);\n" +
-                            "                    progressBar.setCancelable(true);\n" +
-                            "                    progressBar.setMessage(\"ATUALIZANDO ...\");\n" +
-                            "                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
-                            "                    progressBar.setProgress(0);\n" +
-                            "                    progressBar.setMax(100);\n" +
-                            "                    progressBar.show();\n" +
-                            "                    pbmContext.getMecanicoCTR().atualDadosItemOS(ListaItemOSActivity.this, ListaItemOSActivity.class, progressBar);", getLocalClassName());
-                    progressBar = new ProgressDialog(ListaItemOSActivity.this);
-                    progressBar.setCancelable(true);
-                    progressBar.setMessage("ATUALIZANDO ...");
-                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    progressBar.setProgress(0);
-                    progressBar.setMax(100);
-                    progressBar.show();
+                LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                        "                    progressBar = new ProgressDialog(ListaItemOSActivity.this);\n" +
+                        "                    progressBar.setCancelable(true);\n" +
+                        "                    progressBar.setMessage(\"ATUALIZANDO ...\");\n" +
+                        "                    progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);\n" +
+                        "                    progressBar.setProgress(0);\n" +
+                        "                    progressBar.setMax(100);\n" +
+                        "                    progressBar.show();\n" +
+                        "                    pbmContext.getMecanicoCTR().atualDadosItemOS(ListaItemOSActivity.this, ListaItemOSActivity.class, progressBar);", getLocalClassName());
+                progressBar = new ProgressDialog(ListaItemOSActivity.this);
+                progressBar.setCancelable(true);
+                progressBar.setMessage("ATUALIZANDO ...");
+                progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressBar.setProgress(0);
+                progressBar.setMax(100);
+                progressBar.show();
 
-                    pbmContext.getMecanicoCTR().atualDadosItemOS(ListaItemOSActivity.this, ListaItemOSActivity.class, progressBar);
+                pbmContext.getMecanicoCTR().atualDadosItemOS(ListaItemOSActivity.this, ListaItemOSActivity.class, progressBar);
 
-                } else {
+            } else {
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                            "                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaItemOSActivity.this);\n" +
-                            "                    alerta.setTitle(\"ATENÇÃO\");\n" +
-                            "                    alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
-                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaItemOSActivity.this);
-                    alerta.setTitle("ATENÇÃO");
-                    alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
-                    alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                    "                        @Override\n" +
-                                    "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                        }
-                    });
-
-                    alerta.show();
-                }
+                LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                        "                    AlertDialog.Builder alerta = new AlertDialog.Builder(ListaItemOSActivity.this);\n" +
+                        "                    alerta.setTitle(\"ATENÇÃO\");\n" +
+                        "                    alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
+                AlertDialog.Builder alerta = new AlertDialog.Builder(ListaItemOSActivity.this);
+                alerta.setTitle("ATENÇÃO");
+                alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
+                alerta.setPositiveButton("OK", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                        "                        @Override\n" +
+                        "                        public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+                alerta.show();
             }
         });
 
-        buttonRetItemOS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonRetItemOS.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(ListaItemOSActivity.this, OSActivity.class);", getLocalClassName());
-                Intent it = new Intent(ListaItemOSActivity.this, OSActivity.class);
-                startActivity(it);
-                finish();
-            }
+        buttonRetItemOS.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonRetItemOS.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(ListaItemOSActivity.this, OSActivity.class);", getLocalClassName());
+            Intent it = new Intent(ListaItemOSActivity.this, OSActivity.class);
+            startActivity(it);
+            finish();
         });
 
     }

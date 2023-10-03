@@ -31,33 +31,24 @@ public class DescrOSActivity extends ActivityGeneric {
         textViewCodEquip.setText(String.valueOf(pbmContext.getMecanicoCTR().getEquipOS().getNroEquip()));
             textViewDescrEquip.setText(pbmContext.getMecanicoCTR().getEquipOS().getDescrClasseEquip());
 
-        buttonOkDescrOS.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonOkDescrOS.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(DescrOSActivity.this, ListaItemOSActivity.class);", getLocalClassName());
-                Intent it = new Intent(DescrOSActivity.this, ListaItemOSActivity.class);
-                startActivity(it);
-                finish();
-            }
+        buttonOkDescrOS.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonOkDescrOS.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(DescrOSActivity.this, ListaItemOSActivity.class);", getLocalClassName());
+            Intent it = new Intent(DescrOSActivity.this, ListaItemOSActivity.class);
+            startActivity(it);
+            finish();
         });
 
-        buttonCancDescrOS.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonCancDescrOS.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(DescrOSActivity.this, OSActivity.class);", getLocalClassName());
-                Intent it = new Intent(DescrOSActivity.this, OSActivity.class);
-                startActivity(it);
-                finish();
-            }
-
+        buttonCancDescrOS.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonCancDescrOS.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(DescrOSActivity.this, OSActivity.class);", getLocalClassName());
+            Intent it = new Intent(DescrOSActivity.this, OSActivity.class);
+            startActivity(it);
+            finish();
         });
 
     }

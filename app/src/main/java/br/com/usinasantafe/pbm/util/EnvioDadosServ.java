@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
-import br.com.usinasantafe.pbm.control.PneuCTR;
 import br.com.usinasantafe.pbm.model.dao.LogErroDAO;
 import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pbm.util.conHttp.PostCadGenerico;
@@ -41,15 +40,6 @@ public class EnvioDadosServ {
 
     }
 
-    public void enviarBoletimPneu(String activity) {
-
-        PneuCTR pneuCTR = new PneuCTR();
-
-        LogProcessoDAO.getInstance().insertLogProcesso("pneuCTR.dadosEnvioBolPneuFechado()", activity);
-        envio(urlsConexaoHttp.getsInsertBoletimPneu(), pneuCTR.dadosEnvioBolPneuFechado(), activity);
-
-    }
-
     public void envio(String url, String dados, String activity){
 
         String[] strings = {url, activity};
@@ -72,11 +62,6 @@ public class EnvioDadosServ {
         return mecanicoCTR.verApontSemEnvio();
     }
 
-    public boolean verBoletimPneuFechado(){
-        PneuCTR pneuCTR = new PneuCTR();
-        return pneuCTR.verBoletimPneuFechado();
-    }
-
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////// MECANISMO DE ENVIO///////////////////////////////////
@@ -94,26 +79,16 @@ public class EnvioDadosServ {
                 LogProcessoDAO.getInstance().insertLogProcesso("if (verApontSemEnvio()) {\n" +
                         "                    enviarBolAberto(activity);", activity);
                 enviarBoletimMecan(activity);
-            } else {
-                LogProcessoDAO.getInstance().insertLogProcesso("} else {", activity);
-                if(verBoletimPneuFechado()){
-                    LogProcessoDAO.getInstance().insertLogProcesso("if(verBoletimPneuFechado()){\n" +
-                            "                        enviarPneu(activity);", activity);
-                    enviarBoletimPneu(activity);
-                }
             }
-        }
-        else{
+        } else {
             status = 3;
         }
     }
 
     public boolean verifDadosEnvio() {
         MecanicoCTR mecanicoCTR = new MecanicoCTR();
-        PneuCTR pneuCTR = new PneuCTR();
         if ((!mecanicoCTR.verBoletimFechado())
-                && (!mecanicoCTR.verApontSemEnvio())
-                && (!pneuCTR.verBoletimPneuFechado())) {
+                && (!mecanicoCTR.verApontSemEnvio())) {
             return false;
         } else {
             return true;
@@ -132,15 +107,7 @@ public class EnvioDadosServ {
                     "            mecanicoCTR.updateBolFechado(result);", activity);
             MecanicoCTR mecanicoCTR = new MecanicoCTR();
             mecanicoCTR.updateBoletim(result, activity);
-        }
-        else if(result.trim().startsWith("BOLETIMPNEU")){
-            LogProcessoDAO.getInstance().insertLogProcesso("else if(result.trim().startsWith(\"BOLPNEU\")){\n" +
-                    "            PneuCTR pneuCTR = new PneuCTR();\n" +
-                    "            pneuCTR.updateBolEnviado(result);", activity);
-            PneuCTR pneuCTR = new PneuCTR();
-            pneuCTR.updateBolEnviado(result, activity);
-        }
-        else{
+        } else {
             LogProcessoDAO.getInstance().insertLogProcesso("else{\n" +
                     "            status = 1;\n" +
                     "            LogErroDAO.getInstance().insertLogErro(result);", activity);

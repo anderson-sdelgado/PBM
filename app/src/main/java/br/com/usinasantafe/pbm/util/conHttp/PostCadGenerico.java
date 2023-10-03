@@ -11,8 +11,6 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 
-import br.com.usinasantafe.pbm.control.MecanicoCTR;
-import br.com.usinasantafe.pbm.control.PneuCTR;
 import br.com.usinasantafe.pbm.model.dao.LogErroDAO;
 import br.com.usinasantafe.pbm.util.EnvioDadosServ;
 

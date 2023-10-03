@@ -16,10 +16,7 @@ import br.com.usinasantafe.pbm.model.bean.estaticas.ItemOSBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.OSBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ParadaBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ParametroBean;
-import br.com.usinasantafe.pbm.model.bean.estaticas.PneuBean;
-import br.com.usinasantafe.pbm.model.bean.estaticas.REquipPneuBean;
 import br.com.usinasantafe.pbm.model.bean.estaticas.ServicoBean;
-import br.com.usinasantafe.pbm.model.bean.estaticas.TipoManutBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ApontMecanBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimMecanBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimPneuBean;
@@ -69,10 +66,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(cs, OSBean.class);
 			TableUtils.createTable(cs, ParadaBean.class);
 			TableUtils.createTable(cs, ParametroBean.class);
-			TableUtils.createTable(cs, PneuBean.class);
-			TableUtils.createTable(cs, REquipPneuBean.class);
 			TableUtils.createTable(cs, ServicoBean.class);
-			TableUtils.createTable(cs, TipoManutBean.class);
 
 			TableUtils.createTable(cs, ApontMecanBean.class);
 			TableUtils.createTable(cs, BoletimMecanBean.class);

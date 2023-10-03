@@ -32,80 +32,74 @@ public class OSActivity extends ActivityGeneric {
         Button buttonOkOS = findViewById(R.id.buttonOkPadrao);
         Button buttonCancOS = findViewById(R.id.buttonCancPadrao);
 
-        buttonOkOS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonOkOS.setOnClickListener(v -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonOkOS.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if (!editTextPadrao.getText().toString().equals("")) {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonOkOS.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if (!editTextPadrao.getText().toString().equals("")) {
 
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {\n" +
-                            "                    pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());\n" +
-                            "                    pbmContext.getMecanicoCTR().getApontBean().setOsApontMecan(Long.parseLong(editTextPadrao.getText().toString()));", getLocalClassName());
-                    pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());
-                    pbmContext.getMecanicoCTR().getApontBean().setNroOSApontMecan(Long.parseLong(editTextPadrao.getText().toString()));
+                LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {\n" +
+                        "                    pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());\n" +
+                        "                    pbmContext.getMecanicoCTR().getApontBean().setOsApontMecan(Long.parseLong(editTextPadrao.getText().toString()));", getLocalClassName());
+                pbmContext.getMecanicoCTR().setApontBean(new ApontMecanBean());
+                pbmContext.getMecanicoCTR().getApontBean().setNroOSApontMecan(Long.parseLong(editTextPadrao.getText().toString()));
 
-                    if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {
+                if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {
 
-                        LogProcessoDAO.getInstance().insertLogProcesso("try {\n" +
-                                "                        if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {\n" +
-                                "                            Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);", getLocalClassName());
-                        Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);
-                        startActivity(it);
-                        finish();
+                    LogProcessoDAO.getInstance().insertLogProcesso("try {\n" +
+                            "                        if(pbmContext.getMecanicoCTR().verOSApont(Long.parseLong(editTextPadrao.getText().toString()))) {\n" +
+                            "                            Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);", getLocalClassName());
+                    Intent it = new Intent(OSActivity.this, ListaItemOSActivity.class);
+                    startActivity(it);
+                    finish();
+
+                } else {
+
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
+                    if (connectNetwork) {
+
+                        LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                                "                                progressBar = new ProgressDialog(v.getContext());\n" +
+                                "                                progressBar.setCancelable(true);\n" +
+                                "                                progressBar.setMessage(\"Pequisando a OS...\");\n" +
+                                "                                progressBar.show();\n" +
+                                "                                customHandler.postDelayed(updateTimerThread, 10000);\n" +
+                                "                                pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()\n" +
+                                "                                        , OSActivity.this, DescrOSActivity.class, progressBar);", getLocalClassName());
+                        progressBar = new ProgressDialog(v.getContext());
+                        progressBar.setCancelable(true);
+                        progressBar.setMessage("Pequisando a OS...");
+                        progressBar.show();
+
+                        customHandler.postDelayed(updateTimerThread, 10000);
+
+                        pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()
+                                , OSActivity.this, DescrOSActivity.class, progressBar);
 
                     } else {
 
-                        LogProcessoDAO.getInstance().insertLogProcesso("} else {", getLocalClassName());
-                        if (connectNetwork) {
-
-                            LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                                    "                                progressBar = new ProgressDialog(v.getContext());\n" +
-                                    "                                progressBar.setCancelable(true);\n" +
-                                    "                                progressBar.setMessage(\"Pequisando a OS...\");\n" +
-                                    "                                progressBar.show();\n" +
-                                    "                                customHandler.postDelayed(updateTimerThread, 10000);\n" +
-                                    "                                pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()\n" +
-                                    "                                        , OSActivity.this, DescrOSActivity.class, progressBar);", getLocalClassName());
-                            progressBar = new ProgressDialog(v.getContext());
-                            progressBar.setCancelable(true);
-                            progressBar.setMessage("Pequisando a OS...");
-                            progressBar.show();
-
-                            customHandler.postDelayed(updateTimerThread, 10000);
-
-                            pbmContext.getMecanicoCTR().verOS(editTextPadrao.getText().toString()
-                                    , OSActivity.this, DescrOSActivity.class, progressBar);
-
-                        } else {
-
-                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                    "                                Intent it = new Intent(OSActivity.this, DigItemOSActivity.class);", getLocalClassName());
-                            Intent it = new Intent(OSActivity.this, DigItemOSActivity.class);
-                            startActivity(it);
-                            finish();
-
-                        }
+                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                                "                                Intent it = new Intent(OSActivity.this, DigItemOSActivity.class);", getLocalClassName());
+                        Intent it = new Intent(OSActivity.this, DigItemOSActivity.class);
+                        startActivity(it);
+                        finish();
 
                     }
 
                 }
+
             }
         });
 
-        buttonCancOS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editTextPadrao.getText().toString().length() > 0) {
-                    LogProcessoDAO.getInstance().insertLogProcesso("buttonCancOS.setOnClickListener(new View.OnClickListener() {\n" +
-                            "            @Override\n" +
-                            "            public void onClick(View v) {\n" +
-                            "                if (editTextPadrao.getText().toString().length() > 0) {\n" +
-                            "                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));", getLocalClassName());
-                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
-                }
+        buttonCancOS.setOnClickListener(v -> {
+            if (editTextPadrao.getText().toString().length() > 0) {
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonCancOS.setOnClickListener(new View.OnClickListener() {\n" +
+                        "            @Override\n" +
+                        "            public void onClick(View v) {\n" +
+                        "                if (editTextPadrao.getText().toString().length() > 0) {\n" +
+                        "                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));", getLocalClassName());
+                editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
             }
         });
 

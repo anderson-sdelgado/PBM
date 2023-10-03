@@ -14,9 +14,13 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import br.com.usinasantafe.pbm.model.dao.AtualAplicDAO;
+import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 import br.com.usinasantafe.pbm.model.pst.GenericRecordable;
-import br.com.usinasantafe.pbm.util.conHttp.GetBDGenerico;
+import br.com.usinasantafe.pbm.util.conHttp.PostBDGenerico;
 import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
 
 public class AtualDadosServ {
@@ -76,13 +80,27 @@ public class AtualDadosServ {
 				Log.i("PMM", "Erro Manip = " + e);
 			}
 
-		}
-		else{
+		} else {
 			encerrar();
 		}
 
 	}
-	
+
+	public void startAtualizacao(){
+
+		classe = (String) tabAtualArrayList.get(contAtualBD);
+		String[] url = {classe};
+		contAtualBD++;
+
+		AtualAplicDAO atualAplicDAO = new AtualAplicDAO();
+		Map<String, Object> parametrosPost = new HashMap<>();
+		parametrosPost.put("dado", atualAplicDAO.getAtualBDToken());
+
+		PostBDGenerico postBDGenerico = new PostBDGenerico();
+		postBDGenerico.setParametrosPost(parametrosPost);
+		postBDGenerico.execute(url);
+
+	}
 
 	public void atualizarBD(ProgressDialog progressDialog){
 		
@@ -101,15 +119,8 @@ public class AtualDadosServ {
 	            }
 	            
 	        }
-	        
-	        classe = (String) tabAtualArrayList.get(contAtualBD);
-			
-	        String[] url = {classe};
-			
-		    contAtualBD++;
 
-	        GetBDGenerico getBDGenerico = new GetBDGenerico();
-	        getBDGenerico.execute(url);
+			startAtualizacao();
 	        
 		} catch (Exception e) {
 			Log.i("PMM", "ERRO Manip2 = " + e);
@@ -139,12 +150,7 @@ public class AtualDadosServ {
 				}
 			}
 
-			classe = (String) tabAtualArrayList.get(contAtualBD);
-			String[] url = {classe};
-			contAtualBD++;
-
-			GetBDGenerico getBDGenerico = new GetBDGenerico();
-			getBDGenerico.execute(url);
+			startAtualizacao();
 
 		} catch (Exception e) {
 			Log.i("PMM", "ERRO = " + e);
@@ -152,11 +158,14 @@ public class AtualDadosServ {
 
 	}
 
-	public void atualizarBD() {
+	public void atualizarBD(Context telaAtual, Class telaProx, ProgressDialog progressDialog) {
 
 		try {
 
-			this.tipoReceb = 2;
+			this.tipoReceb = 3;
+			this.telaAtual = telaAtual;
+			this.telaProx = telaProx;
+			this.progressDialog = progressDialog;
 			tabAtualArrayList = new ArrayList();
 			Class<?> retClasse = Class.forName(urlsConexaoHttp.localUrl);
 
@@ -169,14 +178,7 @@ public class AtualDadosServ {
 
 			}
 
-			classe = (String) tabAtualArrayList.get(contAtualBD);
-
-			String[] url = {classe};
-
-			contAtualBD++;
-
-			GetBDGenerico getBDGenerico = new GetBDGenerico();
-			getBDGenerico.execute(url);
+			startAtualizacao();
 
 		} catch (Exception e) {
 			Log.i("PMM", "Erro Manip2 = " + e);
@@ -191,53 +193,33 @@ public class AtualDadosServ {
 			qtdeBD = tabAtualArrayList.size();
 			
 			if(contAtualBD < tabAtualArrayList.size()){
-				
-				this.progressDialog.setProgress((contAtualBD * 100) / qtdeBD);
-		        classe = (String) tabAtualArrayList.get(contAtualBD);
-				String[] url = {classe};
-				contAtualBD++;
 
-				GetBDGenerico getBDGenerico = new GetBDGenerico();
-		        getBDGenerico.execute(url);
-		        
-			}
-			else
-			{
+				this.progressDialog.setProgress((contAtualBD * 100) / qtdeBD);
+				startAtualizacao();
+
+			} else {
 				this.progressDialog.dismiss();
 				contAtualBD = 0;
 				AlertDialog.Builder alerta = new AlertDialog.Builder(this.telaAtual);
 				alerta.setTitle("ATENCAO");
 				alerta.setMessage("FOI ATUALIZADO COM SUCESSO OS DADOS.");
-				alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						if(tipoReceb == 3){
-							Intent it = new Intent(telaAtual, telaAtual.getClass());
-							telaAtual.startActivity(it);
-						}
+				alerta.setPositiveButton("OK", (dialog, which) -> {
+					if(tipoReceb == 3){
+						Intent it = new Intent(telaAtual, telaProx);
+						telaAtual.startActivity(it);
 					}
 				});
 				
 				alerta.show();
 			}
 		
-		}
-		else if(this.tipoReceb == 2){
+		} else if(this.tipoReceb == 2) {
 			
 			qtdeBD = tabAtualArrayList.size();
 			
 			if(contAtualBD < tabAtualArrayList.size()){
-				
-		        classe = (String) tabAtualArrayList.get(contAtualBD);
-				String[] url = {classe};
-				contAtualBD++;
-
-				GetBDGenerico getBDGenerico = new GetBDGenerico();
-		        getBDGenerico.execute(url);
-		        
-			}
-			else
-			{
+				startAtualizacao();
+			} else {
 				contAtualBD = 0;
 			}
 			
@@ -253,11 +235,7 @@ public class AtualDadosServ {
 			AlertDialog.Builder alerta = new AlertDialog.Builder(this.telaAtual);
 			alerta.setTitle("ATENCAO");
 			alerta.setMessage("FALHA NA CONEXAO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
-			alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-	
-				}
+			alerta.setPositiveButton("OK", (dialog, which) -> {
 			});
 			
 			alerta.show();

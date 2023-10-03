@@ -4,7 +4,6 @@ import android.app.Application;
 
 import br.com.usinasantafe.pbm.control.ConfigCTR;
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
-import br.com.usinasantafe.pbm.control.PneuCTR;
 import br.com.usinasantafe.pbm.model.dao.LogErroDAO;
 
 public class PBMContext extends Application {
@@ -15,7 +14,6 @@ public class PBMContext extends Application {
     public static String versaoAPP = "3.01";
     private ConfigCTR configCTR;
     private MecanicoCTR mecanicoCTR;
-    private PneuCTR pneuCTR;
     private int verTela;
     // 1 - Parada Normal;
     // 2 - Parada para Fechar Boletim;
@@ -43,11 +41,6 @@ public class PBMContext extends Application {
         return mecanicoCTR;
     }
 
-    public PneuCTR getPneuCTR() {
-        if(pneuCTR == null)
-            pneuCTR = new PneuCTR();
-        return pneuCTR;
-    }
 
     public int getVerTela() {
         return verTela;

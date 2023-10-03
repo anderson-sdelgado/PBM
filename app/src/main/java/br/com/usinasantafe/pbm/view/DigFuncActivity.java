@@ -25,150 +25,116 @@ public class DigFuncActivity extends ActivityGeneric {
 
         pbmContext = (PBMContext) getApplication();
 
-        Button buttonOkFunc = (Button) findViewById(R.id.buttonOkPadrao);
-        Button buttonCancFunc = (Button) findViewById(R.id.buttonCancPadrao);
-        Button buttonAtualPadrao = (Button) findViewById(R.id.buttonAtualPadrao);
+        Button buttonOkFunc = findViewById(R.id.buttonOkPadrao);
+        Button buttonCancFunc = findViewById(R.id.buttonCancPadrao);
+        Button buttonAtualPadrao = findViewById(R.id.buttonAtualPadrao);
 
-        buttonAtualPadrao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonAtualPadrao.setOnClickListener(v -> {
 
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonAtualPadrao.setOnClickListener(new View.OnClickListener() {\n" +
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonAtualPadrao.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                AlertDialog.Builder alerta = new AlertDialog.Builder(  DigFuncActivity.this);\n" +
+                    "                alerta.setTitle(\"ATENÇÃO\");\n" +
+                    "                alerta.setMessage(\"DESEJA REALMENTE ATUALIZAR BASE DE DADOS?\");", getLocalClassName());
+            AlertDialog.Builder alerta = new AlertDialog.Builder(  DigFuncActivity.this);
+            alerta.setTitle("ATENÇÃO");
+            alerta.setMessage("DESEJA REALMENTE ATUALIZAR BASE DE DADOS?");
+            alerta.setNegativeButton("SIM", (dialog, which) -> {
+
+                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
+                        "                    @Override\n" +
+                        "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
+                if (connectNetwork) {
+
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
+                            "                            progressBar = new ProgressDialog(DigFuncActivity.this);\n" +
+                            "                            progressBar.setCancelable(true);\n" +
+                            "                            progressBar.setMessage(\"Atualizando Colaborador...\");\n" +
+                            "                            progressBar.show();\n" +
+                            "                            pbmContext.getMecanicoCTR().atualDadosColab(DigFuncActivity.this\n" +
+                            "                                    , LeitorFuncActivity.class, progressBar);", getLocalClassName());
+                    progressBar = new ProgressDialog(DigFuncActivity.this);
+                    progressBar.setCancelable(true);
+                    progressBar.setMessage("Atualizando Colaborador...");
+                    progressBar.show();
+
+                    pbmContext.getMecanicoCTR().atualDadosColab(DigFuncActivity.this
+                            , LeitorFuncActivity.class, progressBar);
+
+                } else {
+
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                            "                            AlertDialog.Builder alerta = new AlertDialog.Builder( DigFuncActivity.this);\n" +
+                            "                            alerta.setTitle(\"ATENÇÃO\");\n" +
+                            "                            alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
+                    AlertDialog.Builder alerta1 = new AlertDialog.Builder( DigFuncActivity.this);
+                    alerta1.setTitle("ATENÇÃO");
+                    alerta1.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
+                    alerta1.setPositiveButton("OK", (dialog1, which1) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                            "                                @Override\n" +
+                            "                                public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+                    alerta1.show();
+
+                }
+
+            });
+
+            alerta.setPositiveButton("NÃO", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
+                    "                    @Override\n" +
+                    "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+            alerta.show();
+
+        });
+
+        buttonOkFunc.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonOkFunc.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @SuppressWarnings(\"rawtypes\")\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {", getLocalClassName());
+            if (!editTextPadrao.getText().toString().equals("")) {
+
+                LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {", getLocalClassName());
+                if (pbmContext.getMecanicoCTR().verMatricColab(Long.parseLong(editTextPadrao.getText().toString()))) {
+
+                    LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().verMatricColab(Long.parseLong(editTextPadrao.getText().toString()))) {\n" +
+                            "                        pbmContext.getMecanicoCTR().atualBoletimSApont();\n" +
+                            "                        pbmContext.getMecanicoCTR().atualSalvarBoletim(pbmContext.getMecanicoCTR().getColab(Long.parseLong(editTextPadrao.getText().toString())));\n" +
+                            "                        Intent it = new Intent(DigFuncActivity.this, MenuFuncaoActivity.class);", getLocalClassName());
+                    pbmContext.getMecanicoCTR().atualBoletimSApont();
+                    pbmContext.getMecanicoCTR().atualSalvarBoletim(pbmContext.getMecanicoCTR().getColab(Long.parseLong(editTextPadrao.getText().toString())), getLocalClassName());
+
+                    Intent it = new Intent(DigFuncActivity.this, MenuFuncaoActivity.class);
+                    startActivity(it);
+                    finish();
+
+                } else {
+
+                    LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
+                            "                        AlertDialog.Builder alerta = new AlertDialog.Builder(DigFuncActivity.this);\n" +
+                            "                        alerta.setTitle(\"ATENÇÃO\");\n" +
+                            "                        alerta.setMessage(\"NUMERAÇÃO DO FUNCIONÁRIO INEXISTENTE! FAVOR VERIFICA A MESMA.\");", getLocalClassName());
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(DigFuncActivity.this);
+                    alerta.setTitle("ATENÇÃO");
+                    alerta.setMessage("NUMERAÇÃO DO FUNCIONÁRIO INEXISTENTE! FAVOR VERIFICA A MESMA.");
+                    alerta.setPositiveButton("OK", (dialog, which) -> LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
+                            "                            @Override\n" +
+                            "                            public void onClick(DialogInterface dialog, int which) {", getLocalClassName()));
+                    alerta.show();
+
+                }
+            }
+
+        });
+
+        buttonCancFunc.setOnClickListener(v -> {
+            if (editTextPadrao.getText().toString().length() > 0) {
+                LogProcessoDAO.getInstance().insertLogProcesso("buttonCancFunc.setOnClickListener(new View.OnClickListener() {\n" +
                         "            @Override\n" +
                         "            public void onClick(View v) {\n" +
-                        "                AlertDialog.Builder alerta = new AlertDialog.Builder(  DigFuncActivity.this);\n" +
-                        "                alerta.setTitle(\"ATENÇÃO\");\n" +
-                        "                alerta.setMessage(\"DESEJA REALMENTE ATUALIZAR BASE DE DADOS?\");", getLocalClassName());
-                AlertDialog.Builder alerta = new AlertDialog.Builder(  DigFuncActivity.this);
-                alerta.setTitle("ATENÇÃO");
-                alerta.setMessage("DESEJA REALMENTE ATUALIZAR BASE DE DADOS?");
-                alerta.setNegativeButton("SIM", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setNegativeButton(\"SIM\", new DialogInterface.OnClickListener() {\n" +
-                                "                    @Override\n" +
-                                "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                        if (connectNetwork) {
-
-                            LogProcessoDAO.getInstance().insertLogProcesso("if (connectNetwork) {\n" +
-                                    "                            progressBar = new ProgressDialog(DigFuncActivity.this);\n" +
-                                    "                            progressBar.setCancelable(true);\n" +
-                                    "                            progressBar.setMessage(\"Atualizando Colaborador...\");\n" +
-                                    "                            progressBar.show();\n" +
-                                    "                            pbmContext.getMecanicoCTR().atualDadosColab(DigFuncActivity.this\n" +
-                                    "                                    , LeitorFuncActivity.class, progressBar);", getLocalClassName());
-                            progressBar = new ProgressDialog(DigFuncActivity.this);
-                            progressBar.setCancelable(true);
-                            progressBar.setMessage("Atualizando Colaborador...");
-                            progressBar.show();
-
-                            pbmContext.getMecanicoCTR().atualDadosColab(DigFuncActivity.this
-                                    , LeitorFuncActivity.class, progressBar);
-
-
-                        } else {
-
-                            LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                    "                            AlertDialog.Builder alerta = new AlertDialog.Builder( DigFuncActivity.this);\n" +
-                                    "                            alerta.setTitle(\"ATENÇÃO\");\n" +
-                                    "                            alerta.setMessage(\"FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.\");", getLocalClassName());
-                            AlertDialog.Builder alerta = new AlertDialog.Builder( DigFuncActivity.this);
-                            alerta.setTitle("ATENÇÃO");
-                            alerta.setMessage("FALHA NA CONEXÃO DE DADOS. O CELULAR ESTA SEM SINAL. POR FAVOR, TENTE NOVAMENTE QUANDO O CELULAR ESTIVE COM SINAL.");
-                            alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                            "                                @Override\n" +
-                                            "                                public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                                }
-                            });
-
-                            alerta.show();
-
-                        }
-
-                    }
-                });
-
-                alerta.setPositiveButton("NÃO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"NÃO\", new DialogInterface.OnClickListener() {\n" +
-                                "                    @Override\n" +
-                                "                    public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                    }
-                });
-
-                alerta.show();
-
-            }
-
-        });
-
-        buttonOkFunc.setOnClickListener(new View.OnClickListener() {
-            @SuppressWarnings("rawtypes")
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonOkFunc.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @SuppressWarnings(\"rawtypes\")\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {", getLocalClassName());
-                if (!editTextPadrao.getText().toString().equals("")) {
-
-                    LogProcessoDAO.getInstance().insertLogProcesso("if (!editTextPadrao.getText().toString().equals(\"\")) {", getLocalClassName());
-                    if (pbmContext.getMecanicoCTR().verMatricColab(Long.parseLong(editTextPadrao.getText().toString()))) {
-
-                        LogProcessoDAO.getInstance().insertLogProcesso("if (pbmContext.getMecanicoCTR().verMatricColab(Long.parseLong(editTextPadrao.getText().toString()))) {\n" +
-                                "                        pbmContext.getMecanicoCTR().atualBoletimSApont();\n" +
-                                "                        pbmContext.getMecanicoCTR().atualSalvarBoletim(pbmContext.getMecanicoCTR().getColab(Long.parseLong(editTextPadrao.getText().toString())));\n" +
-                                "                        Intent it = new Intent(DigFuncActivity.this, MenuFuncaoActivity.class);", getLocalClassName());
-                        pbmContext.getMecanicoCTR().atualBoletimSApont();
-                        pbmContext.getMecanicoCTR().atualSalvarBoletim(pbmContext.getMecanicoCTR().getColab(Long.parseLong(editTextPadrao.getText().toString())), getLocalClassName());
-
-                        Intent it = new Intent(DigFuncActivity.this, MenuFuncaoActivity.class);
-                        startActivity(it);
-                        finish();
-
-                    } else {
-
-                        LogProcessoDAO.getInstance().insertLogProcesso("} else {\n" +
-                                "                        AlertDialog.Builder alerta = new AlertDialog.Builder(DigFuncActivity.this);\n" +
-                                "                        alerta.setTitle(\"ATENÇÃO\");\n" +
-                                "                        alerta.setMessage(\"NUMERAÇÃO DO FUNCIONÁRIO INEXISTENTE! FAVOR VERIFICA A MESMA.\");", getLocalClassName());
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(DigFuncActivity.this);
-                        alerta.setTitle("ATENÇÃO");
-                        alerta.setMessage("NUMERAÇÃO DO FUNCIONÁRIO INEXISTENTE! FAVOR VERIFICA A MESMA.");
-                        alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                LogProcessoDAO.getInstance().insertLogProcesso("alerta.setPositiveButton(\"OK\", new DialogInterface.OnClickListener() {\n" +
-                                        "                            @Override\n" +
-                                        "                            public void onClick(DialogInterface dialog, int which) {", getLocalClassName());
-                            }
-                        });
-
-                        alerta.show();
-
-                    }
-                }
-
-            }
-
-        });
-
-        buttonCancFunc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editTextPadrao.getText().toString().length() > 0) {
-                    LogProcessoDAO.getInstance().insertLogProcesso("buttonCancFunc.setOnClickListener(new View.OnClickListener() {\n" +
-                            "            @Override\n" +
-                            "            public void onClick(View v) {\n" +
-                            "                if (editTextPadrao.getText().toString().length() > 0) {\n" +
-                            "                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));", getLocalClassName());
-                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
-                }
+                        "                if (editTextPadrao.getText().toString().length() > 0) {\n" +
+                        "                    editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));", getLocalClassName());
+                editTextPadrao.setText(editTextPadrao.getText().toString().substring(0, editTextPadrao.getText().toString().length() - 1));
             }
         });
 

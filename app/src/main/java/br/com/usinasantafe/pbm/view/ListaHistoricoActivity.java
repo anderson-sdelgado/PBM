@@ -19,27 +19,24 @@ public class ListaHistoricoActivity extends ActivityGeneric {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_historico);
 
-        Button buttonRetHistorico = (Button) findViewById(R.id.buttonRetHistorico);
+        Button buttonRetHistorico = findViewById(R.id.buttonRetHistorico);
 
         pbmContext = (PBMContext) getApplication();
 
         LogProcessoDAO.getInstance().insertLogProcesso("ListView listaHistorico = (ListView) findViewById(R.id.listaHistorico);\n" +
                 "        AdapterListHistorico adapterListHistorico = new AdapterListHistorico(this, pbmContext.getMecanicoCTR().apontList());\n" +
                 "        listaHistorico.setAdapter(adapterListHistorico);", getLocalClassName());
-        ListView listaHistorico = (ListView) findViewById(R.id.listaHistorico);
+        ListView listaHistorico = findViewById(R.id.listaHistorico);
         AdapterListHistorico adapterListHistorico = new AdapterListHistorico(this, pbmContext.getMecanicoCTR().apontBolApontandoList());
         listaHistorico.setAdapter(adapterListHistorico);
-        buttonRetHistorico.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonRetHistorico.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "                Intent it = new Intent(ListaHistoricoActivity.this, MenuFuncaoActivity.class);", getLocalClassName());
-                Intent it = new Intent(ListaHistoricoActivity.this, MenuFuncaoActivity.class);
-                startActivity(it);
-                finish();
-            }
+        buttonRetHistorico.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonRetHistorico.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "                Intent it = new Intent(ListaHistoricoActivity.this, MenuFuncaoActivity.class);", getLocalClassName());
+            Intent it = new Intent(ListaHistoricoActivity.this, MenuFuncaoActivity.class);
+            startActivity(it);
+            finish();
         });
 
     }

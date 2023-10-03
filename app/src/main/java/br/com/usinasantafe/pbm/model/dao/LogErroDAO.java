@@ -24,7 +24,7 @@ public class LogErroDAO {
         if(configCTR.hasElemConfig()){
             ConfigBean configBean = configCTR.getConfig();
             LogErroBean logErroBean = new LogErroBean();
-            logErroBean.setIdEquip(configBean.getEquipConfig());
+            logErroBean.setIdEquip(configBean.getIdEquipConfig());
             logErroBean.setException(throwableToString(ex));
             logErroBean.setDthr(Tempo.getInstance().dthrAtualString());
             logErroBean.setDthrLong(Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthrAtualString()));
@@ -38,7 +38,7 @@ public class LogErroDAO {
         if(configCTR.hasElemConfig()){
             ConfigBean configBean = configCTR.getConfig();
             LogErroBean logErroBean = new LogErroBean();
-            logErroBean.setIdEquip(configBean.getEquipConfig());
+            logErroBean.setIdEquip(configBean.getIdEquipConfig());
             logErroBean.setException("RETORNO SERVIDOR COM FALHA = " + erro);
             logErroBean.setDthr(Tempo.getInstance().dthrAtualString());
             logErroBean.setDthrLong(Tempo.getInstance().dthrStringToLong(Tempo.getInstance().dthrAtualString()));

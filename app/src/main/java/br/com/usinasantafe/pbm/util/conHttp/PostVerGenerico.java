@@ -105,9 +105,9 @@ public class PostVerGenerico extends AsyncTask<String, Void, String> {
             return null;
         }
         String urlParams = null;
-        Iterator<String> e = (Iterator<String>) params.keySet().iterator();
+        Iterator<String> e = params.keySet().iterator();
         while (e.hasNext()) {
-            String chave = (String) e.next();
+            String chave = e.next();
             Object objValor = params.get(chave);
             String valor = objValor.toString();
             urlParams = urlParams == null ? "" : urlParams + "&";

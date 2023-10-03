@@ -123,7 +123,7 @@ public class MecanicoCTR {
         ConfigCTR configCTR = new ConfigCTR();
 
         BoletimMecanDAO boletimMecanDAO = new BoletimMecanDAO();
-        boletimMecanDAO.atualSalvarBoletim(configCTR.getConfig().getEquipConfig(), colabBean.getIdColab(), getEscalaTrab(colabBean.getIdEscalaTrabColab()).getHorarioEntEscalaTrab());
+        boletimMecanDAO.atualSalvarBoletim(configCTR.getConfig().getIdEquipConfig(), colabBean.getIdColab(), getEscalaTrab(colabBean.getIdEscalaTrabColab()).getHorarioEntEscalaTrab());
 
         LogProcessoDAO.getInstance().insertLogProcesso("EnvioDadosServ.getInstance().envioDados(activity);", activity);
         EnvioDadosServ.getInstance().envioDados(activity);

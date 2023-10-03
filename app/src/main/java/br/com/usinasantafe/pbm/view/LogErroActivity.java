@@ -30,19 +30,14 @@ public class LogErroActivity extends ActivityGeneric {
         AdapterListErro adapterListErro = new AdapterListErro(this, pbmContext.getConfigCTR().logErroList());
         listViewLogErro.setAdapter(adapterListErro);
 
-        buttonRetLogErro.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                LogProcessoDAO.getInstance().insertLogProcesso("buttonRetLogProcesso.setOnClickListener(new View.OnClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onClick(View v) {\n" +
-                        "Intent it = new Intent(LogErroActivity.this, LogBaseDadoActivity.class);", getLocalClassName());
-                Intent it = new Intent(LogErroActivity.this, LogBaseDadoActivity.class);
-                startActivity(it);
-                finish();
-            }
-
+        buttonRetLogErro.setOnClickListener(v -> {
+            LogProcessoDAO.getInstance().insertLogProcesso("buttonRetLogProcesso.setOnClickListener(new View.OnClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onClick(View v) {\n" +
+                    "Intent it = new Intent(LogErroActivity.this, LogBaseDadoActivity.class);", getLocalClassName());
+            Intent it = new Intent(LogErroActivity.this, LogBaseDadoActivity.class);
+            startActivity(it);
+            finish();
         });
 
     }

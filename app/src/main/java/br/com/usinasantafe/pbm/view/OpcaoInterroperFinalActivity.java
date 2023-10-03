@@ -15,7 +15,7 @@ import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
 
 public class OpcaoInterroperFinalActivity extends ActivityGeneric {
 
-    private ListView lista;
+    private ListView listView;
     private PBMContext pbmContext;
 
     @Override
@@ -40,24 +40,21 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
         itens.add("CANCELAR");
 
         AdapterList adapterList = new AdapterList(this, itens);
-        lista = findViewById(R.id.listViewMenuOpcao);
-        lista.setAdapter(adapterList);
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView = findViewById(R.id.listViewMenuOpcao);
+        listView.setAdapter(adapterList);
+        listView.setOnItemClickListener((l, v, position, id) -> {
 
-            @Override
-            public void onItemClick(AdapterView<?> l, View v, int position,
-                                    long id) {
+            LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
+                    "            @Override\n" +
+                    "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
+                    "                                    long id) {\n" +
+                    "                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);\n" +
+                    "                String text = textView.getText().toString();", getLocalClassName());
+            TextView textView = v.findViewById(R.id.textViewItemList);
+            String text = textView.getText().toString();
 
-                LogProcessoDAO.getInstance().insertLogProcesso("lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n" +
-                        "            @Override\n" +
-                        "            public void onItemClick(AdapterView<?> l, View v, int position,\n" +
-                        "                                    long id) {\n" +
-                        "                TextView textView = (TextView) v.findViewById(R.id.textViewItemList);\n" +
-                        "                String text = textView.getText().toString();", getLocalClassName());
-                TextView textView = v.findViewById(R.id.textViewItemList);
-                String text = textView.getText().toString();
-
-                if (text.equals("FINALIZAR")) {
+            switch (text) {
+                case "FINALIZAR": {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("if (text.equals(\"FINALIZAR\")) {\n" +
                             "                    pbmContext.getMecanicoCTR().finalizarApont();\n" +
@@ -66,8 +63,10 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
                     Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);
                     startActivity(it);
                     finish();
+                    break;
 
-                } else if (text.equals("INTERROPER")) {
+                }
+                case "INTERROPER": {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"INTERROPER\")) {\n" +
                             "                    pbmContext.getMecanicoCTR().interroperApont();\n" +
@@ -76,17 +75,19 @@ public class OpcaoInterroperFinalActivity extends ActivityGeneric {
                     Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);
                     startActivity(it);
                     finish();
+                    break;
 
-                } else if (text.equals("CANCELAR")) {
+                }
+                case "CANCELAR": {
 
                     LogProcessoDAO.getInstance().insertLogProcesso("} else if (text.equals(\"CANCELAR\")) {\n" +
                             "                    Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);", getLocalClassName());
                     Intent it = new Intent(OpcaoInterroperFinalActivity.this, TelaInicialActivity.class);
                     startActivity(it);
                     finish();
+                    break;
 
                 }
-
             }
 
         });

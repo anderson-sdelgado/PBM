@@ -8,19 +8,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
-import br.com.usinasantafe.pbm.view.MenuInicialActivity;
 import br.com.usinasantafe.pbm.control.ConfigCTR;
 import br.com.usinasantafe.pbm.control.MecanicoCTR;
-import br.com.usinasantafe.pbm.control.PneuCTR;
-import br.com.usinasantafe.pbm.model.bean.AtualAplicBean;
 import br.com.usinasantafe.pbm.model.pst.GenericRecordable;
 import br.com.usinasantafe.pbm.util.conHttp.PostVerGenerico;
 import br.com.usinasantafe.pbm.util.conHttp.UrlsConexaoHttp;
@@ -42,8 +35,8 @@ public class VerifDadosServ {
     private TelaInicialActivity telaInicialActivity;
     private PostVerGenerico postVerGenerico;
     private boolean verTerm;
-    private boolean finalManutPneu;
     public static int status;
+    private String senha;
 
     public VerifDadosServ() {
     }
@@ -63,31 +56,22 @@ public class VerifDadosServ {
     }
 
     public void manipularDadosHttp(String result) {
-
         try {
-
             if (!result.equals("")) {
-
+                MecanicoCTR mecanicoCTR = new MecanicoCTR();
+                ConfigCTR configCTR = new ConfigCTR();
                 if (this.tipo.equals("Atualiza")) {
-                    MecanicoCTR mecanicoCTR = new MecanicoCTR();
                     mecanicoCTR.insertParametro(result.trim());
                     this.telaInicialActivity.goMenuInicial();
-                }
-                else if(this.tipo.equals("OS")) {
-                    MecanicoCTR mecanicoCTR = new MecanicoCTR();
+                } else if(this.tipo.equals("OS")) {
                     mecanicoCTR.recDadosOS(result);
+                } else if(this.tipo.equals("Equip")) {
+                    configCTR.receberVerifEquip(senha, telaAtual, telaProx, progressDialog, result);
                 }
-                else if(this.tipo.equals("Pneu")) {
-                    PneuCTR pneuCTR = new PneuCTR();
-                    pneuCTR.recDadosPneu(result, finalManutPneu);
-                }
-
             }
-
         } catch (Exception e) {
             Log.i("PMM", "Erro Manip atualizar = " + e);
         }
-
     }
 
     public void verDados(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog) {
@@ -104,21 +88,6 @@ public class VerifDadosServ {
 
     }
 
-    public void verDadosPneu(String dado, String tipo, Context telaAtual, Class telaProx, ProgressDialog progressDialog, boolean finalManutPneu) {
-
-        verTerm = false;
-        urlsConexaoHttp = new UrlsConexaoHttp();
-        this.telaAtual = telaAtual;
-        this.telaProx = telaProx;
-        this.progressDialog = progressDialog;
-        this.dados = dado;
-        this.tipo = tipo;
-        this.finalManutPneu = finalManutPneu;
-
-        envioDados();
-
-    }
-
     public void verifAtualAplic(String dados, TelaInicialActivity telaInicialActivity, String activity) {
 
         urlsConexaoHttp = new UrlsConexaoHttp();
@@ -129,6 +98,21 @@ public class VerifDadosServ {
         envioVerif(activity);
 
     }
+
+    public void verifDados(String senha, String dados, Context telaAtual, Class telaProx, ProgressDialog progressDialog, String activity) {
+
+        this.urlsConexaoHttp = new UrlsConexaoHttp();
+        this.telaAtual = telaAtual;
+        this.telaProx = telaProx;
+        this.progressDialog = progressDialog;
+        this.dados = dados;
+        this.tipo = "Equip";
+        this.senha = senha;
+
+        envioVerif(activity);
+
+    }
+
 
     public void envioVerif(String activity) {
 
@@ -152,7 +136,7 @@ public class VerifDadosServ {
         Map<String, Object> parametrosPost = new HashMap<String, Object>();
         parametrosPost.put("dado", String.valueOf(dados));
 
-        Log.i("PMM", "VERIFICA = " + String.valueOf(dados));
+        Log.i("PMM", "VERIFICA = " + dados);
 
         postVerGenerico = new PostVerGenerico();
         postVerGenerico.setParametrosPost(parametrosPost);
@@ -187,10 +171,7 @@ public class VerifDadosServ {
             AlertDialog.Builder alerta = new AlertDialog.Builder(telaAtual);
             alerta.setTitle("ATENÇÃO");
             alerta.setMessage(texto);
-            alerta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
+            alerta.setPositiveButton("OK", (dialog, which) -> {
             });
             alerta.show();
         }

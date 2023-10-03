@@ -13,7 +13,7 @@ public class ConfigBean extends Entidade {
     @DatabaseField(generatedId=true)
     private Long idConfig;
     @DatabaseField
-    private Long equipConfig;
+    private Long idEquipConfig;
     @DatabaseField
     private String senhaConfig;
     @DatabaseField
@@ -34,12 +34,12 @@ public class ConfigBean extends Entidade {
         this.idConfig = idConfig;
     }
 
-    public Long getEquipConfig() {
-        return equipConfig;
+    public Long getIdEquipConfig() {
+        return idEquipConfig;
     }
 
-    public void setEquipConfig(Long equipConfig) {
-        this.equipConfig = equipConfig;
+    public void setIdEquipConfig(Long idEquipConfig) {
+        this.idEquipConfig = idEquipConfig;
     }
 
     public String getSenhaConfig() {

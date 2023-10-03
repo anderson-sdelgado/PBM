@@ -117,25 +117,6 @@ public class Tempo {
         }
     }
 
-    public boolean verDthrServ(String dthrServ){
-
-        Long longDtServ = dthrStringToLong(dthrServ);
-
-        Date dataHoraCel = new Date();
-        Long longDtCel =  dataHoraCel.getTime();
-
-        Long dthrDif =  longDtServ - longDtCel;
-        Long diaDif = dthrDif/24/60/60/1000;
-
-        if((diaDif >= 0) && (diaDif <= 15)){
-            return true;
-        }
-        else{
-            return false;
-        }
-
-    }
-
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////// DIFERENÇA SERVIDOR ///////////////////////////////////////

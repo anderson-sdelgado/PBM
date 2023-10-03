@@ -11,7 +11,7 @@ public class ConfigDAO {
 
     public void insert(Long idEquip, String senha){
         ConfigBean configBean = new ConfigBean();
-        configBean.setEquipConfig(idEquip);
+        configBean.setIdEquipConfig(idEquip);
         configBean.setSenhaConfig(senha);
         configBean.setDifDthrConfig(0L);
         configBean.insert();
