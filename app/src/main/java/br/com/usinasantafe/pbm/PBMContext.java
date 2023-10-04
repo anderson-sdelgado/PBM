@@ -10,8 +10,7 @@ public class PBMContext extends Application {
 
     private Thread.UncaughtExceptionHandler mDefaultExceptionHandler;
 
-    public static String versaoWS = "3.00";
-    public static String versaoAPP = "3.01";
+    public static String versaoWS = "3.01";
     private ConfigCTR configCTR;
     private MecanicoCTR mecanicoCTR;
     private int verTela;

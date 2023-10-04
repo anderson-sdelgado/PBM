@@ -12,6 +12,7 @@ public class AtualAplicBean {
     private Long minutosParada;
     private Long horaFechBoletim;
     private String token;
+    private Long nroOS;
 
     public AtualAplicBean() {
     }
@@ -70,5 +71,13 @@ public class AtualAplicBean {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Long getNroOS() {
+        return nroOS;
+    }
+
+    public void setNroOS(Long nroOS) {
+        this.nroOS = nroOS;
     }
 }

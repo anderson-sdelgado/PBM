@@ -25,6 +25,7 @@ import br.com.usinasantafe.pbm.model.bean.estaticas.ServicoBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.ApontMecanBean;
 import br.com.usinasantafe.pbm.model.bean.variaveis.BoletimMecanBean;
 import br.com.usinasantafe.pbm.model.dao.ApontMecanDAO;
+import br.com.usinasantafe.pbm.model.dao.AtualAplicDAO;
 import br.com.usinasantafe.pbm.model.dao.BoletimMecanDAO;
 import br.com.usinasantafe.pbm.model.dao.ColabDAO;
 import br.com.usinasantafe.pbm.model.dao.ComponenteDAO;
@@ -311,9 +312,10 @@ public class MecanicoCTR {
 
     //////////////////////// VERIFICAÇÃO E ATUALIZAÇÃO DE DADOS POR SERVIDOR /////////////////////
 
-    public void verOS(String dado, Context telaAtual, Class telaProx, ProgressDialog progressDialog){
+    public void verOS(String nroOS, Context telaAtual, Class telaProx, ProgressDialog progressDialog){
         OSDAO osDAO = new OSDAO();
-        osDAO.verOS(dado, telaAtual, telaProx, progressDialog);
+        AtualAplicDAO atualAplicDAO = new AtualAplicDAO();
+        osDAO.verOS(atualAplicDAO.getAtualNroOS(Long.parseLong(nroOS)), telaAtual, telaProx, progressDialog);
     }
 
     public void atualDadosColab(Context telaAtual, Class telaProx, ProgressDialog progressDialog){

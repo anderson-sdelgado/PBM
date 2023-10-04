@@ -26,6 +26,12 @@ public class AtualAplicDAO {
 
     }
 
+    public String getAtualNroOS(Long nroOS) {
+        AtualAplicBean atualAplicBean = new AtualAplicBean();
+        atualAplicBean.setNroOS(nroOS);
+        return getToken(atualAplicBean);
+    }
+
     public String getAtualBDToken(){
         AtualAplicBean atualAplicBean = new AtualAplicBean();
         return getToken(atualAplicBean);

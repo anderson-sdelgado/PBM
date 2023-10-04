@@ -6,8 +6,8 @@ public class UrlsConexaoHttp {
 
     public static String versao = "versao_" + PBMContext.versaoWS.replace(".", "_");
 
-    public static String url = "https://www.usinasantafe.com.br/pbmdev/view/";
-//    public static String url = "https://www.usinasantafe.com.br/pbmqa/view/";
+//    public static String url = "https://www.usinasantafe.com.br/pbmdev/view/";
+    public static String url = "https://www.usinasantafe.com.br/pbmqa/view/";
 //    public static String url = "https://www.usinasantafe.com.br/pbmprod/" + versao + "/view/";
 
     public static String localPSTEstatica = "br.com.usinasantafe.pbm.model.bean.estaticas.";

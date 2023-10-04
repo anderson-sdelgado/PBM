@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import br.com.usinasantafe.pbm.BuildConfig;
 import br.com.usinasantafe.pbm.PBMContext;
 import br.com.usinasantafe.pbm.R;
 import br.com.usinasantafe.pbm.model.dao.LogProcessoDAO;
@@ -76,7 +77,7 @@ public class TelaInicialActivity extends ActivityGeneric {
                         "                customHandler.postDelayed(updateTimerThread, 10000);", getLocalClassName());
                 customHandler.postDelayed(encerraAtualThread, 10000);
                 LogProcessoDAO.getInstance().insertLogProcesso("pmmContext.getConfigCTR().verAtualAplic(pmmContext.versaoAplic, this, getLocalClassName());", getLocalClassName());
-                pbmContext.getConfigCTR().verAtualAplic(pbmContext.versaoAPP, this, getLocalClassName());
+                pbmContext.getConfigCTR().verAtualAplic(BuildConfig.VERSION_NAME, this, getLocalClassName());
             }
             else{
                 LogProcessoDAO.getInstance().insertLogProcesso("else{\n" +
